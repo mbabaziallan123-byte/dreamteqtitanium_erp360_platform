@@ -5,3 +5,13 @@ desktop.ini
 .env
 .vscode/
 ~$*
+.vercel
+.env*
+ApiKeys.tsx
+config-api.js
+API.html
+API.md
+*.docx
+*.xlsx
+*.pdf
+*.zip

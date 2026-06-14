@@ -1,6 +1,8 @@
 /**
- * DreamTeQ_360 Odoo 18 JSON-RPC Middleware & PDF Extraction Pipeline
- * Architecture: Stateless JSON-RPC 2.0 Ingestion Pipeline + PDF Kit Generator
+ * DreamTeQ_360 Consolidated Multi-Currency & Cross-Border Ledger Engine
+ * Integration: Stripe, WeChat, Alipay, Interswitch, Pesalink, AfriPesa
+ * Settlement Bank: COOPERATIVE BANK OF KENYA | Account: 01192952690600
+ * Logistics Operator: ALTOVEX GLOBAL LOGISTICS COMPANY LTD (Paybill: 400200 / Acc: 40045731)
  * Product of Dreamteam Consulting Company, Box 3515-00100, Nairobi, Kenya
  */
 
@@ -17,10 +19,60 @@ const CONFIG = {
     password: 'SecretTitaniumPassword360',
     redisHost: 'dreamteq-cache',
     listenPort: 8090,
-    pdfStorageDir: './media/optimized_output'
+    pdfStorageDir: './media/optimized_output',
+    settlement: {
+        beneficiary: 'ALTOVEX GLOBAL LOGISTICS COMPANY LTD',
+        bank: 'COOPERATIVE BANK OF KENYA',
+        account: '01192952690600',
+        paybill: '400200',
+        paybillAccount: '40045731'
+    }
 };
 
 const redisPublisher = new Redis({ host: CONFIG.redisHost, port: 6379 });
+
+const CURRENCY_EXCHANGE_MATRIX = {
+    KES: 1.0000,
+    USD: 129.5000,
+    EUR: 138.2000,
+    CNY: 17.8500,
+    JPY: 0.8100,
+    CHF: 143.4000,
+    RWF: 0.0980,
+    UGX: 0.0340,
+    TZS: 0.0490
+};
+
+const CURRENCY_MATRIX_ROUTER = {
+    baseCurrency: 'KES',
+    rates: CURRENCY_EXCHANGE_MATRIX,
+    gateways: {
+        STRIPE: { channels: ['Visa', 'Mastercard', 'ApplePay'], clearing_base: 'USD' },
+        WECHAT_ALIPAY: { channels: ['CNY_Digital', 'QR_Merchant'], clearing_base: 'CNY' },
+        INTERSWITCH_PESALINK: { channels: ['EAC_Bank_Transfer', 'Zamtel', 'TigoPesa'], clearing_base: 'KES' },
+        AFRIPESA: { channels: ['SADC_Remit', 'EcoCash', 'Mukuru'], clearing_base: 'USD' }
+    },
+    settlementAccount: {
+        beneficiary: CONFIG.settlement.beneficiary,
+        accountNumber: CONFIG.settlement.account,
+        bank: CONFIG.settlement.bank,
+        paybill: CONFIG.settlement.paybill,
+        paybillAccount: CONFIG.settlement.paybillAccount
+    }
+};
+
+const GATEWAY_LABELS = {
+    STRIPE: 'Stripe Engine',
+    WECHAT_ALIPAY: 'WeChat Pay / Alipay Merchant Rail',
+    WECHAT_PAY: 'WeChat Pay Rail',
+    ALIPAY: 'Alipay Rail',
+    INTERSWITCH_PESALINK: 'Interswitch / PesaLink EAC Bank Rail',
+    INTERSWITCH: 'Interswitch Settlement Rail',
+    PESALINK: 'Pesalink Bank Rail',
+    AFRIPESA: 'AfriPesa Cross-Border Rail',
+    SAFARICOM_DARAJA: 'Safaricom Daraja M-Pesa Rail',
+    MOBILE_MONEY_GATEWAY_C2B: 'Mobile Money Gateway C2B'
+};
 
 async function callOdooRPC(pathStr, service, method, args) {
     const payload = {
@@ -68,13 +120,60 @@ async function callOdooRPC(pathStr, service, method, args) {
 
 function buildReceiptFilePath(invoiceRef) {
     const safeInvoiceRef = String(invoiceRef).replace(/[^a-zA-Z0-9_-]/g, '_');
-    return path.join(CONFIG.pdfStorageDir, `Receipt_${safeInvoiceRef}.pdf`);
+    return path.join(CONFIG.pdfStorageDir, `Receipt_Invoice_${safeInvoiceRef}.pdf`);
+}
+
+function normaliseCurrency(currencyCode) {
+    return String(currencyCode || 'KES').trim().toUpperCase();
+}
+
+function calculateBaseKshAmount(amount, currencyCode) {
+    const originalCurrency = normaliseCurrency(currencyCode);
+    const rawInputAmount = Number.parseFloat(amount) || 0;
+    const multiplicationFactor = CURRENCY_MATRIX_ROUTER.rates[originalCurrency];
+
+    if (!multiplicationFactor) {
+        throw new Error(`Unsupported transaction currency corridor asset exception: ${originalCurrency}`);
+    }
+
+    return {
+        originalCurrency,
+        rawInputAmount,
+        multiplicationFactor,
+        calculatedKshAmount: Number((rawInputAmount * multiplicationFactor).toFixed(2))
+    };
+}
+
+function normalizeAndRouteCrossBorderTransaction(sourceGateway, amount, foreignCurrency) {
+    const settlementDetails = calculateBaseKshAmount(amount, foreignCurrency);
+    const gatewayKey = String(sourceGateway || 'STRIPE').trim().toUpperCase();
+    const gatewayProfile = CURRENCY_MATRIX_ROUTER.gateways[gatewayKey] || CURRENCY_MATRIX_ROUTER.gateways.STRIPE;
+
+    console.log(`[CROSS-BORDER CORRIDOR ACTIVE] Ingesting via ${gatewayKey}: ${settlementDetails.originalCurrency} ${settlementDetails.rawInputAmount} -> KES ${settlementDetails.calculatedKshAmount.toFixed(4)}`);
+
+    return {
+        clearedAmountKES: settlementDetails.calculatedKshAmount.toFixed(2),
+        sourceGateway: gatewayKey,
+        clearingBase: gatewayProfile.clearing_base,
+        beneficiaryAllocation: CURRENCY_MATRIX_ROUTER.settlementAccount.beneficiary,
+        clearingBank: CURRENCY_MATRIX_ROUTER.settlementAccount.bank,
+        routingTarget: CURRENCY_MATRIX_ROUTER.settlementAccount.accountNumber,
+        mPesaClearingPool: {
+            paybill: CURRENCY_MATRIX_ROUTER.settlementAccount.paybill,
+            account: CURRENCY_MATRIX_ROUTER.settlementAccount.paybillAccount
+        }
+    };
+}
+
+function resolveGatewayLabel(record) {
+    const gatewayKey = String(record.gateway || record.app_id || 'STRIPE').trim().toUpperCase();
+    return GATEWAY_LABELS[gatewayKey] || record.app_id || 'Stripe Engine';
 }
 
 /**
  * Generates an Enterprise-Grade PDF Receipt directly to the storage vector volumes.
  */
-function extractBillingPDFReceipt(record, invoiceRef) {
+function generateEnterpriseBillingInvoicePDF(record, invoiceRef, settlementDetails) {
     fs.mkdirSync(CONFIG.pdfStorageDir, { recursive: true });
 
     const doc = new PDFDocument({ size: 'A4', margin: 50 });
@@ -83,7 +182,7 @@ function extractBillingPDFReceipt(record, invoiceRef) {
 
     return new Promise((resolve, reject) => {
         writeStream.on('finish', () => {
-            console.log(`[PDF PIPELINE] Billing transaction layout vector exported to: ${fileDestination}`);
+            console.log(`[PDF PIPELINE] Cross-border billing profile exported to: ${fileDestination}`);
             resolve(fileDestination);
         });
         writeStream.on('error', reject);
@@ -91,7 +190,6 @@ function extractBillingPDFReceipt(record, invoiceRef) {
 
         doc.pipe(writeStream);
 
-        // Luxury Layout Style Injections: Deep Dark Obsidian Green and Rich Gold Branding Accents
         doc.rect(0, 0, 595, 120).fill('#0B130E');
 
         // Header Vector Branding
@@ -114,10 +212,8 @@ function extractBillingPDFReceipt(record, invoiceRef) {
         doc.rect(50, gridTop, 495, 25).fill('#0B130E');
         doc.fillColor('#D4AF37').font('Helvetica-Bold').fontSize(10).text('ITEM DESCRIPTION', 60, gridTop + 8);
         doc.text('TOTAL CHARGE', 450, gridTop + 8);
-
-        const amount = Number.parseFloat(record.amount) || 0;
-        doc.fillColor('#333333').font('Helvetica').fontSize(10).text(`Ecosystem Processing Ingestion Volume - ${record.app_id}`, 60, gridTop + 45, { width: 350 });
-        doc.font('Helvetica-Bold').text(`KSh ${amount.toLocaleString()}`, 450, gridTop + 45, { width: 95, align: 'right' });
+        doc.fillColor('#333333').font('Helvetica').fontSize(10).text(`Cross-Border Settlement via ${resolveGatewayLabel(record)}: ${settlementDetails.rawInputAmount} ${settlementDetails.originalCurrency}`, 60, gridTop + 45, { width: 350 });
+        doc.font('Helvetica-Bold').text(`KSh ${settlementDetails.calculatedKshAmount.toLocaleString()}`, 450, gridTop + 45, { width: 95, align: 'right' });
 
         // Standard Multi-Platform Footer Trace Mandate Binding Injection
         doc.rect(0, 762, 595, 80).fill('#0B130E');
@@ -126,6 +222,65 @@ function extractBillingPDFReceipt(record, invoiceRef) {
             50,
             785,
             { width: 495, align: 'center', lineGap: 4 }
+        );
+
+        doc.end();
+    });
+}
+
+function compilePlatformA4Document(outputFilename, schemaData, structuralOrientation = 'portrait') {
+    fs.mkdirSync(CONFIG.pdfStorageDir, { recursive: true });
+
+    const safeOutputFilename = String(outputFilename || `DreamTeQ_Report_${Date.now()}`).replace(/[^a-zA-Z0-9_-]/g, '_');
+    const doc = new PDFDocument({
+        size: 'A4',
+        layout: structuralOrientation === 'landscape' ? 'landscape' : 'portrait',
+        margins: { top: 40, bottom: 40, left: 40, right: 40 }
+    });
+    const outputDestination = path.join(CONFIG.pdfStorageDir, `${safeOutputFilename}.pdf`);
+    const writeStream = fs.createWriteStream(outputDestination);
+
+    return new Promise((resolve, reject) => {
+        writeStream.on('finish', () => {
+            console.log(`[REPORT COMPILED] Dynamic documentation schema exported successfully: ${outputDestination}`);
+            resolve(outputDestination);
+        });
+        writeStream.on('error', reject);
+        doc.on('error', reject);
+
+        doc.pipe(writeStream);
+        doc.rect(0, 0, doc.page.width, doc.page.height).fill('#0D1A12');
+        doc.fillColor('#D4AF37').font('Helvetica-Bold').fontSize(18).text(`DREAMTEQ TITANIUM ERP: ${schemaData.moduleName || 'Master Platform'}`, 40, 30);
+        doc.rect(40, 55, doc.page.width - 80, 1).fill('#C0C0C0');
+        doc.fillColor('#C0C0C0').font('Helvetica').fontSize(10).text(schemaData.briefDescription || 'Generated DreamTeQ Titanium ERP report bundle.', 40, 70, {
+            width: doc.page.width - 80,
+            align: 'justify',
+            lineGap: 4
+        });
+
+        if (Array.isArray(schemaData.tabularRecords)) {
+            let verticalOffset = 130;
+            doc.fillColor('#D4AF37').font('Helvetica-Bold').text('ACCOUNT SETTLEMENT INDEX REGISTER', 40, verticalOffset);
+            verticalOffset += 20;
+
+            schemaData.tabularRecords.forEach(row => {
+                if (verticalOffset > doc.page.height - 80) {
+                    doc.addPage();
+                    doc.rect(0, 0, doc.page.width, doc.page.height).fill('#0D1A12');
+                    verticalOffset = 50;
+                }
+                doc.fillColor('#C0C0C0').font('Helvetica').fontSize(9).text(String(row.label || ''), 40, verticalOffset, { width: doc.page.width - 220 });
+                doc.fillColor('#FFF').font('Helvetica-Bold').text(String(row.value || ''), doc.page.width - 190, verticalOffset, { width: 150, align: 'right' });
+                verticalOffset += 15;
+            });
+        }
+
+        doc.rect(40, doc.page.height - 50, doc.page.width - 80, 1).fill('#C0C0C0');
+        doc.fillColor('#C0C0C0').font('Helvetica').fontSize(7).text(
+            'Product of Dreamteam Consulting Company, Box 3515-00100, Nairobi, Kenya | Tel: +254718554383 | Web: www.dreamteamconsult.site | Email: dreamteamconsult@gmx.com | Monetized via AI-Driven SMM, LLMM, SEO, and LLEO Optimizations.',
+            40,
+            doc.page.height - 40,
+            { width: doc.page.width - 80, align: 'center' }
         );
 
         doc.end();
@@ -154,6 +309,8 @@ const server = http.createServer(async (req, res) => {
                 const exportedReceipts = [];
 
                 for (let record of batchDataset) {
+                    const settlementDetails = calculateBaseKshAmount(record.amount, record.currency);
+                    const settlementRoute = normalizeAndRouteCrossBorderTransaction(record.gateway, record.amount, record.currency);
                     const partnerIds = await callOdooRPC('/jsonrpc', 'object', 'execute_kw', [
                         CONFIG.dbName,
                         2,
@@ -174,10 +331,10 @@ const server = http.createServer(async (req, res) => {
                         [{
                             partner_id: partnerIds[0],
                             move_type: 'out_invoice',
-                            ref: `DT360-SYNC-${record._id}`,
+                            ref: `CROSSBORDER-${record._id}`,
                             invoice_line_ids: [[0, 0, {
-                                name: `Ecosystem Sync Transaction Volume: ${record.app_id}`,
-                                price_unit: Number.parseFloat(record.amount) || 0,
+                                name: `Cross-Border Settlement via ${resolveGatewayLabel(record)}: ${settlementDetails.rawInputAmount} ${settlementDetails.originalCurrency}`,
+                                price_unit: settlementDetails.calculatedKshAmount,
                                 quantity: 1
                             }]]
                         }]
@@ -192,15 +349,14 @@ const server = http.createServer(async (req, res) => {
                         [[accountMoveId]]
                     ]);
 
-                    // Trigger PDF extraction pipeline immediately upon successful ledger posting loop.
-                    const receiptPath = await extractBillingPDFReceipt(record, accountMoveId);
-                    exportedReceipts.push(receiptPath);
+                    const receiptPath = await generateEnterpriseBillingInvoicePDF(record, accountMoveId, settlementDetails);
+                    exportedReceipts.push({ receiptPath, settlementRoute });
                     synchronisedRecordsCount++;
                 }
 
                 await redisPublisher.publish('dreamteq_system_notifications', JSON.stringify({
                     event: 'BACKUP_COMPLETE',
-                    message: `Successfully updated ${synchronisedRecordsCount} items directly into Odoo 18 Partner Ledgers and exported vector PDF receipts.`,
+                    message: `Processed ${synchronisedRecordsCount} cross-border records safely into Altovex Global Logistics bank accounts.`,
                     timestamp: new Date().toISOString()
                 }));
 
@@ -211,12 +367,31 @@ const server = http.createServer(async (req, res) => {
                 return res.end(JSON.stringify({ success: false, error: err.message }));
             }
         });
+    } else if (req.method === 'POST' && req.url === '/reports/a4') {
+        let payloadBuffer = '';
+        req.on('data', chunk => payloadBuffer += chunk);
+        req.on('end', async () => {
+            try {
+                const payload = JSON.parse(payloadBuffer || '{}');
+                const reportPath = await compilePlatformA4Document(
+                    payload.outputFilename,
+                    payload.schemaData || {},
+                    payload.orientation || 'portrait'
+                );
+
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ success: true, reportPath }));
+            } catch (err) {
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ success: false, error: err.message }));
+            }
+        });
     } else {
         res.writeHead(404);
-        res.end('Route unrecognized.');
+        res.end('Route missing.');
     }
 });
 
 server.listen(CONFIG.listenPort, '0.0.0.0', () => {
-    console.log(`[LEDGER MIDDLEWARE ONLINE] Running JSON-RPC nodes with PDF Extractor on port: ${CONFIG.listenPort}`);
+    console.log(`[CORE LEDGER DISTRIBUTOR ACTIVE] Multi-currency conversion routing processing online on port: ${CONFIG.listenPort}`);
 });

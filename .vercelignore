@@ -1,0 +1,20 @@
+.git/
+.vercel/
+node_modules/
+backups/
+media/optimized_output/
+.env
+.env.*
+*.docx
+*.xlsx
+*.pdf
+*.zip
+~$*
+desktop.ini
+ApiKeys.tsx
+config-api.js
+completecashcloudwapipatwawitingapis.docx
+MPESA CALLBACK.docx
+mpesa paybill instructions.docx
+SOLINC PROFORMA INVOICE.pdf
+fertilizerbusinessforeastafricaexpressionofinterest.zip

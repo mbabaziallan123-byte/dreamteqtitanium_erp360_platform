@@ -1,0 +1,53 @@
+[
+  {
+    "model": "dreamteq.crossborder.ledger",
+    "fields": [
+      "routing_target",
+      "paybill_account",
+      "cleared_amount_kes",
+      "source_gateway",
+      "merchant_reference"
+    ],
+    "writeGroups": [
+      "group_dreamteq_cto_master",
+      "group_dreamteq_finance_controller"
+    ]
+  },
+  {
+    "model": "dreamteq.settlement.route",
+    "fields": [
+      "beneficiary_account_number",
+      "bank_identifier",
+      "paybill",
+      "paybill_account"
+    ],
+    "writeGroups": [
+      "group_dreamteq_cto_master"
+    ]
+  },
+  {
+    "model": "dreamteq.farmer.profile",
+    "fields": [
+      "phone_number",
+      "national_id",
+      "geolocation_polygon",
+      "credit_score_vector"
+    ],
+    "writeGroups": [
+      "group_dreamteq_cto_master",
+      "group_dreamteq_field_agent"
+    ]
+  },
+  {
+    "model": "res.partner.bank",
+    "fields": [
+      "acc_number",
+      "bank_id",
+      "sanitized_acc_number"
+    ],
+    "writeGroups": [
+      "group_dreamteq_cto_master",
+      "group_dreamteq_finance_controller"
+    ]
+  }
+]

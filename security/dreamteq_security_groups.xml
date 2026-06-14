@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="group_dreamteq_cto_master" model="res.groups">
+            <field name="name">DreamTeQ CTO Master Vault</field>
+            <field name="category_id" ref="base.module_category_accounting"/>
+        </record>
+
+        <record id="group_dreamteq_finance_controller" model="res.groups">
+            <field name="name">DreamTeQ Finance Controller</field>
+            <field name="category_id" ref="base.module_category_accounting"/>
+        </record>
+
+        <record id="group_dreamteq_logistics_operator" model="res.groups">
+            <field name="name">DreamTeQ Altovex Logistics Operator</field>
+            <field name="category_id" ref="base.module_category_accounting"/>
+        </record>
+
+        <record id="group_dreamteq_field_agent" model="res.groups">
+            <field name="name">DreamTeQ Field Extension Agent</field>
+            <field name="category_id" ref="base.module_category_accounting"/>
+        </record>
+
+        <record id="group_dreamteq_auditor_readonly" model="res.groups">
+            <field name="name">DreamTeQ Read-Only Compliance Auditor</field>
+            <field name="category_id" ref="base.module_category_accounting"/>
+        </record>
+    </data>
+</odoo>
