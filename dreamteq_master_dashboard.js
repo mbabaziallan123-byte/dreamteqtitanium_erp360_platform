@@ -506,4 +506,64 @@
     });
 
     document.addEventListener('DOMContentLoaded', mountDashboard);
+
+    // ── WhatsApp Telemetry Live Traffic Logger ────────────────────────────────
+    function logLiveWhatsAppTrafficEvent(messageType, statusText) {
+        var feed        = document.getElementById('wa-live-traffic-feed');
+        var sentCounter = document.getElementById('wa-total-sent');
+
+        if (feed && sentCounter) {
+            var activeCount = parseInt(sentCounter.innerText, 10) || 0;
+            sentCounter.innerText = activeCount + 1;
+
+            var timeString = new Date().toLocaleTimeString();
+            feed.innerHTML += '<br>&gt; [' + timeString + '] Outbound ' + messageType + ' -> Status: ' + statusText;
+            feed.scrollTop = feed.scrollHeight;
+        }
+    }
+    window.logLiveWhatsAppTrafficEvent = logLiveWhatsAppTrafficEvent;
+
+    // ── Regional Cooperative Viewport Matrix Controller ───────────────────────
+    /**
+     * Drives view switches inside the Regional Cooperative Viewport Matrix.
+     * @param {string} regionalScopeSelection - ALL | Nairobi_East | Rift_Valley_Central | SADC_Cross_Border
+     */
+    async function switchRegionalCooperativeDataView(regionalScopeSelection) {
+        var contentGrid = document.getElementById('regional-coop-filtered-content-grid');
+        if (!contentGrid || typeof DreamTeQ_Core_Apps === 'undefined') return;
+
+        contentGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #D4AF37;">Querying PouchDB records matching regional signature token: ' + regionalScopeSelection + '...</div>';
+
+        try {
+            var allRecords = await DreamTeQ_Core_Apps.databases.farmers.allDocs({ include_docs: true });
+
+            var filteredRows = allRecords.rows.filter(function (row) {
+                if (regionalScopeSelection === 'ALL') return true;
+                return row.doc && row.doc.coop === regionalScopeSelection;
+            });
+
+            if (filteredRows.length === 0) {
+                contentGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #888; padding: 20px;">Zero active smallholder profiles registered under this cooperative sector node.</div>';
+                return;
+            }
+
+            contentGrid.innerHTML = filteredRows.map(function (row) {
+                var doc = row.doc;
+                return '<div style="background: #030504; border: 1px solid #222; border-left: 3px solid #D4AF37; padding: 15px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">' +
+                    '<div style="font-size: 0.75rem; font-family: monospace; color: #888; margin-bottom: 5px;">ID: ' + doc._id + '</div>' +
+                    '<div style="color: #FFF; font-weight: bold; font-size: 1.05rem; margin-bottom: 8px;">' + doc.name + '</div>' +
+                    '<div style="font-size: 0.82rem; color: #C0C0C0;">Phone Link: <span style="font-family: monospace;">' + doc.phone + '</span></div>' +
+                    '<div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">' +
+                        '<span style="font-size: 0.7rem; color: #888; text-transform: uppercase;">KYC Status</span>' +
+                        '<span style="background: rgba(52,211,153,0.1); color: #34D399; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">' + doc.kyc_status + '</span>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+
+        } catch (err) {
+            contentGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #EF4444;">Error mapping database entries: ' + err.message + '</div>';
+        }
+    }
+    window.switchRegionalCooperativeDataView = switchRegionalCooperativeDataView;
+
 })();
