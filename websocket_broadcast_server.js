@@ -9,6 +9,7 @@
 const http      = require('http');
 const WebSocket = require('ws');
 const Redis     = require('ioredis');
+const { dispatchPipelineExceptionAlert } = require('./pipeline_exception_notifier');
 
 const WS_PORT   = parseInt(process.env.WS_PORT   || '8085', 10);
 const REDIS_HOST = process.env.REDIS_HOST || 'dreamteq-cache';
@@ -67,6 +68,43 @@ redisSubscriber.subscribe.apply(redisSubscriber, CHANNELS.concat([function(err, 
     }
 }]));
 
+function interceptAndEvaluateAgentTelemetry(channel, rawStringData) {
+    try {
+        var telemetryPacket = JSON.parse(rawStringData);
+        var statusColor = String(telemetryPacket.status_color || telemetryPacket.statusColor || '').toLowerCase();
+        var eventName = String(telemetryPacket.event || '');
+        var messageText = String(telemetryPacket.message || telemetryPacket.error || '');
+        var isMaroonState = eventName === 'AGENT_STATE_SHIFT' && statusColor === 'maroon';
+        var isSyncTimeout = /database synchronization timeout|sync timeout|db lock timeout|database lock timeout/i.test(messageText);
+
+        if (!isMaroonState && !isSyncTimeout) {
+            return;
+        }
+
+        var agentId = telemetryPacket.agent_id || telemetryPacket.agentId || 'unknown_agent';
+        var componentId = 'AMANDA_AGENT_OVERRUN_' + String(agentId).toUpperCase().replace(/[^A-Z0-9_]/g, '_');
+        console.log('[ALERT MATRIX INTERCEPT] Critical agent telemetry caught for node: ' + agentId + ' on channel: ' + channel);
+
+        var exceptionContextDump = {
+            message: messageText || ('Multi-agent processing execution timeout drop encountered on cluster: ' + agentId),
+            stack: [
+                'Agent Rating Vector: ' + (statusColor ? statusColor.toUpperCase() : 'TIMEOUT_ANOMALY'),
+                'Context Channel Allocation: ' + (telemetryPacket.channel || channel || 'Ecosystem Core'),
+                'Associated ERP Module Identity: ' + (telemetryPacket.module_id || telemetryPacket.moduleId || 'Unknown'),
+                'System Latency Metrics Overrun: ' + (telemetryPacket.latency_ms || telemetryPacket.latencyMs || 'Timeout') + ' ms',
+                'Raw Event Name: ' + (eventName || 'UNSPECIFIED_EVENT')
+            ].join('\n'),
+            telemetryPacket: telemetryPacket
+        };
+
+        dispatchPipelineExceptionAlert(componentId, exceptionContextDump).catch(function(error) {
+            console.error('[ALERT MATRIX FAULT] Failed to dispatch agent notification email:', error.message);
+        });
+    } catch (err) {
+        console.error('[ALERT MATRIX FAULT] Failed to parse agent notification telemetry:', err.message);
+    }
+}
+
 // ── WebSocket connection handler ──────────────────────────────────────────────
 const clients = new Set();
 
@@ -100,6 +138,8 @@ wss.on('connection', function(ws, req) {
 // ── Redis → WebSocket fan-out ─────────────────────────────────────────────────
 redisSubscriber.on('message', function(channel, message) {
     var envelope;
+    interceptAndEvaluateAgentTelemetry(channel, message);
+
     try {
         // Re-wrap legacy plain-string messages into standard envelope
         var parsed = JSON.parse(message);
