@@ -97,6 +97,26 @@ services:
     networks:
       - dreamteq-mesh
 
+  # WhatsApp Meta-Llama & Monica AI Router Gateway
+  dreamteq-whatsapp-ai-router:
+    image: node:20-alpine
+    container_name: dreamteq_whatsapp_ai_broker
+    ports:
+      - "8095:8095"
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: sh -c "npm install ioredis && node whatsapp_ai_router.js"
+    environment:
+      - WHATSAPP_AI_GATEWAY_TOKEN=${WHATSAPP_AI_GATEWAY_TOKEN}
+      - WHATSAPP_ADMIN_PHONE=${WHATSAPP_ADMIN_PHONE}
+      - REDIS_HOST=dreamteq-cache
+      - REDIS_PORT=6379
+    depends_on:
+      - dreamteq-cache
+    networks:
+      - dreamteq-mesh
+
 volumes:
   postgres_master_data:
 
