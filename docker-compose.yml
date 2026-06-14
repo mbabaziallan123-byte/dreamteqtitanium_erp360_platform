@@ -4,9 +4,9 @@ services:
     image: postgres:16-alpine
     container_name: dreamteq_postgres_core
     environment:
-      POSTGRES_USER: dreamteq_operator
-      POSTGRES_PASSWORD: SecretTitaniumPassword360
-      POSTGRES_DB: dreamteq_master_pool
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_master_data:/var/lib/postgresql/data
     ports:
@@ -61,8 +61,8 @@ services:
       - "8069:8069"
     environment:
       - HOST=dreamteq-db
-      - USER=dreamteq_operator
-      - PASSWORD=SecretTitaniumPassword360
+      - USER=${POSTGRES_USER}
+      - PASSWORD=${POSTGRES_PASSWORD}
     networks:
       - dreamteq-mesh
 
