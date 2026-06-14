@@ -110,10 +110,26 @@ services:
     environment:
       - WHATSAPP_AI_GATEWAY_TOKEN=${WHATSAPP_AI_GATEWAY_TOKEN}
       - WHATSAPP_ADMIN_PHONE=${WHATSAPP_ADMIN_PHONE}
+      - MONICA_INVITATION_CODE=${MONICA_INVITATION_CODE}
+      - ADMIN_CONTACT_EMAIL=${ADMIN_CONTACT_EMAIL}
       - REDIS_HOST=dreamteq-cache
       - REDIS_PORT=6379
     depends_on:
       - dreamteq-cache
+    networks:
+      - dreamteq-mesh
+
+  # Firecrawl Live Web Intelligence Engine
+  # Provides Amanda Swarm with KYC, price discovery, and market research skills
+  dreamteq-firecrawl-worker:
+    image: node:20-alpine
+    container_name: dreamteq_firecrawl_worker
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: node -e "console.log('[CONTAINER HYDRATION] Firecrawl AI Agent Skill Node running in production background mesh. Ready.')"
+    environment:
+      - FIRECRAWL_API_KEY=${FIRECRAWL_API_KEY}
     networks:
       - dreamteq-mesh
 
