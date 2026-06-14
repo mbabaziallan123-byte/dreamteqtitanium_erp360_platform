@@ -1,0 +1,11 @@
+fastapi==0.111.0
+uvicorn==0.30.1
+pydantic==2.7.4
+pydantic-settings==2.3.3
+firecrawl-py==1.0.0
+google-generativeai==0.7.0
+psycopg2-binary==2.9.9
+redis==5.0.7
+slowapi==0.1.6
+paho-mqtt==1.6.1
+sqlalchemy==2.0.30

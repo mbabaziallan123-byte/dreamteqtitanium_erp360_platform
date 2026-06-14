@@ -1,0 +1,46 @@
+version: '3.8'
+
+# DreamTeQ_360 Firecrawl Scraper Microservice — Container Orchestration
+# Product of Dreamteam Consulting Company, Box 3515-00100, Nairobi, Kenya
+#
+# All secrets are injected via environment variables.
+# Copy .env.example → .env in this directory and fill in real values.
+# NEVER commit .env to Git.
+
+services:
+
+  redis-cache:
+    image: redis:7-alpine
+    container_name: dreamteq_scraper_redis
+    restart: always
+    ports:
+      - "6380:6379"    # mapped to 6380 to avoid conflict with root compose redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  dreamteq-scraper-module:
+    build: .
+    container_name: dreamteq_scraper_container
+    restart: always
+    ports:
+      - "8085:8000"
+    environment:
+      - FIRECRAWL_API_KEY=${FIRECRAWL_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis-cache:6379/0
+      - MQTT_BROKER_HOST=${MQTT_BROKER_HOST:-broker.hivemq.com}
+      - MQTT_BROKER_PORT=${MQTT_BROKER_PORT:-1883}
+      - MQTT_TOPIC_PREFIX=${MQTT_TOPIC_PREFIX:-dreamteq/farm}
+      - RATE_LIMIT_PER_MINUTE=${RATE_LIMIT_PER_MINUTE:-30}
+    depends_on:
+      redis-cache:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
