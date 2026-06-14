@@ -82,6 +82,21 @@ services:
     networks:
       - dreamteq-mesh
 
+  # Re-Integrated Frappe / ERPNext Stack Core Component (v14 Cache Matcher)
+  frappenext-core:
+    image: frappe/erpnext:v14
+    container_name: dreamteq_frappe_server
+    depends_on:
+      - dreamteq-db
+      - dreamteq-cache
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=dreamteq-db
+      - REDIS_CACHE=redis://dreamteq-cache:6379/0
+    networks:
+      - dreamteq-mesh
+
 volumes:
   postgres_master_data:
 

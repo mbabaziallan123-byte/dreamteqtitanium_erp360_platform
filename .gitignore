@@ -1,5 +1,7 @@
 node_modules/
 backups/local_state/*
 .DS_Store
+desktop.ini
 .env
 .vscode/
+~$*

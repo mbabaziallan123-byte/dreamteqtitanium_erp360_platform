@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "ioredis": "^5.11.1",
+    "pdf-parse": "^2.4.5",
+    "pdfkit": "^0.19.1",
+    "ws": "^8.21.0"
+  }
+}
