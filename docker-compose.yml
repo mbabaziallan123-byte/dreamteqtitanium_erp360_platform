@@ -1,0 +1,90 @@
+services:
+  # Master PostgreSQL Cluster Configuration
+  dreamteq-db:
+    image: postgres:16-alpine
+    container_name: dreamteq_postgres_core
+    environment:
+      POSTGRES_USER: dreamteq_operator
+      POSTGRES_PASSWORD: SecretTitaniumPassword360
+      POSTGRES_DB: dreamteq_master_pool
+    volumes:
+      - postgres_master_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - dreamteq-mesh
+
+  # Redis Cache Engine
+  dreamteq-cache:
+    image: redis:7-alpine
+    container_name: dreamteq_redis_mesh
+    ports:
+      - "6379:6379"
+    networks:
+      - dreamteq-mesh
+
+  # Portal Front Facing Gateway Engine
+  web:
+    image: nginx:1.27-alpine
+    container_name: dreamteq_portal_gateway
+    ports:
+      - "8080:80"
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./100APPS.HTML:/usr/share/nginx/html/100APPS.HTML:ro
+      - ./LMSENTREPRISE.HTML:/usr/share/nginx/html/LMSENTREPRISE.HTML:ro
+    networks:
+      - dreamteq-mesh
+
+  # WebSocket Realtime Message Broker Node
+  dreamteq-socket-broker:
+    image: node:20-alpine
+    container_name: dreamteq_websocket_server
+    ports:
+      - "8085:8085"
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: sh -c "npm install ws ioredis && node websocket_broadcast_server.js"
+    depends_on:
+      - dreamteq-cache
+    networks:
+      - dreamteq-mesh
+
+  # Odoo 18 Application Hub
+  odoo18-core:
+    image: odoo:18.0
+    container_name: odoo18_titanium_backend
+    depends_on:
+      - dreamteq-db
+    ports:
+      - "8069:8069"
+    environment:
+      - HOST=dreamteq-db
+      - USER=dreamteq_operator
+      - PASSWORD=SecretTitaniumPassword360
+    networks:
+      - dreamteq-mesh
+
+  # Odoo 18 Ledger JSON-RPC Translation Broker
+  dreamteq-ledger-middleware:
+    image: node:20-alpine
+    container_name: dreamteq_ledger_broker
+    ports:
+      - "8090:8090"
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: sh -c "npm install ioredis pdfkit && node odoo_rpc_middleware.js"
+    depends_on:
+      - dreamteq-cache
+      - odoo18-core
+    networks:
+      - dreamteq-mesh
+
+volumes:
+  postgres_master_data:
+
+networks:
+  dreamteq-mesh:
+    driver: bridge

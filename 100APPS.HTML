@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamTeQ 100 Mini-Apps Sandbox Platform</title>
+    <style>
+        body {
+            background-color: #030504;
+            color: #C0C0C0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 15px;
+        }
+        .mini-app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .app-test-card {
+            background: #0B130E;
+            border: 1px solid #C0C0C0;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .app-test-card:hover {
+            border-color: #D4AF37;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+        }
+        .app-title {
+            color: #D4AF37;
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .trigger-btn {
+            background: transparent;
+            border: 1px solid #D4AF37;
+            color: #D4AF37;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            margin-top: 10px;
+            transition: all 0.2s ease;
+        }
+        .trigger-btn:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+        footer {
+            margin-top: 30px;
+            border-top: 1px solid #222;
+            padding-top: 15px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 style="color: #FFF; font-size: 1.2rem; text-transform: uppercase; margin-bottom: 15px; border-left: 3px solid #D4AF37; padding-left: 10px;">
+        Active Digital Mini-App Telemetry Array
+    </h2>
+
+    <div class="mini-app-grid">
+        <!-- Card 1 -->
+        <div class="app-test-card">
+            <div class="app-title">01. SoilHealth AI</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Dispatches real-time nitrogen, phosphorus, and potassium tracking values directly into master storage tables.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('SoilHealth_AI', {nitrogen: 42.1, phosphorus: 18.4, potassium: 124.8})">
+                Transmit NPK Stream
+            </button>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="app-test-card">
+            <div class="app-title">02. CropYield Predictor</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Sends AI-generated seasonal yield forecast payloads into the harvest analytics aggregation pipeline.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('CropYield_Predictor', {crop: 'Maize', forecast_tons: 4.7, confidence: 0.91})">
+                Push Yield Forecast
+            </button>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="app-test-card">
+            <div class="app-title">03. IrrigationBot</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Fires automated water-scheduling trigger events linked to soil moisture and evapotranspiration sensor feeds.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('IrrigationBot', {zone: 'Block_C', moisture_pct: 28.3, trigger: 'AUTO_ON'})">
+                Activate Water Pulse
+            </button>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="app-test-card">
+            <div class="app-title">04. PestWatch AI</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Dispatches real-time pest detection classification scores from drone image telemetry feeds.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('PestWatch_AI', {pest: 'Fall Armyworm', severity: 'Medium', gps: '-1.28,36.82'})">
+                Log Pest Detection
+            </button>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="app-test-card">
+            <div class="app-title">05. WeatherGrid</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Injects hyperlocal 72-hour weather pattern packages into the DreamTeQ climate risk model ingestion layer.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('WeatherGrid', {temp_c: 24.5, humidity_pct: 68, rainfall_mm: 12.3, wind_kph: 14})">
+                Inject Weather Bundle
+            </button>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="app-test-card">
+            <div class="app-title">06. MarketPulse</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Streams live commodity price index snapshots into the farmer revenue optimization advisory module.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('MarketPulse', {commodity: 'Wheat', price_usd: 214.50, exchange: 'Nairobi_EA'})">
+                Broadcast Price Feed
+            </button>
+        </div>
+
+        <!-- Card 7 -->
+        <div class="app-test-card">
+            <div class="app-title">07. FarmWallet</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Logs micro-transaction settlement records into the cooperative blockchain ledger reconciliation queue.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('FarmWallet', {farmer_id: 'KE-00712', amount_ksh: 3400, tx_type: 'HARVEST_SALE'})">
+                Post Settlement Log
+            </button>
+        </div>
+
+        <!-- Card 8 -->
+        <div class="app-test-card">
+            <div class="app-title">08. InputStore</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Triggers inventory depletion alerts and restocking purchase orders to agri-input supplier APIs.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('InputStore', {item: 'DAP Fertilizer 50kg', stock_units: 12, reorder_threshold: 15})">
+                Fire Restock Alert
+            </button>
+        </div>
+
+        <!-- Card 9 -->
+        <div class="app-test-card">
+            <div class="app-title">09. DroneMapper</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Pushes NDVI field health scan results and flight path metadata into the geo-analytics data lake.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('DroneMapper', {field_id: 'FIELD_22A', ndvi_avg: 0.68, area_ha: 5.4, scan_date: new Date().toISOString()})">
+                Upload NDVI Scan
+            </button>
+        </div>
+
+        <!-- Card 10 -->
+        <div class="app-test-card">
+            <div class="app-title">10. HarvestLogger</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Records post-harvest yield weights, grading classifications, and storage destination assignments.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('HarvestLogger', {batch_id: 'HRV-2024-084', weight_kg: 1250, grade: 'A1', destination: 'Warehouse_B'})">
+                Commit Harvest Batch
+            </button>
+        </div>
+
+        <!-- Card 11 -->
+        <div class="app-test-card">
+            <div class="app-title">11. ColdChain Monitor</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Streams temperature and humidity readings from cold-storage units into the spoilage prevention alert engine.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('ColdChain_Monitor', {unit_id: 'COLD_03', temp_c: 4.2, humidity_pct: 85, status: 'NOMINAL'})">
+                Stream Cold Data
+            </button>
+        </div>
+
+        <!-- Card 12 -->
+        <div class="app-test-card">
+            <div class="app-title">12. TraceChain</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Appends immutable farm-to-fork provenance records to the blockchain traceability registry.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('TraceChain', {product: 'Organic Tomatoes', origin: 'Kirinyaga Farm 4', certifier: 'KEBS', batch: 'TC-9921'})">
+                Append Provenance
+            </button>
+        </div>
+
+        <!-- Card 13 -->
+        <div class="app-test-card">
+            <div class="app-title">13. LandRegistry</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Submits parcel boundary updates and ownership verification hashes to the digital land title ledger.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('LandRegistry', {parcel_id: 'KE-NRB-1140', area_ha: 3.2, owner_hash: 'SHA256_PLACEHOLDER', verified: true})">
+                Submit Title Update
+            </button>
+        </div>
+
+        <!-- Card 14 -->
+        <div class="app-test-card">
+            <div class="app-title">14. CoopManager</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Pushes cooperative member contribution records and dividend calculation triggers to the governance module.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('CoopManager', {coop_id: 'COOP-MK-007', members: 142, contribution_ksh: 500, period: 'Q2-2024'})">
+                Log Coop Contribution
+            </button>
+        </div>
+
+        <!-- Card 15 -->
+        <div class="app-test-card">
+            <div class="app-title">15. SeedBank AI</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Dispatches seed variety performance analytics and germination rate logs into the breeding data warehouse.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('SeedBank_AI', {variety: 'H614D Maize', germination_pct: 94, yield_potential: 'High', season: 'LR2024'})">
+                Log Seed Performance
+            </button>
+        </div>
+
+        <!-- Card 16 -->
+        <div class="app-test-card">
+            <div class="app-title">16. AgroInsure</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Triggers parametric insurance payout evaluation events based on weather index threshold breach alerts.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('AgroInsure', {policy_id: 'INS-2024-4421', trigger_event: 'DROUGHT_INDEX', payout_ksh: 18000})">
+                Evaluate Payout Trigger
+            </button>
+        </div>
+
+        <!-- Card 17 -->
+        <div class="app-test-card">
+            <div class="app-title">17. Extension Hub</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Streams agricultural advisory content delivery logs and farmer engagement metrics to the extension analytics board.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('Extension_Hub', {advisory: 'Fall Armyworm Control', delivery: 'SMS', farmers_reached: 340, county: 'Nakuru'})">
+                Log Advisory Push
+            </button>
+        </div>
+
+        <!-- Card 18 -->
+        <div class="app-test-card">
+            <div class="app-title">18. AquaFarm</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Relays fish pond water quality parameters and feeding schedule triggers into the aquaculture management system.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('AquaFarm', {pond_id: 'POND_A2', ph: 7.2, dissolved_o2: 6.8, temp_c: 22, feed_kg: 4.5})">
+                Relay Pond Telemetry
+            </button>
+        </div>
+
+        <!-- Card 19 -->
+        <div class="app-test-card">
+            <div class="app-title">19. PoultryOps</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Pushes flock health indices, egg production counts, and feed conversion ratios into the poultry analytics engine.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('PoultryOps', {flock_id: 'FLOCK_07', birds: 500, eggs_today: 412, mortality: 2, feed_kg: 60})">
+                Push Flock Metrics
+            </button>
+        </div>
+
+        <!-- Card 20 -->
+        <div class="app-test-card">
+            <div class="app-title">20. DairyTrack</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Streams per-cow milk yield telemetry and mastitis detection alert flags into the herd management platform.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('DairyTrack', {cow_id: 'COW_142', yield_litres: 18.4, fat_pct: 3.8, mastitis_flag: false})">
+                Stream Milk Yield
+            </button>
+        </div>
+
+        <!-- Card 21 -->
+        <div class="app-test-card">
+            <div class="app-title">21. BeehiveNet</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Broadcasts hive weight gain, temperature stability, and swarm detection events to the apiary monitoring grid.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('BeehiveNet', {hive_id: 'HIVE_09', weight_kg: 32.1, temp_c: 34.8, swarm_alert: false})">
+                Broadcast Hive Signal
+            </button>
+        </div>
+
+        <!-- Card 22 -->
+        <div class="app-test-card">
+            <div class="app-title">22. AgriLogistics</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Injects cargo dispatch manifests and last-mile delivery route optimisation requests into the fleet scheduler.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('AgriLogistics', {truck_id: 'TRK-KE-0041', cargo_kg: 2400, origin: 'Eldoret', destination: 'Nairobi_WH'})">
+                Dispatch Cargo Manifest
+            </button>
+        </div>
+
+        <!-- Card 23 -->
+        <div class="app-test-card">
+            <div class="app-title">23. FarmBid</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Submits real-time produce auction bid entries and lot closure confirmations to the digital marketplace clearing engine.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('FarmBid', {lot_id: 'LOT-2024-0882', product: 'Beans 90kg', bid_ksh: 8500, bidder: 'BUYER_044'})">
+                Submit Auction Bid
+            </button>
+        </div>
+
+        <!-- Card 24 -->
+        <div class="app-test-card">
+            <div class="app-title">24. SolarFarm IoT</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Relays solar panel energy output metrics and battery bank charge state to the off-grid energy management hub.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('SolarFarm_IoT', {panel_array: 'ARRAY_B', output_kwh: 14.2, battery_pct: 78, grid_status: 'OFF_GRID'})">
+                Relay Energy Metrics
+            </button>
+        </div>
+
+        <!-- Card 25 -->
+        <div class="app-test-card">
+            <div class="app-title">25. WaterMeter AI</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Dispatches borehole and surface water abstraction volume logs into the catchment management compliance registry.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('WaterMeter_AI', {meter_id: 'WM-BORE-14', abstraction_m3: 42.8, licence_limit_m3: 80, compliant: true})">
+                Log Abstraction Volume
+            </button>
+        </div>
+
+        <!-- Card 26 -->
+        <div class="app-test-card">
+            <div class="app-title">26. CarbonCredits</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Computes and submits soil carbon sequestration measurement bundles to the voluntary carbon exchange registry.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('CarbonCredits', {farm_id: 'FARM-0219', tonnes_co2e: 12.4, methodology: 'VCS_VM0042', vintage: 2024})">
+                Submit Carbon Bundle
+            </button>
+        </div>
+
+        <!-- Card 27 -->
+        <div class="app-test-card">
+            <div class="app-title">27. GreenCertify</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Triggers organic and GAP compliance audit score submissions to the third-party certification verification portal.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('GreenCertify', {farm_id: 'FARM-0219', standard: 'GlobalGAP', score: 94.2, audit_date: new Date().toISOString()})">
+                Submit Audit Score
+            </button>
+        </div>
+
+        <!-- Card 28 -->
+        <div class="app-test-card">
+            <div class="app-title">28. NutritionLab</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Pushes crop tissue sample nutritional analysis results into the fertilizer recommendation algorithm input queue.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('NutritionLab', {sample_id: 'SMP-0441', crop: 'Tomato', N_pct: 3.2, P_pct: 0.4, K_pct: 2.8, deficiency: 'Boron'})">
+                Push Lab Results
+            </button>
+        </div>
+
+        <!-- Card 29 -->
+        <div class="app-test-card">
+            <div class="app-title">29. AgriLegal</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Submits contract farming agreement metadata and digital signature verification hashes to the legal compliance vault.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('AgriLegal', {contract_id: 'CTR-2024-0055', parties: 2, signed: true, value_ksh: 250000, crop: 'Coffee'})">
+                Vault Contract Record
+            </button>
+        </div>
+
+        <!-- Card 30 -->
+        <div class="app-test-card">
+            <div class="app-title">30. FarmerProfile</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Syncs verified farmer identity bundles and KYC attestation records to the national agricultural registry node.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('FarmerProfile', {farmer_id: 'KE-FM-00219', name: 'J. Kamau', county: 'Meru', kyc_status: 'VERIFIED', hectares: 2.5})">
+                Sync Farmer KYC
+            </button>
+        </div>
+
+        <!-- Card 31 -->
+        <div class="app-test-card">
+            <div class="app-title">31. SchoolFarm</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Relays school garden produce yield and nutrition programme delivery records to the food security monitoring board.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('SchoolFarm', {school_id: 'SCH-KE-0081', students_fed: 320, produce_kg: 85, term: 'T2-2024'})">
+                Relay Produce Log
+            </button>
+        </div>
+
+        <!-- Card 32 -->
+        <div class="app-test-card">
+            <div class="app-title">32. GreenHouse OS</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Streams automated greenhouse climate actuator states and crop stage progression markers to the cultivation dashboard.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('GreenHouse_OS', {gh_id: 'GH_UNIT_3', temp_c: 26.4, humidity_pct: 72, co2_ppm: 480, stage: 'FLOWERING'})">
+                Stream Climate State
+            </button>
+        </div>
+
+        <!-- Card 33 -->
+        <div class="app-test-card">
+            <div class="app-title">33. AgroFintech</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Dispatches digital lending application packets from smallholder farmers to SACCO underwriting decision engines.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('AgroFintech', {applicant: 'KE-FM-00219', loan_ksh: 45000, purpose: 'INPUT_PURCHASE', sacco: 'FARMCOOP_SACCO'})">
+                Dispatch Loan Packet
+            </button>
+        </div>
+
+        <!-- Card 34 -->
+        <div class="app-test-card">
+            <div class="app-title">34. CropDoctor</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Uploads field photo diagnostic cases and AI-classified disease identification reports to the plant pathology knowledge base.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('CropDoctor', {case_id: 'DX-2024-0091', crop: 'Potato', disease: 'Late Blight', confidence_pct: 88.4, treatment: 'Mancozeb'})">
+                Upload Diagnosis Case
+            </button>
+        </div>
+
+        <!-- Card 35 -->
+        <div class="app-test-card">
+            <div class="app-title">35. LivestockID</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Registers RFID ear-tag scans and animal movement certificates to the national livestock traceability system.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('LivestockID', {tag_id: 'KE-RFID-00441', species: 'Cattle', breed: 'Friesian', dob: '2022-03-14', farm: 'FARM-0219'})">
+                Register Tag Scan
+            </button>
+        </div>
+
+        <!-- Card 36 -->
+        <div class="app-test-card">
+            <div class="app-title">36. SoilMap</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Pushes GPS-tagged soil texture, pH, and organic matter survey records to the national soil information database.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('SoilMap', {survey_id: 'SM-2024-0314', gps: '-0.41,37.08', ph: 6.2, organic_matter_pct: 3.8, texture: 'Clay Loam'})">
+                Push Survey Record
+            </button>
+        </div>
+
+        <!-- Card 37 -->
+        <div class="app-test-card">
+            <div class="app-title">37. AgroExport</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Submits phytosanitary compliance certificates and export consignment declarations to KEPHIS clearance portals.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('AgroExport', {consignment_id: 'EXP-2024-0088', product: 'Cut Flowers', quantity_kg: 4200, destination: 'Netherlands'})">
+                Submit Export Cert
+            </button>
+        </div>
+
+        <!-- Card 38 -->
+        <div class="app-test-card">
+            <div class="app-title">38. RuralConnect</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Routes SMS, USSD, and voice IVR farmer interaction logs into the digital engagement analytics layer.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('RuralConnect', {channel: 'USSD', farmer_msisdn: '+254712XXXXXX', session_duration_s: 92, menu_depth: 3})">
+                Log USSD Session
+            </button>
+        </div>
+
+        <!-- Card 39 -->
+        <div class="app-test-card">
+            <div class="app-title">39. AgriNews</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Injects curated agricultural news digests and price alert notifications into the farmer information push queue.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('AgriNews', {headline: 'Maize prices up 12% at Eldoret depot', category: 'MARKET', priority: 'HIGH', reach: 1240})">
+                Inject News Digest
+            </button>
+        </div>
+
+        <!-- Card 40 -->
+        <div class="app-test-card">
+            <div class="app-title">40. FarmTech Store</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Posts agri-equipment procurement orders and service maintenance ticket logs to the tech vendor fulfilment API.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('FarmTech_Store', {order_id: 'ORD-2024-0712', item: 'Drip Irrigation Kit 1ha', qty: 2, vendor: 'AgroTech_EA'})">
+                Post Equipment Order
+            </button>
+        </div>
+
+        <!-- Card 41 -->
+        <div class="app-test-card">
+            <div class="app-title">41. AgriCredit Score</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Generates dynamic operational micro-financing request logs routed through automated risk evaluation pools.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('AgriCredit_Score', {requested_credit: 25000, risk_factor: 'Low', farmer_id: 'KE-FM-00219'})">
+                Log Financing Pulse
+            </button>
+        </div>
+
+        <!-- Card 42 -->
+        <div class="app-test-card">
+            <div class="app-title">42. SatelliteWatch</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Ingests multispectral satellite imagery change-detection alerts into the crop stress early warning system.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('SatelliteWatch', {tile_id: 'TILE-KE-0091', evi_change: -0.14, alert: 'CROP_STRESS', area_ha: 22.4})">
+                Ingest Satellite Alert
+            </button>
+        </div>
+
+        <!-- Card 43 -->
+        <div class="app-test-card">
+            <div class="app-title">43. SupplyChain AI</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Optimises and dispatches multi-tier supply chain route plans to logistics partners via the coordination API.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('SupplyChain_AI', {route_id: 'RT-2024-0041', legs: 3, total_km: 218, optimised_cost_ksh: 14200})">
+                Dispatch Route Plan
+            </button>
+        </div>
+
+        <!-- Card 44 -->
+        <div class="app-test-card">
+            <div class="app-title">44. SeedTrace</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Records certified seed lot distribution chain events from breeder to last-mile agro-dealer.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('SeedTrace', {lot_id: 'SEED-LOT-2024-0088', variety: 'WEMA Drought Tolerant', kg_distributed: 840, dealer: 'AgriDeal_Eldoret'})">
+                Record Seed Dispatch
+            </button>
+        </div>
+
+        <!-- Card 45 -->
+        <div class="app-test-card">
+            <div class="app-title">45. ClimateSmart</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Submits climate-smart agriculture practice adoption survey entries to the impact measurement framework.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('ClimateSmart', {farmer_id: 'KE-FM-00219', practice: 'Conservation Tillage', adoption_score: 82, season: 'SR2024'})">
+                Submit CSA Survey
+            </button>
+        </div>
+
+        <!-- Card 46 -->
+        <div class="app-test-card">
+            <div class="app-title">46. WasteToWealth</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Logs agricultural waste conversion batch metrics into the biogas and composting circular economy tracker.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('WasteToWealth', {batch_id: 'BIO-2024-0031', waste_kg: 600, output_type: 'Compost', output_kg: 420})">
+                Log Conversion Batch
+            </button>
+        </div>
+
+        <!-- Card 47 -->
+        <div class="app-test-card">
+            <div class="app-title">47. AgriGender</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Pushes gender-disaggregated programme participation and resource access data to the equity monitoring dashboard.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('AgriGender', {programme: 'WISER_AgriLoan', female_participants: 218, male_participants: 94, period: 'Q2-2024'})">
+                Push Gender Data
+            </button>
+        </div>
+
+        <!-- Card 48 -->
+        <div class="app-test-card">
+            <div class="app-title">48. YouthAgri</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Tracks youth agripreneur cohort progress milestones and business plan submission events to the incubation manager.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('YouthAgri', {cohort_id: 'YOUTH-2024-K07', members: 22, milestone: 'BUSINESS_PLAN_SUBMITTED', county: 'Kisumu'})">
+                Track Cohort Milestone
+            </button>
+        </div>
+
+        <!-- Card 49 -->
+        <div class="app-test-card">
+            <div class="app-title">49. PolicyPulse</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Aggregates field-level policy compliance status scores and subsidy eligibility flags for government reporting.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('PolicyPulse', {county: 'Nakuru', compliant_farms: 1240, subsidy_eligible: 980, policy: 'FERTILIZER_SUBSIDY_2024'})">
+                Aggregate Policy Report
+            </button>
+        </div>
+
+        <!-- Card 50 -->
+        <div class="app-test-card">
+            <div class="app-title">50. DataLake Hub</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Routes all DreamTeQ platform telemetry streams into the master data lake ingestion and transformation pipeline.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('DataLake_Hub', {streams_active: 49, events_queued: 1842, ingestion_rate_eps: 214, status: 'OPTIMAL'})">
+                Flush to Data Lake
+            </button>
+        </div>
+
+        <!-- Card 51 -->
+        <div class="app-test-card">
+            <div class="app-title">51. SmartScale</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Relays IoT weighbridge readings and grading station measurements into the produce quality management system.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('SmartScale', {scale_id: 'SC-GRAD-01', product: 'Avocado', weight_kg: 320.4, grade: 'Premium', moisture_pct: 8.2})">
+                Relay Scale Reading
+            </button>
+        </div>
+
+        <!-- Card 52 -->
+        <div class="app-test-card">
+            <div class="app-title">52. PackagingOps</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Logs packaging line throughput rates and label compliance scan results into the post-harvest operations tracker.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('PackagingOps', {line_id: 'PKG-LINE-02', units_packed: 1840, label_pass_pct: 99.1, shift: 'MORNING'})">
+                Log Packaging Batch
+            </button>
+        </div>
+
+        <!-- Card 53 -->
+        <div class="app-test-card">
+            <div class="app-title">53. FoodSafety AI</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Dispatches pesticide residue test results and aflatoxin screening flags to the food safety compliance registry.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('FoodSafety_AI', {batch_id: 'FS-2024-0044', pesticide_ppb: 0.02, aflatoxin_ppb: 0.8, status: 'PASS'})">
+                Dispatch Safety Cert
+            </button>
+        </div>
+
+        <!-- Card 54 -->
+        <div class="app-test-card">
+            <div class="app-title">54. MarketLink</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Connects verified buyers and sellers via digital RFQ matching and order confirmation relay events.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('MarketLink', {rfq_id: 'RFQ-2024-0712', product: 'Dried Chillies 500kg', buyer: 'BUYER_019', status: 'MATCHED'})">
+                Relay RFQ Match
+            </button>
+        </div>
+
+        <!-- Card 55 -->
+        <div class="app-test-card">
+            <div class="app-title">55. BiodiversityNet</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Logs pollinator species observation records and biodiversity index updates to the conservation monitoring layer.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('BiodiversityNet', {site_id: 'SITE-MK-007', species_observed: 12, pollinator_index: 74.2, date: new Date().toISOString()})">
+                Log Biodiversity Data
+            </button>
+        </div>
+
+        <!-- Card 56 -->
+        <div class="app-test-card">
+            <div class="app-title">56. HerbGarden</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Tracks medicinal and culinary herb cultivation batches and export compliance records in the specialty crops module.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('HerbGarden', {crop: 'Moringa', batch_kg: 85, organic: true, export_ready: true, buyer: 'EU_Importer_04'})">
+                Track Herb Batch
+            </button>
+        </div>
+
+        <!-- Card 57 -->
+        <div class="app-test-card">
+            <div class="app-title">57. FruitPack</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Pushes orchard harvest tray-count logs and cold-store allocation assignments to the fresh produce operations hub.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('FruitPack', {orchard_id: 'ORC-014', variety: 'Hass Avocado', trays_packed: 240, cold_room: 'CR-02'})">
+                Push Orchard Log
+            </button>
+        </div>
+
+        <!-- Card 58 -->
+        <div class="app-test-card">
+            <div class="app-title">58. SugarCane ERP</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Relays cane delivery note data and miller payment vouchers through the nucleus estate settlement platform.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('SugarCane_ERP', {delivery_note: 'DN-2024-08841', tonnes: 28.4, miller: 'Mumias_Sugar', payment_ksh: 48280})">
+                Relay Delivery Note
+            </button>
+        </div>
+
+        <!-- Card 59 -->
+        <div class="app-test-card">
+            <div class="app-title">59. TeaBoard</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Submits green leaf delivery weights and factory intake receipts to the KTDA farmer payment reconciliation system.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('TeaBoard', {farmer_id: 'KE-FM-00219', green_leaf_kg: 184, factory: 'Githunguri_KTDA', payment_ksh: 2944})">
+                Submit Leaf Delivery
+            </button>
+        </div>
+
+        <!-- Card 60 -->
+        <div class="app-test-card">
+            <div class="app-title">60. CoffeeMill</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Logs cherry delivery records and parchment processing batch outcomes to the cooperative mill management ledger.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('CoffeeMill', {farmer_id: 'KE-FM-00219', cherry_kg: 92, parchment_kg: 18.4, coop: 'Githunguri_FCS'})">
+                Log Cherry Delivery
+            </button>
+        </div>
+
+        <!-- Card 61 -->
+        <div class="app-test-card">
+            <div class="app-title">61. MacadamiaNet</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Pushes nut-in-shell delivery weights and moisture content readings to the processor intake quality control system.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('MacadamiaNet', {batch_id: 'MAC-2024-0041', nis_kg: 420, moisture_pct: 12.4, processor: 'Kirinyaga_Nuts_Ltd'})">
+                Push NIS Delivery
+            </button>
+        </div>
+
+        <!-- Card 62 -->
+        <div class="app-test-card">
+            <div class="app-title">62. HoneyTrack</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Records honey extraction batch weights, moisture content, and HMF test values to the apiary export compliance log.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('HoneyTrack', {batch_id: 'HNY-2024-0019', weight_kg: 84, moisture_pct: 17.8, hmf_mg_kg: 14.2, grade: 'Export'})">
+                Record Honey Batch
+            </button>
+        </div>
+
+        <!-- Card 63 -->
+        <div class="app-test-card">
+            <div class="app-title">63. SpiceChain</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Dispatches spice crop drying batch telemetry and fumigation clearance certificates to the export readiness checker.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('SpiceChain', {crop: 'Cardamom', batch_kg: 140, moisture_pct: 9.8, fumigation_cert: 'FC-2024-0055', export_ready: true})">
+                Dispatch Spice Cert
+            </button>
+        </div>
+
+        <!-- Card 64 -->
+        <div class="app-test-card">
+            <div class="app-title">64. FishMarket</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Relays landing beach fish catch volumes, species composition logs, and hygiene inspection scores to the blue economy registry.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('FishMarket', {beach_id: 'BEACH-VIC-04', catch_kg: 1840, species: 'Nile Perch', hygiene_score: 88})">
+                Relay Catch Log
+            </button>
+        </div>
+
+        <!-- Card 65 -->
+        <div class="app-test-card">
+            <div class="app-title">65. MushroomLab</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Logs substrate inoculation batch records and fruiting body yield metrics into the specialty fungi cultivation tracker.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('MushroomLab', {batch_id: 'MSH-2024-0012', substrate_kg: 200, species: 'Oyster', yield_kg: 48, days_to_harvest: 21})">
+                Log Mushroom Yield
+            </button>
+        </div>
+
+        <!-- Card 66 -->
+        <div class="app-test-card">
+            <div class="app-title">66. InsectFarm</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Streams black soldier fly colony biomass conversion logs and frass production metrics to the circular protein economy dashboard.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('InsectFarm', {colony_id: 'BSF-UNIT-07', waste_consumed_kg: 480, larvae_kg: 96, frass_kg: 210, cycle_days: 14})">
+                Stream BSF Metrics
+            </button>
+        </div>
+
+        <!-- Card 67 -->
+        <div class="app-test-card">
+            <div class="app-title">67. AloeVera Grid</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Records aloe vera leaf harvest weights and gel extraction batch purity values to the cosmetics supply chain module.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('AloeVera_Grid', {batch_id: 'ALV-2024-0007', leaf_kg: 640, gel_litres: 192, purity_pct: 99.2, buyer: 'CosmoNaturals_Ltd'})">
+                Record Aloe Batch
+            </button>
+        </div>
+
+        <!-- Card 68 -->
+        <div class="app-test-card">
+            <div class="app-title">68. PigeryOps</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Pushes pig growth performance records, feed conversion ratios, and slaughter weight projections to the piggery management system.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('PigeryOps', {pig_id: 'PIG-0441', breed: 'Large White', age_weeks: 22, weight_kg: 88.4, fcr: 2.8})">
+                Push Growth Record
+            </button>
+        </div>
+
+        <!-- Card 69 -->
+        <div class="app-test-card">
+            <div class="app-title">69. SilkwormNet</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Logs sericulture rearing batch cocoon production metrics and filament quality assessments to the silk value chain tracker.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('SilkwormNet', {batch_id: 'SLK-2024-0003', cocoon_kg: 42, filament_length_m: 800, grade: 'A', rearing_days: 28})">
+                Log Cocoon Production
+            </button>
+        </div>
+
+        <!-- Card 70 -->
+        <div class="app-test-card">
+            <div class="app-title">70. RabitryTrack</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Records rabbit litter performance, weaning weights, and hutch biosecurity inspection scores in the small livestock module.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('RabitryTrack', {doe_id: 'RAB-DOE-022', litter_size: 8, weaning_weight_g: 420, biosecurity_score: 91})">
+                Record Litter Data
+            </button>
+        </div>
+
+        <!-- Card 71 -->
+        <div class="app-test-card">
+            <div class="app-title">71. CamelDairy</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Streams camel milk yield records and veterinary health clearances to the ASAL livestock value chain platform.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('CamelDairy', {camel_id: 'CAM-014', yield_litres: 8.4, vet_cleared: true, location: 'Marsabit', date: new Date().toISOString()})">
+                Stream Camel Yield
+            </button>
+        </div>
+
+        <!-- Card 72 -->
+        <div class="app-test-card">
+            <div class="app-title">72. FlowerAuction</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Pushes cut flower bunch count, stem length grading, and auction clock price captures to the Nairobi flower exchange feed.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('FlowerAuction', {consignment_id: 'FLW-2024-0441', variety: 'Red Rose', bunches: 840, stem_cm: 60, auction_price_eur: 0.42})">
+                Push Auction Feed
+            </button>
+        </div>
+
+        <!-- Card 73 -->
+        <div class="app-test-card">
+            <div class="app-title">73. VegeBox</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Compiles and dispatches weekly community supported agriculture box subscription order fulfilment manifests.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('VegeBox', {week: '2024-W24', boxes_dispatched: 142, avg_box_value_ksh: 850, subscribers_active: 158})">
+                Dispatch CSA Manifest
+            </button>
+        </div>
+
+        <!-- Card 74 -->
+        <div class="app-test-card">
+            <div class="app-title">74. HealthyHarvest</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Logs biofortified crop distribution events and nutritional impact survey responses to the food systems health index.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('HealthyHarvest', {crop: 'Orange-Fleshed Sweet Potato', kg_distributed: 2400, beneficiaries: 320, vit_a_impact: 'HIGH'})">
+                Log Biofortification
+            </button>
+        </div>
+
+        <!-- Card 75 -->
+        <div class="app-test-card">
+            <div class="app-title">75. ReGenFarm</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Tracks regenerative agriculture practice adoption scores and soil health trend metrics in the ecosystem services registry.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('ReGenFarm', {farm_id: 'FARM-0219', regen_score: 78.4, soil_health_trend: 'IMPROVING', practices: ['Cover Cropping','Agroforestry']})">
+                Track ReGen Score
+            </button>
+        </div>
+
+        <!-- Card 76 -->
+        <div class="app-test-card">
+            <div class="app-title">76. FertilizerBot</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Pushes AI-optimised variable-rate fertilizer prescription maps to the precision spreader fleet management system.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('FertilizerBot', {field_id: 'FIELD_22A', prescription_map_id: 'PRESC-2024-0088', N_kg_ha: 80, P_kg_ha: 40, K_kg_ha: 60})">
+                Push Prescription Map
+            </button>
+        </div>
+
+        <!-- Card 77 -->
+        <div class="app-test-card">
+            <div class="app-title">77. AgriRobotics</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Streams autonomous planting robot task completion telemetry and obstacle detection logs to the fleet operations controller.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('AgriRobotics', {robot_id: 'BOT-PLANT-03', task: 'TRANSPLANTING', rows_completed: 48, battery_pct: 62, anomalies: 0})">
+                Stream Robot Task
+            </button>
+        </div>
+
+        <!-- Card 78 -->
+        <div class="app-test-card">
+            <div class="app-title">78. PrecisionSpray</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Logs variable-rate pesticide application event records and nozzle calibration confirmations to the spray audit system.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('PrecisionSpray', {sprayer_id: 'SPR-VR-02', field_id: 'FIELD_22A', chemical: 'Lambda Cyhalothrin', litres_applied: 84.2, coverage_ha: 4.8})">
+                Log Spray Event
+            </button>
+        </div>
+
+        <!-- Card 79 -->
+        <div class="app-test-card">
+            <div class="app-title">79. SeedDrillAI</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Pushes GPS-tagged planting population density maps and seed placement accuracy reports to the field operations log.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('SeedDrillAI', {drill_id: 'DRILL-07', field_id: 'FIELD_22A', population_seeds_ha: 66000, placement_accuracy_pct: 97.8})">
+                Push Planting Map
+            </button>
+        </div>
+
+        <!-- Card 80 -->
+        <div class="app-test-card">
+            <div class="app-title">80. HarvestBot</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Relays combine harvester grain loss monitoring data and yield mapping telemetry to the precision agriculture analytics engine.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('HarvestBot', {combine_id: 'CMB-04', field_id: 'FIELD_22A', yield_t_ha: 4.8, grain_loss_pct: 1.2, moisture_pct: 14.4})">
+                Relay Yield Map
+            </button>
+        </div>
+
+        <!-- Card 81 -->
+        <div class="app-test-card">
+            <div class="app-title">81. SoilSensor Net</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Streams subsurface soil moisture probe array readings into the precision irrigation decision support system.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('SoilSensor_Net', {node_id: 'SSN-014', depth_cm: 30, moisture_pct: 24.8, temp_c: 21.4, ec_mS: 0.82})">
+                Stream Probe Data
+            </button>
+        </div>
+
+        <!-- Card 82 -->
+        <div class="app-test-card">
+            <div class="app-title">82. WeatherStation</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Pushes automated on-farm micro-meteorological station readings to the agro-climate monitoring network grid.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('WeatherStation', {station_id: 'AWS-KE-019', temp_c: 23.8, humidity_pct: 65, rain_mm: 4.2, wind_kph: 11, radiation_Wm2: 820})">
+                Push Station Reading
+            </button>
+        </div>
+
+        <!-- Card 83 -->
+        <div class="app-test-card">
+            <div class="app-title">83. RainfallIndex</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Dispatches daily satellite-derived rainfall estimate index values to parametric weather insurance trigger evaluation engines.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('RainfallIndex', {pixel_id: 'CHIRPS-KE-0441', date: new Date().toISOString(), rainfall_mm: 18.4, threshold_trigger: 10, triggered: true})">
+                Dispatch CHIRPS Index
+            </button>
+        </div>
+
+        <!-- Card 84 -->
+        <div class="app-test-card">
+            <div class="app-title">84. ErosionWatch</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Logs soil erosion risk index updates and conservation structure installation records to the watershed management system.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('ErosionWatch', {catchment_id: 'CATCH-MK-03', erosion_risk: 'High', terraces_installed: 8, vegetation_cover_pct: 34})">
+                Log Erosion Risk
+            </button>
+        </div>
+
+        <!-- Card 85 -->
+        <div class="app-test-card">
+            <div class="app-title">85. FloodAlert</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Broadcasts river level breach alerts and inundation zone farmer evacuation advisories through the flood early warning relay.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('FloodAlert', {river: 'Tana', gauge_m: 4.8, alert_level: 'YELLOW', farms_at_risk: 84, advisory_issued: true})">
+                Broadcast Flood Alert
+            </button>
+        </div>
+
+        <!-- Card 86 -->
+        <div class="app-test-card">
+            <div class="app-title">86. LocustTrack</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Streams desert locust swarm detection coordinates and wind trajectory forecasts to the FAO regional response system.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('LocustTrack', {swarm_id: 'LST-2024-0041', gps: '1.12,38.44', density: 'Medium', area_km2: 14.2, wind_dir: 'SW'})">
+                Stream Swarm Alert
+            </button>
+        </div>
+
+        <!-- Card 87 -->
+        <div class="app-test-card">
+            <div class="app-title">87. DroughtMonitor</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Pushes SPI and NDVI-based drought severity index updates to the NDMA food security early warning dashboard.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('DroughtMonitor', {region: 'Turkana', spi_3m: -1.84, ndvi_anomaly: -0.22, severity: 'MODERATE', weeks_dry: 8})">
+                Push Drought Index
+            </button>
+        </div>
+
+        <!-- Card 88 -->
+        <div class="app-test-card">
+            <div class="app-title">88. FoodPriceWatch</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Logs daily staple food retail price surveys from market monitors into the food security price monitoring database.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('FoodPriceWatch', {market: 'Gikomba_Nairobi', maize_flour_ksh: 180, beans_ksh: 220, cooking_oil_ksh: 310, date: new Date().toISOString()})">
+                Log Market Prices
+            </button>
+        </div>
+
+        <!-- Card 89 -->
+        <div class="app-test-card">
+            <div class="app-title">89. NutritionSurveillance</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Submits child anthropometric measurement data packets to the nutrition surveillance SMART survey reporting system.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('NutritionSurveillance', {county: 'Turkana', sam_pct: 4.2, mam_pct: 12.8, survey_date: new Date().toISOString(), children_sampled: 480})">
+                Submit SMART Survey
+            </button>
+        </div>
+
+        <!-- Card 90 -->
+        <div class="app-test-card">
+            <div class="app-title">90. AgriHR</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Logs seasonal farm labour recruitment records, wage payment confirmations, and worker safety incident reports.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('AgriHR', {farm_id: 'FARM-0219', workers_hired: 42, wage_ksh_day: 500, safety_incidents: 0, period: 'LR_HARVEST_2024'})">
+                Log Labour Record
+            </button>
+        </div>
+
+        <!-- Card 91 -->
+        <div class="app-test-card">
+            <div class="app-title">91. FarmEnergy</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Monitors and dispatches on-farm renewable energy generation and consumption metrics to the green energy portfolio tracker.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('FarmEnergy', {farm_id: 'FARM-0219', solar_kwh: 28.4, biogas_kwh: 12.2, consumption_kwh: 34.8, surplus_kwh: 5.8})">
+                Dispatch Energy Report
+            </button>
+        </div>
+
+        <!-- Card 92 -->
+        <div class="app-test-card">
+            <div class="app-title">92. WaterHarvesting</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Records rainwater harvesting structure fill levels and runoff capture events in the water security asset registry.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('WaterHarvesting', {structure_id: 'DAM-KE-0041', capacity_m3: 500, current_m3: 342, fill_pct: 68.4, rainfall_event_mm: 22})">
+                Record Fill Event
+            </button>
+        </div>
+
+        <!-- Card 93 -->
+        <div class="app-test-card">
+            <div class="app-title">93. AgriTourism</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Logs agri-tourism visitor booking confirmations and experience delivery feedback scores to the rural tourism platform.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('AgriTourism', {farm_id: 'FARM-0219', visitors: 24, experience: 'Coffee Farm Tour', revenue_ksh: 36000, rating: 4.7})">
+                Log Visitor Booking
+            </button>
+        </div>
+
+        <!-- Card 94 -->
+        <div class="app-test-card">
+            <div class="app-title">94. ResearchTrials</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Pushes on-farm adaptive research trial measurement data to the CGIAR Open Data platform research repository.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('ResearchTrials', {trial_id: 'TRIAL-2024-0088', treatment: 'T3_High_N', rep: 2, yield_t_ha: 5.2, plot_m2: 25})">
+                Push Trial Data
+            </button>
+        </div>
+
+        <!-- Card 95 -->
+        <div class="app-test-card">
+            <div class="app-title">95. E-Extension</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Streams digital extension officer field visit logs and farmer coaching session outcomes to the advisory performance dashboard.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('E_Extension', {officer_id: 'EO-KE-0041', farmers_visited: 18, demos_conducted: 3, county: 'Embu', date: new Date().toISOString()})">
+                Stream Field Visit Log
+            </button>
+        </div>
+
+        <!-- Card 96 -->
+        <div class="app-test-card">
+            <div class="app-title">96. AgriBlockchain</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Appends smart contract execution events and tokenised commodity settlement records to the distributed ledger audit trail.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('AgriBlockchain', {contract_addr: '0xDREAM...', event: 'PAYMENT_RELEASED', amount_usd: 1240, commodity: 'Arabica Coffee'})">
+                Append Ledger Event
+            </button>
+        </div>
+
+        <!-- Card 97 -->
+        <div class="app-test-card">
+            <div class="app-title">97. FarmMetaverse</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Dispatches virtual farm twin synchronisation state packets to the 3D geospatial agricultural metaverse rendering engine.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('FarmMetaverse', {twin_id: 'FARM-0219-TWIN', sync_objects: 142, lag_ms: 84, render_quality: 'HD', session_users: 3})">
+                Sync Farm Twin
+            </button>
+        </div>
+
+        <!-- Card 98 -->
+        <div class="app-test-card">
+            <div class="app-title">98. AIAdvisor</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Routes natural language farmer query packages through the LLM advisory engine and logs response quality ratings.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('AIAdvisor', {query_id: 'QRY-2024-08841', query: 'When should I apply top dressing?', lang: 'sw', confidence: 0.94, rating: 5})">
+                Route LLM Query
+            </button>
+        </div>
+
+        <!-- Card 99 -->
+        <div class="app-test-card">
+            <div class="app-title">99. OpenData API</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">Publishes anonymised platform telemetry datasets to the DreamTeQ open data API gateway for third-party integration.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('OpenData_API', {dataset: 'SOIL_NPK_KENYA_2024', records_published: 84200, api_calls_today: 1242, licence: 'CC-BY-4.0'})">
+                Publish Open Dataset
+            </button>
+        </div>
+
+        <!-- Card 100 -->
+        <div class="app-test-card">
+            <div class="app-title">100. DreamTeQ Master Hub</div>
+            <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">The central intelligence orchestrator — aggregates all 99 mini-app telemetry streams and routes to the master DreamTeQ 360 ERP core.</p>
+            <button class="trigger-btn" onclick="fireMockTelemetry('DreamTeQ_Master_Hub', {apps_active: 100, events_per_sec: 840, uptime_pct: 99.97, master_status: 'ALL_SYSTEMS_NOMINAL'})">
+                Orchestrate All Streams
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        Product of Dreamteam Consulting Company, Box 3515-00100, Nairobi, Kenya | Tel: +254718554383 | Web: www.dreamteamconsult.site | Email: dreamteamconsult@gmx.com | Monetized via AI-Driven SMM, LLMM, SEO, and LLEO Optimizations.
+    </footer>
+
+    <script>
+        /**
+         * Pushes telemetry objects up through the parent iFrame context window layer
+         */
+        function fireMockTelemetry(appId, dataPayload) {
+            console.log(`[MINI-APP ${appId}] Broadcasting data package to host portal context...`);
+            
+            const messagePacket = {
+                channel: "DREAMTEQ_MINIAPP_STREAM",
+                appId: appId,
+                payload: {
+                    ...dataPayload,
+                    _id: 'LOG_' + appId.toUpperCase() + '_' + Date.now(),
+                    timestamp: new Date().toISOString()
+                }
+            };
+
+            // PostMessage delivery to parent system window frame coordinates
+            window.parent.postMessage(messagePacket, "*");
+        }
+    </script>
+</body>
+</html>
