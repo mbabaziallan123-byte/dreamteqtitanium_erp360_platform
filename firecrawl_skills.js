@@ -15,7 +15,9 @@ const https = require('https');
 
 // ── Firecrawl API configuration ───────────────────────────────────────────────
 // API key is read from environment only — never hardcoded in source.
+// v2 is the current production API version per official Firecrawl integration docs.
 const FIRECRAWL_HOST    = 'api.firecrawl.dev';
+const FIRECRAWL_BASE    = '/v2';
 const FIRECRAWL_API_KEY = process.env.FIRECRAWL_API_KEY || '';
 
 // ── Internal helper: make a signed HTTPS request to Firecrawl ────────────────
@@ -29,7 +31,7 @@ function firecrawlRequest(path, bodyObject) {
 
         const options = {
             hostname: FIRECRAWL_HOST,
-            path,
+            path:     `${FIRECRAWL_BASE}${path}`,
             method: 'POST',
             headers: {
                 'Authorization':  `Bearer ${FIRECRAWL_API_KEY}`,
@@ -69,7 +71,7 @@ const FirecrawlAgentSkills = {
     async scrapeCleanWebContext(targetUrl) {
         console.log(`[FIRECRAWL SKILL] Initiating clean web scrape on: ${targetUrl}`);
 
-        const result = await firecrawlRequest('/v1/scrape', {
+        const result = await firecrawlRequest('/scrape', {
             url:             targetUrl,
             formats:         ['markdown'],
             onlyMainContent: true
@@ -77,6 +79,10 @@ const FirecrawlAgentSkills = {
 
         if (result.success && result.data && result.data.markdown) {
             return result.data.markdown;
+        }
+        // v2 may nest markdown inside data.content on some endpoint variants
+        if (result.success && result.data && result.data.content) {
+            return result.data.content;
         }
         throw new Error(result.error || 'Firecrawl /scrape returned no usable content.');
     },
@@ -93,7 +99,7 @@ const FirecrawlAgentSkills = {
     async searchLiveMarketIntelligence(query, limit = 3) {
         console.log(`[FIRECRAWL SKILL] Dispatching live web intelligence search: "${query}"`);
 
-        const result = await firecrawlRequest('/v1/search', {
+        const result = await firecrawlRequest('/search', {
             query,
             limit,
             scrapeOptions: {
@@ -102,7 +108,8 @@ const FirecrawlAgentSkills = {
             }
         });
 
-        return result.data || [];
+        // v2 /search nests results under data.web
+        return (result.data && result.data.web) ? result.data.web : (result.data || []);
     },
 
     /**
@@ -116,7 +123,7 @@ const FirecrawlAgentSkills = {
     async crawlDomainCorpus(startUrl, pageLimit = 10) {
         console.log(`[FIRECRAWL SKILL] Initiating domain corpus crawl on: ${startUrl} (limit: ${pageLimit} pages)`);
 
-        const result = await firecrawlRequest('/v1/crawl', {
+        const result = await firecrawlRequest('/crawl', {
             url:   startUrl,
             limit: pageLimit,
             scrapeOptions: {

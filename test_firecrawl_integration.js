@@ -68,18 +68,22 @@ async function runFirecrawlAuditSuite() {
         const discoveryResults = await FirecrawlAgentSkills.searchLiveMarketIntelligence(testSearchQuery, 3);
 
         assert(Array.isArray(discoveryResults),
-            'Firecrawl /search response must resolve as an array.');
+            'Firecrawl /search response (data.web) must resolve as an array.');
         console.log(`✅  Assertion 1 Passed: Pulled ${discoveryResults.length} live context block(s) from the web.`);
 
         if (discoveryResults.length > 0) {
             const topResult = discoveryResults[0];
             assert(typeof topResult === 'object' && topResult !== null,
                 'Each result block must be a non-null object.');
-            console.log(`✅  Assertion 2 Passed: Top result object valid. Title: "${topResult.title || '(no title)'}"`);
+            // v2 web results have url + title fields
+            const hasUrl   = typeof topResult.url   === 'string';
+            const hasTitle = typeof topResult.title  === 'string';
+            assert(hasUrl || hasTitle, 'Top result must have at least a url or title field.');
+            console.log(`✅  Assertion 2 Passed: Top result valid. Title: "${topResult.title || '(no title)'}"`);
         }
 
-        // ── Live assertion 2: scrape returns Markdown string ────────────────
-        const testScrapeUrl = 'https://www.nafis.go.ke/';
+        // Use a stable, always-available public URL for the scrape smoke test
+        const testScrapeUrl = 'https://firecrawl.dev';
         const markdownContent = await FirecrawlAgentSkills.scrapeCleanWebContext(testScrapeUrl);
         assert(typeof markdownContent === 'string' && markdownContent.length > 50,
             'Firecrawl /scrape must return a meaningful Markdown string (> 50 chars).');
