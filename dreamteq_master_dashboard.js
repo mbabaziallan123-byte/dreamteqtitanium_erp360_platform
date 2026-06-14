@@ -27,6 +27,63 @@
     var frappeModules = ['CRM', 'Selling', 'Buying', 'Stock', 'Projects', 'HR', 'Payroll', 'Accounting', 'Assets', 'Manufacturing', 'Quality', 'Support', 'Website', 'Portal', 'Desk', 'Workflow', 'SLA', 'Healthcare', 'Agriculture', 'Education'];
     var odooModules = ['Partners', 'Accounting', 'Invoicing', 'Inventory', 'Purchase', 'Sales', 'CRM', 'Subscriptions', 'Documents', 'Sign', 'Barcode', 'Fleet', 'Repair', 'Maintenance', 'Manufacturing', 'PLM', 'Quality', 'Employees', 'Recruitment', 'Time Off', 'Expenses', 'Payroll', 'Project', 'Timesheets', 'Field Service', 'Helpdesk', 'Website', 'eCommerce', 'POS', 'Email Marketing', 'SMS Marketing', 'Social Marketing', 'Events', 'Surveys', 'Knowledge', 'Approvals', 'Studio', 'IoT', 'VoIP', 'Live Chat', 'Planning', 'Appointments', 'Rental', 'Lunch', 'Fleet Fuel', 'MRP Workorders', 'Payment Providers', 'Data Cleaning', 'Spreadsheets', 'Dashboards'];
 
+    var titaniumFeaturedModules = [
+        { id: 'itax_compliance', name: 'iTax Automated Filing Module', ancestry: 'Odoo Accounting + Kenya Revenue Authority Bridge', agent: 'TaxCompliance Swarm', desc: 'Automated VAT, PAYE, and withholding tax optimization computation layers routed to KRA-ready API payloads.', braintier: '#34D399' },
+        { id: 'hr_payroll', name: 'Ecosystem HR & Payroll Module', ancestry: 'Frappe HR + Odoo Employee', agent: 'LaborCompensation Swarm', desc: 'Manages piece-rate field worker wages, statutory deductions, and direct bank allocation ledgers.', braintier: '#34D399' },
+        { id: 'crm_farmer', name: 'Smallholder Relations CRM', ancestry: 'Frappe CRM Core', agent: 'Cooperative Liaison Swarm', desc: 'Handles smallholder interaction lifecycles, farmer helpdesk requests, and voice-to-text agronomy memos.', braintier: '#34D399' },
+        { id: 'sales_marketing', name: 'Project Sales & Marketing Module', ancestry: 'Odoo CRM + Odoo Sales', agent: 'MarketArbitrage Swarm', desc: 'Runs wholesale contract allocation arrays, automated lead scoring, and route-aware deal matching.', braintier: '#34D399' },
+        { id: 'training_lms', name: 'Capacity Building LMS Module', ancestry: 'Odoo Slide LMS Core', agent: 'Instructional Design Swarm', desc: 'Deploys training guidelines, certification tests, and A4 presentation manual outputs.', braintier: '#FBBF24' },
+        { id: 'jobs_careers', name: 'Jobs & Rural Careers Module', ancestry: 'Frappe Recruitment Core', agent: 'TalentAllocation Swarm', desc: 'Matches seasonal field labor, mechanical operators, and agronomists with verified operational tasks.', braintier: '#34D399' },
+        { id: 'manufacturing_value', name: 'Manufacturing & Value Addition', ancestry: 'Odoo MRP Engine', agent: 'ProcessCosting Swarm', desc: 'Calculates milling, sorting, pasteurization, packaging BOM overheads, and batch yields.', braintier: '#34D399' },
+        { id: 'finance_admin', name: 'Finance & Admin General Ledger', ancestry: 'Odoo 18 Multi-Company Accounting', agent: 'CapitalAllocation Swarm', desc: 'Central double-entry ledger for KES, USD, EUR, and CNY cooperative bank clearings.', braintier: '#34D399' },
+        { id: 'smm_monetization', name: 'SMM Automated Content Module', ancestry: 'DreamTeQ Custom Media Framework', agent: 'SocialContent Swarm', desc: 'Controls programmatic short-form video creation, watermarking, and publishing queues.', braintier: '#34D399' },
+        { id: 'legal_compliance', name: 'Legal, IP & Patent Protection', ancestry: 'Odoo Document Management Vault', agent: 'ComplianceAudit Swarm', desc: 'Protects sensitive source data, legal frameworks, patents, trademarks, and audit artifacts.', braintier: '#34D399' },
+        { id: 'business_planning', name: 'Project Business Planning Module', ancestry: 'Frappe Project Management Matrix', agent: 'StrategicFeasibility Swarm', desc: 'Compiles capital projections, asset lifecycle indices, and predictive business model outlines.', braintier: '#34D399' },
+        { id: 'valuechain_farm_fork', name: 'Value Chain Farm-to-Fork Analysis', ancestry: 'Odoo Stock Logistics + Blockchain Trace', agent: 'TraceabilityAudit Swarm', desc: 'Maps price markup parameters from smallholder fields through warehousing to kiosks.', braintier: '#34D399' },
+        { id: 'profitability_analysis', name: 'Project Profitability Analysis Dashboard', ancestry: 'Odoo Analytic Accounting Mod', agent: 'YieldProfitability Swarm', desc: 'Evaluates gross margin per cooperative node while tracking input overhead usage.', braintier: '#34D399' },
+        { id: 'project_budgeting', name: 'Project Budgeting Module', ancestry: 'Odoo Budget Management Engine', agent: 'FiscalControl Swarm', desc: 'Enforces cash allocation boundaries and alerts operational heads to overhead spikes.', braintier: '#34D399' },
+        { id: 'postharvest_packaging', name: 'Post-Harvest & Packaging Module', ancestry: 'Odoo Quality Assurance + MRP', agent: 'SpoilagePrevention Swarm', desc: 'Monitors shelf life, moisture values, and barcode labeling for shipping boxes.', braintier: '#34D399' },
+        { id: 'inventory_management', name: 'Project Inventory Management Module', ancestry: 'Odoo 18 Multi-Warehouse Stock', agent: 'InventoryVelocity Swarm', desc: 'Tracks batch numbers, seed and fertilizer thresholds, and warehouse velocity.', braintier: '#34D399' },
+        { id: 'project_research', name: 'Project Research & Metadata Hub', ancestry: 'Frappe Custom Document Node', agent: 'AgronomicR_D Swarm', desc: 'Stores soil records, variety yields, and regional models curated by extension agronomists.', braintier: '#FBBF24' },
+        { id: 'inputs_trial_validation', name: 'Inputs Trial & Validation Module', ancestry: 'Odoo Quality App Framework', agent: 'EfficacyEvaluation Swarm', desc: 'Compares seed varieties and fertilizer combinations inside sandbox field plots.', braintier: '#FBBF24' },
+        { id: 'inputs_supply_delivery', name: 'Inputs Supply & Delivery Module', ancestry: 'Odoo Purchase + Stock Picking', agent: 'WholesaleProcurement Swarm', desc: 'Groups cooperative input buying requests into automated wholesale purchasing actions.', braintier: '#34D399' },
+        { id: 'transport_fleet', name: 'Transport Fleet Management & Tracking', ancestry: 'Odoo Fleet + GPS Telematics', agent: 'VehicleMaintenance Swarm', desc: 'Monitors diagnostics, fuel anomalies, and tire wear profiles for logistics fleets.', braintier: '#34D399' },
+        { id: 'cargotex_marketplace', name: 'Altovex DreamTeQ CargoTeX Module', ancestry: 'Altovex Global Logistics Matching Engine', agent: 'LogisticsArbitrage Swarm', desc: 'Matches vehicle capacity with empty shipping crate routes across active supply pathways.', braintier: '#34D399' },
+        { id: 'kiosk_merchandise', name: 'Kiosk Merchandise Franchise Module', ancestry: 'Odoo Retail Point of Sale Core', agent: 'FranchiseVelocity Swarm', desc: 'Controls roadside retail outlets, offline terminal configurations, and revenue sweeps.', braintier: '#34D399' },
+        { id: 'website_deployment', name: 'Website Development & CMS Module', ancestry: 'Odoo 18 Website Builder Engine', agent: 'WebPublication Swarm', desc: 'Deploys landing templates, cooperative news feeds, and e-commerce storefront channels.', braintier: '#34D399' },
+        { id: 'drone_crop_protection', name: 'Drone Crop Protection & Mapping', ancestry: 'ArduPilot Mission Planner API Wrapper', agent: 'AutonomousGeospatial Swarm', desc: 'Controls boundary sweeps, thermal leaf evaluations, and precision spray paths.', braintier: '#34D399' }
+    ];
+
+    function createTitaniumModuleRegistry() {
+        var registry = titaniumFeaturedModules.slice();
+        frappeModules.forEach(function (name, offset) {
+            registry.push({ id: 'frappe_' + name.toLowerCase().replace(/[^a-z0-9]+/g, '_'), name: name + ' Hybrid Service', ancestry: 'Frappe Next Core', agent: 'FrappeDomain Swarm ' + String(offset + 1).padStart(2, '0'), desc: 'Re-engineered Frappe service surface with offline-first persistence, audit routing, and Amanda status monitoring.', braintier: offset % 5 === 0 ? '#FBBF24' : '#34D399' });
+        });
+        odooModules.slice(0, 70 - registry.length).forEach(function (name, offset) {
+            registry.push({ id: 'odoo_' + name.toLowerCase().replace(/[^a-z0-9]+/g, '_'), name: name + ' Titanium Module', ancestry: 'Odoo 18 Enterprise Core', agent: 'OdooDomain Swarm ' + String(offset + 1).padStart(2, '0'), desc: 'Re-engineered Odoo module with ledger hooks, multi-agent telemetry loops, and A4 report export readiness.', braintier: offset % 7 === 0 ? '#A7F3D0' : '#34D399' });
+        });
+        return registry.slice(0, 70);
+    }
+
+    var DreamTeQ_ERP_Modules_Engine = {
+        modulesRegistry: createTitaniumModuleRegistry(),
+        injectTitaniumModulesIntoDashboard: function (targetContainerId) {
+            var rootContainer = document.getElementById(targetContainerId);
+            if (!rootContainer || rootContainer.dataset.rendered === 'true') return;
+            rootContainer.innerHTML = this.modulesRegistry.map(function (mod, index) {
+                return '<article class="dreamteq-floating-card titanium-module-card" style="--module-brain-tier:' + escapeHtml(mod.braintier) + '">' +
+                    '<div><div class="titanium-module-head"><span>DT_TITANIUM_ERP_' + String(index + 1).padStart(2, '0') + '</span><svg width="18" height="18" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,5 95,38 78,92 22,92 5,38"></polygon></svg></div>' +
+                    '<h4>' + escapeHtml(mod.name) + '</h4><span class="titanium-module-heritage">Base Heritage: ' + escapeHtml(mod.ancestry) + '</span><p>' + escapeHtml(mod.desc) + '</p></div>' +
+                    '<div><div class="titanium-module-agent">Assigned Agent: [' + escapeHtml(mod.agent) + ']</div><button type="button" onclick="triggerModuleExecutionSandbox(\'' + escapeHtml(mod.id) + '\',\'' + escapeHtml(mod.name) + '\')">Initialize Core Workspace</button></div>' +
+                    '</article>';
+            }).join('');
+            rootContainer.dataset.rendered = 'true';
+            console.log('[ERP INITIALIZATION] Rendered ' + this.modulesRegistry.length + ' titanium core micro-frontends.');
+        }
+    };
+
+    window.DreamTeQ_ERP_Modules_Engine = DreamTeQ_ERP_Modules_Engine;
+
     function escapeHtml(value) {
         return String(value).replace(/[&<>'"]/g, function (char) {
             return { '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char];
@@ -239,7 +296,7 @@
         root.innerHTML = [
             '<header class="dt-header"><div class="dt-header-row"><div><h1 class="dt-title">DreamTeQ Titanium ERP</h1><p class="dt-subtitle">Re-engineered fork of Frappe Next and Odoo 18, fused into a mobile-first, offline-first hybrid ERP command portal with Amanda Super Agent orchestration.</p><div class="dt-chip-row"><span class="dt-chip">70 Hybrid ERP Modules</span><span class="dt-chip">120 Mini-App Interfaces</span><span class="dt-chip">Vercel Production Vault</span><span class="dt-chip" id="platform-sync-badge">System Offline-Ready</span><span class="dt-chip" id="ws-badge">WS Pending</span></div></div><div class="dt-agent-rack"><div class="dt-agent"><div class="dt-agent-label">Amanda Brain</div><span class="dt-pentagon dt-good"></span></div><div class="dt-agent"><div class="dt-agent-label">DeepSeek Op</div><span class="dt-pentagon dt-good"></span></div><div class="dt-agent"><div class="dt-agent-label">Gemini Vision</div><span class="dt-pentagon dt-soft"></span></div><div class="dt-agent"><div class="dt-agent-label">Edge Ollama</div><span class="dt-pentagon dt-warn"></span></div></div></div></header>',
             '<div class="dt-grid"><aside class="dt-stack"><section class="dt-card"><h2 class="dt-card-title">Monetization Streams</h2><div class="dt-metric-label">SMM Video Revenue</div><div class="dt-metric-value" id="analytics-smm-rev">KSh 142,450</div><div class="dt-metric-label">LLMM / LLEO Search Influx</div><div class="dt-metric-value dt-gold" id="analytics-lleo-leads">2,481 Leads</div><div class="dt-metric-label">B2B Global Log Volume</div><div class="dt-metric-value" id="analytics-b2b-gmv">KSh 1,894,200</div></section><section class="dt-card"><h2 class="dt-card-title">Storage Partition Vectors</h2><div class="dt-stream" style="height:116px;">MiniApps Local Docs: <span id="pouch-miniapp-count">0</span><br>LMS Course Logs: <span id="pouch-lms-count">0</span><br>Analytics Logs: <span id="pouch-analytics-count">0</span><br>Encrypted Salt Array: AES-GCM Active</div></section><section class="dt-card warning"><h2 class="dt-card-title" style="color:#EF4444;">CTO Master Vault Panel</h2><div id="cto-auth-gate"><input class="dt-input" type="password" id="cto-passphrase-field" placeholder="Enter Master Gateway Key"><button class="dt-button" onclick="verifyCTOGodsGateAuthentication()" style="margin-top:10px;width:100%;">Authenticate CTO Enclave</button></div><div id="cto-secured-actions" class="dt-actions"><button class="dt-button" onclick="triggerGodsModeAction(\'HEAL\')">Self Heal</button><button class="dt-button silver" onclick="triggerGodsModeAction(\'DEBUG\')">Debug Live</button><button class="dt-button" onclick="triggerGodsModeAction(\'PAUSE\')">Pause Stack</button><button class="dt-button silver" onclick="triggerGodsModeAction(\'HOT_BACKUP\')">Hot Backup</button></div></section><section class="dt-card"><h2 class="dt-card-title">Corporate A4 Report Engine</h2><div class="dt-actions active"><button class="dt-button" onclick="compileReport(\'portrait\')">Compile Portrait Report</button><button class="dt-button silver" onclick="compileReport(\'landscape\')">Compile Landscape Deck</button></div></section></aside>',
-            '<main class="dt-stack"><section class="dt-card gold"><h2 class="dt-card-title">Titanium ERP Module Infrastructure (70 Engines)</h2><div id="hybrid-module-grid" class="dt-scroll-grid"></div></section><section class="dt-card gold"><h2 class="dt-card-title">120 App Subsystem Workspace</h2><div id="miniapp-grid" class="dt-scroll-grid"></div></section><section class="dt-frames"><div class="dt-frame"><div class="dt-frame-head"><span>100APPS.HTML Workspace</span><button class="dt-button" onclick="reloadFrame(\'frame-miniapps\')">Reload</button></div><iframe id="frame-miniapps" src="100APPS.HTML" sandbox="allow-scripts allow-same-origin allow-forms"></iframe></div><div class="dt-frame"><div class="dt-frame-head"><span>LMSENTREPRISE.HTML Portal</span><button class="dt-button silver" onclick="reloadFrame(\'frame-lms\')">Reload</button></div><iframe id="frame-lms" src="LMSENTREPRISE.HTML" sandbox="allow-scripts allow-same-origin allow-forms"></iframe></div></section></main>',
+            '<main class="dt-stack"><section id="titanium-erp-portal-surface" class="dt-card gold titanium-erp-portal-surface"><div class="titanium-portal-heading"><h2>Titanium Hybrid ERP System Core</h2><p>70 re-engineered Frappe Next and Odoo 18 full-stack sub-domain dashboards managed by active multi-agent intelligence swarms.</p></div><div id="titanium-modules-grid-mount" class="titanium-modules-grid"></div></section><section class="dt-card gold"><h2 class="dt-card-title">Titanium ERP Module Infrastructure (70 Engines)</h2><div id="hybrid-module-grid" class="dt-scroll-grid"></div></section><section class="dt-card gold"><h2 class="dt-card-title">120 App Subsystem Workspace</h2><div id="miniapp-grid" class="dt-scroll-grid"></div></section><section class="dt-frames"><div class="dt-frame"><div class="dt-frame-head"><span>100APPS.HTML Workspace</span><button class="dt-button" onclick="reloadFrame(\'frame-miniapps\')">Reload</button></div><iframe id="frame-miniapps" src="100APPS.HTML" sandbox="allow-scripts allow-same-origin allow-forms"></iframe></div><div class="dt-frame"><div class="dt-frame-head"><span>LMSENTREPRISE.HTML Portal</span><button class="dt-button silver" onclick="reloadFrame(\'frame-lms\')">Reload</button></div><iframe id="frame-lms" src="LMSENTREPRISE.HTML" sandbox="allow-scripts allow-same-origin allow-forms"></iframe></div></section></main>',
             '<aside class="dt-stack"><section class="dt-card"><h2 class="dt-card-title">Swarm Agent Execution Pulse</h2><div class="dt-agent-rack" style="grid-template-columns:repeat(2,1fr);min-width:0;"><div class="dt-agent"><div class="dt-agent-label">Frappe Core</div><span class="dt-pentagon dt-good"></span></div><div class="dt-agent"><div class="dt-agent-label">Odoo 18</div><span class="dt-pentagon dt-warn"></span></div><div class="dt-agent"><div class="dt-agent-label">Ledger RPC</div><span class="dt-pentagon dt-soft"></span></div><div class="dt-agent"><div class="dt-agent-label">Vercel Vault</div><span class="dt-pentagon dt-good"></span></div></div></section><section class="dt-card"><h2 class="dt-card-title">Core System Live Event Stream</h2><div id="terminal-display" class="dt-stream">&gt; Establishing communication links to backend server arrays...</div><div style="display:flex;gap:8px;margin-top:10px;"><input class="dt-input" id="terminal-input" placeholder="Command Amanda..."><button class="dt-button" onclick="executeAmandaTerminalCommand()">Run</button></div></section><section class="dt-card"><h2 class="dt-card-title">Settlement Mesh</h2><div class="dt-stream" style="height:150px;">Cooperative Bank settlement channel armed.<br>M-Pesa Paybill routing protected in Vercel Vault.<br>Stripe and Hyperswitch connectors vault-mapped.<br>Cross-border rails: WeChat, Alipay, Interswitch, Pesalink, AfriPesa.</div></section></aside></div>',
             renderEnhancedCTOVaultPanel(),
             '<section class="dt-card gold"><h2 class="dt-card-title">Core Farmer &amp; Admin Business Utilities</h2><div class="dt-core-app-grid"><div id="app-holder-farmer-registration"></div><div id="app-holder-farmer-onboarding"></div><div id="app-holder-farmer-dashboard"></div><div id="app-holder-admin-backend"></div></div></section>',
@@ -281,10 +338,11 @@
         }
         var moduleGrid = document.getElementById('hybrid-module-grid');
         if (moduleGrid && !moduleGrid.dataset.rendered) {
-            frappeModules.forEach(function (name, offset) { appendModule(moduleGrid, offset + 1, 'Frappe Next', name); });
-            odooModules.forEach(function (name, offset) { appendModule(moduleGrid, offset + 21, 'Odoo 18', name); });
+            DreamTeQ_ERP_Modules_Engine.modulesRegistry.forEach(function (moduleDef, offset) { appendModule(moduleGrid, offset + 1, moduleDef.ancestry, moduleDef.name); });
             moduleGrid.dataset.rendered = 'true';
         }
+
+        DreamTeQ_ERP_Modules_Engine.injectTitaniumModulesIntoDashboard('titanium-modules-grid-mount');
     }
 
     function appendModule(grid, id, source, title) {
@@ -304,6 +362,11 @@
     };
 
     window.routeModuleAction = function (id) { termLog('[ERP MODULE] Titanium module ' + id + ' inspection pulse issued.'); };
+    window.triggerModuleExecutionSandbox = function (moduleId, moduleName) {
+        var label = moduleName || moduleId || 'UNKNOWN_MODULE';
+        appendCoreLog('[MODULE ACTIVE] Initializing stateless frame context for: ' + label);
+        termLog('[ERP SANDBOX] ' + label + ' workspace instantiation pulse issued.');
+    };
     window.reloadFrame = function (id) { var frame = document.getElementById(id); if (frame) frame.src = frame.src; };
     window.compileReport = function (mode) { termLog('[REPORT] Compiling A4 ' + mode + ' report matrix for executive export.'); };
 

@@ -33,6 +33,22 @@
 .dt-mini-card span { color: #8d998f; font-size: .7rem; letter-spacing: .5px; text-transform: uppercase; }
 .dt-mini-card p { color: #C0C0C0; font-size: .76rem; line-height: 1.45; margin: 10px 0 12px; }
 .dt-mini-card button { background: transparent; border: 1px solid #D4AF37; border-radius: 4px; color: #D4AF37; cursor: pointer; font-size: .68rem; padding: 7px 9px; text-transform: uppercase; }
+.titanium-erp-portal-surface { background: #050A06; }
+.titanium-portal-heading { border-left: 4px solid #D4AF37; padding-left: 15px; margin-bottom: 24px; text-align: left; }
+.titanium-portal-heading h2 { color: #D4AF37; font-size: 1.45rem; font-weight: 900; letter-spacing: 1px; margin: 0; text-transform: uppercase; text-shadow: 0 0 10px rgba(212,175,55,.18); }
+.titanium-portal-heading p { color: #C0C0C0; font-size: .86rem; line-height: 1.5; margin: 6px 0 0; }
+.titanium-modules-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; max-height: 720px; overflow: auto; padding-right: 4px; }
+.titanium-module-card { background: #0B130E; border: 1px solid #C0C0C0; border-radius: 8px; border-top: 4px solid #D4AF37; box-shadow: 0 8px 20px rgba(0,0,0,.5); display: flex; flex-direction: column; justify-content: space-between; min-height: 250px; padding: 18px; }
+.titanium-module-head { align-items: flex-start; display: flex; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.titanium-module-head span { background: rgba(212,175,55,.08); border: 1px solid #D4AF37; border-radius: 4px; color: #D4AF37; font-family: Consolas,'Courier New',monospace; font-size: .66rem; font-weight: 900; padding: 3px 6px; }
+.titanium-module-head svg { filter: drop-shadow(0 0 4px var(--module-brain-tier, #34D399)); flex: 0 0 auto; }
+.titanium-module-head polygon { fill: var(--module-brain-tier, #34D399); }
+.titanium-module-card h4 { color: #fff; font-size: .98rem; letter-spacing: .5px; line-height: 1.25; margin: 0 0 8px; text-transform: uppercase; }
+.titanium-module-heritage { color: #8f9a92; display: block; font-size: .68rem; letter-spacing: .4px; margin-bottom: 10px; text-transform: uppercase; }
+.titanium-module-card p { color: #C0C0C0; font-size: .78rem; line-height: 1.5; margin: 0 0 15px; }
+.titanium-module-agent { color: #D4AF37; font-family: Consolas,'Courier New',monospace; font-size: .7rem; margin-bottom: 10px; }
+.titanium-module-card button { background: transparent; border: 1px solid #D4AF37; border-radius: 5px; color: #D4AF37; cursor: pointer; font-size: .68rem; font-weight: 900; padding: 8px 10px; text-transform: uppercase; }
+.titanium-module-card button:hover { background: rgba(212,175,55,.12); }
 .dt-frames { display: grid; gap: 18px; grid-template-columns: repeat(2,minmax(0,1fr)); }
 .dt-frame { background: #0B130E; border: 1px solid #C0C0C0; border-radius: 10px; display: flex; flex-direction: column; min-height: 520px; overflow: hidden; }
 .dt-frame-head { align-items: center; background: #020403; border-bottom: 1px solid #1f2d24; color: #D4AF37; display: flex; font-size: .78rem; font-weight: 900; justify-content: space-between; letter-spacing: .6px; padding: 12px 14px; text-transform: uppercase; }
@@ -48,7 +64,7 @@
 .dt-chat-form { background: #0B130E; border-top: 1px solid #26372c; display: flex; gap: 8px; padding: 10px; }
 .dt-chat-form input { background: #000; border: 1px solid #C0C0C0; border-radius: 4px; color: #fff; flex: 1; min-width: 0; padding: 10px; }
 @media (max-width:1280px) { .dt-grid { grid-template-columns: 1fr; } .dt-frames { grid-template-columns: 1fr; } }
-@media (max-width:680px) { .dt-agent-rack { grid-template-columns: repeat(2,1fr); width: 100%; } .dt-actions { grid-template-columns: 1fr; } }
+@media (max-width:680px) { .dt-agent-rack { grid-template-columns: repeat(2,1fr); width: 100%; } .dt-actions { grid-template-columns: 1fr; } .titanium-modules-grid { grid-template-columns: 1fr; max-height: none; } }
 
 /* ========================================================================== */
 /* DREAMTEQ MASTER REGISTRATION, ADMIN, AND ONBOARDING UI EXTENSIONS */

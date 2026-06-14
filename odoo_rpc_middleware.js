@@ -386,6 +386,36 @@ const server = http.createServer(async (req, res) => {
                 return res.end(JSON.stringify({ success: false, error: err.message }));
             }
         });
+    } else if (req.method === 'POST' && req.url === '/reports/compile-document') {
+        let documentPayloadBuffer = '';
+        req.on('data', chunk => documentPayloadBuffer += chunk);
+        req.on('end', async () => {
+            try {
+                const documentConfig = JSON.parse(documentPayloadBuffer || '{}');
+
+                if (!documentConfig.moduleName || !documentConfig.briefDescription) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    return res.end(JSON.stringify({ success: false, error: 'Missing document structural definitions.' }));
+                }
+
+                const layoutDirection = documentConfig.type === 'presentation' ? 'landscape' : 'portrait';
+                const moduleId = String(documentConfig.moduleId || documentConfig.moduleName || 'master_platform').replace(/[^a-zA-Z0-9_-]/g, '_');
+                const filenameStr = `Report_${moduleId}_${Date.now()}`;
+                const reportPath = await compilePlatformA4Document(filenameStr, documentConfig, layoutDirection);
+
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({
+                    success: true,
+                    exportedFile: `${filenameStr}.pdf`,
+                    reportPath,
+                    dimensions: layoutDirection,
+                    message: 'A4 high-density compilation completed matching layout specifications.'
+                }));
+            } catch (err) {
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ success: false, error: err.message }));
+            }
+        });
     } else {
         res.writeHead(404);
         res.end('Route missing.');
