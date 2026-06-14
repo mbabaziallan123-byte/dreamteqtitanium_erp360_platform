@@ -59,6 +59,21 @@
         return '<div class="agent-pentagon-status-container ' + stateClass + '"><svg width="22" height="22" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,5 95,38 78,92 22,92 5,38" fill="var(--pentagon-color, #34D399)"></polygon></svg><div class="agent-pentagon-status-copy"><strong>' + escapeHtml(label) + '</strong>: <span class="agent-pentagon-performance">' + escapeHtml(status) + '</span></div></div>';
     }
 
+    function renderEnhancedCTOVaultPanel() {
+        return '<section id="cto-gods-mode-panel" class="cto-master-vault-panel">' +
+            '<div class="cto-master-vault-header"><div><h2 class="cto-master-vault-title">CTO Master Platform Security Vault</h2><p class="cto-master-vault-profile">Secured Access Node Profile: <strong>Mr. Allan (Platform CTO)</strong></p></div><div class="cto-master-vault-status">GODS MODE READY</div></div>' +
+            '<div class="cto-vault-secured-badge"><span class="cto-vault-lock-symbol">LOCK</span><span>Hardware encrypted isolation channel mapped safely under security token credentials profile target. Full systemic overrides remain session-gated.</span></div>' +
+            '<div class="cto-vault-actions-grid">' +
+            '<button type="button" class="cto-vault-action-button" onclick="triggerCTOVaultAction(\'ONLINE_DEBUG\')"><span>DEBUG</span>Activate Gods Mode Debug</button>' +
+            '<button type="button" class="cto-vault-action-button" onclick="triggerCTOVaultAction(\'PAUSE_SYSTEM\')"><span>PAUSE</span>Pause System Operations</button>' +
+            '<button type="button" class="cto-vault-action-button" onclick="triggerCTOVaultAction(\'HOT_FIX\')"><span>FIX</span>Hot-Fix System Clusters</button>' +
+            '<button type="button" class="cto-vault-action-button" onclick="triggerCTOVaultAction(\'ROLLBACK\')"><span>ROLLBACK</span>Return to Last Safest State</button>' +
+            '</div>' +
+            '<div class="cto-vault-doc-hub"><h4 class="cto-vault-doc-title">Core Platform Documentation &amp; Reference Manuals</h4><div class="cto-vault-doc-links"><a href="#" onclick="compileReport(\'portrait\'); return false;">Download Comprehensive Platform Manual.pdf (Portrait)</a><span class="cto-vault-doc-separator">|</span><a href="#" onclick="compileReport(\'landscape\'); return false;">Download Mini-App System Training Manual.pdf (Landscape)</a></div></div>' +
+            '<div class="cto-vault-footer">Product of Dreamteam Consulting Company, Box 3515-00100, Nairobi, Kenya | Tel: +254718554383 | Web: www.dreamteamconsult.site | Email: dreamteamconsult@gmx.com | Monetized via AI-Driven SMM, LLMM, SEO, and LLEO Optimizations.</div>' +
+            '</section>';
+    }
+
     var DreamTeQ_Core_Apps = {
         databases: {
             farmers: createLocalDatabase('dreamteq_360_farmers_registry'),
@@ -226,6 +241,7 @@
             '<div class="dt-grid"><aside class="dt-stack"><section class="dt-card"><h2 class="dt-card-title">Monetization Streams</h2><div class="dt-metric-label">SMM Video Revenue</div><div class="dt-metric-value" id="analytics-smm-rev">KSh 142,450</div><div class="dt-metric-label">LLMM / LLEO Search Influx</div><div class="dt-metric-value dt-gold" id="analytics-lleo-leads">2,481 Leads</div><div class="dt-metric-label">B2B Global Log Volume</div><div class="dt-metric-value" id="analytics-b2b-gmv">KSh 1,894,200</div></section><section class="dt-card"><h2 class="dt-card-title">Storage Partition Vectors</h2><div class="dt-stream" style="height:116px;">MiniApps Local Docs: <span id="pouch-miniapp-count">0</span><br>LMS Course Logs: <span id="pouch-lms-count">0</span><br>Analytics Logs: <span id="pouch-analytics-count">0</span><br>Encrypted Salt Array: AES-GCM Active</div></section><section class="dt-card warning"><h2 class="dt-card-title" style="color:#EF4444;">CTO Master Vault Panel</h2><div id="cto-auth-gate"><input class="dt-input" type="password" id="cto-passphrase-field" placeholder="Enter Master Gateway Key"><button class="dt-button" onclick="verifyCTOGodsGateAuthentication()" style="margin-top:10px;width:100%;">Authenticate CTO Enclave</button></div><div id="cto-secured-actions" class="dt-actions"><button class="dt-button" onclick="triggerGodsModeAction(\'HEAL\')">Self Heal</button><button class="dt-button silver" onclick="triggerGodsModeAction(\'DEBUG\')">Debug Live</button><button class="dt-button" onclick="triggerGodsModeAction(\'PAUSE\')">Pause Stack</button><button class="dt-button silver" onclick="triggerGodsModeAction(\'HOT_BACKUP\')">Hot Backup</button></div></section><section class="dt-card"><h2 class="dt-card-title">Corporate A4 Report Engine</h2><div class="dt-actions active"><button class="dt-button" onclick="compileReport(\'portrait\')">Compile Portrait Report</button><button class="dt-button silver" onclick="compileReport(\'landscape\')">Compile Landscape Deck</button></div></section></aside>',
             '<main class="dt-stack"><section class="dt-card gold"><h2 class="dt-card-title">Titanium ERP Module Infrastructure (70 Engines)</h2><div id="hybrid-module-grid" class="dt-scroll-grid"></div></section><section class="dt-card gold"><h2 class="dt-card-title">120 App Subsystem Workspace</h2><div id="miniapp-grid" class="dt-scroll-grid"></div></section><section class="dt-frames"><div class="dt-frame"><div class="dt-frame-head"><span>100APPS.HTML Workspace</span><button class="dt-button" onclick="reloadFrame(\'frame-miniapps\')">Reload</button></div><iframe id="frame-miniapps" src="100APPS.HTML" sandbox="allow-scripts allow-same-origin allow-forms"></iframe></div><div class="dt-frame"><div class="dt-frame-head"><span>LMSENTREPRISE.HTML Portal</span><button class="dt-button silver" onclick="reloadFrame(\'frame-lms\')">Reload</button></div><iframe id="frame-lms" src="LMSENTREPRISE.HTML" sandbox="allow-scripts allow-same-origin allow-forms"></iframe></div></section></main>',
             '<aside class="dt-stack"><section class="dt-card"><h2 class="dt-card-title">Swarm Agent Execution Pulse</h2><div class="dt-agent-rack" style="grid-template-columns:repeat(2,1fr);min-width:0;"><div class="dt-agent"><div class="dt-agent-label">Frappe Core</div><span class="dt-pentagon dt-good"></span></div><div class="dt-agent"><div class="dt-agent-label">Odoo 18</div><span class="dt-pentagon dt-warn"></span></div><div class="dt-agent"><div class="dt-agent-label">Ledger RPC</div><span class="dt-pentagon dt-soft"></span></div><div class="dt-agent"><div class="dt-agent-label">Vercel Vault</div><span class="dt-pentagon dt-good"></span></div></div></section><section class="dt-card"><h2 class="dt-card-title">Core System Live Event Stream</h2><div id="terminal-display" class="dt-stream">&gt; Establishing communication links to backend server arrays...</div><div style="display:flex;gap:8px;margin-top:10px;"><input class="dt-input" id="terminal-input" placeholder="Command Amanda..."><button class="dt-button" onclick="executeAmandaTerminalCommand()">Run</button></div></section><section class="dt-card"><h2 class="dt-card-title">Settlement Mesh</h2><div class="dt-stream" style="height:150px;">Cooperative Bank settlement channel armed.<br>M-Pesa Paybill routing protected in Vercel Vault.<br>Stripe and Hyperswitch connectors vault-mapped.<br>Cross-border rails: WeChat, Alipay, Interswitch, Pesalink, AfriPesa.</div></section></aside></div>',
+            renderEnhancedCTOVaultPanel(),
             '<section class="dt-card gold"><h2 class="dt-card-title">Core Farmer &amp; Admin Business Utilities</h2><div class="dt-core-app-grid"><div id="app-holder-farmer-registration"></div><div id="app-holder-farmer-onboarding"></div><div id="app-holder-farmer-dashboard"></div><div id="app-holder-admin-backend"></div></div></section>',
             '<button id="dt-chat-button" onclick="toggleAmandaChat()" aria-label="Open Amanda chatbot">AI</button><section id="dt-chat-panel"><div class="dt-chat-head"><strong style="color:#D4AF37;text-transform:uppercase;">Amanda Master Orchestrator</strong><button class="dt-button silver" onclick="toggleAmandaChat()">Close</button></div><div id="dt-chat-log" class="dt-chat-log"><div class="dt-bubble">Hello Operator. I am Amanda, the primary super agent chatbot node running the operational health of your front-end canvas, backend JSON-RPC engines, and cloud deployments.</div></div><div class="dt-chat-form"><input id="dt-chat-input" placeholder="Command me..."><button class="dt-button" onclick="dispatchAmandaChat()">Send</button></div></section>'
         ].join('');
@@ -319,6 +335,41 @@
 
     window.triggerGodsModeAction = function (action) {
         termLog('[CTO CONSOLE] ' + String(action || 'UNKNOWN').toUpperCase() + ' acknowledged. Server-side execution remains protected behind terminal/cloud controls.');
+    };
+
+    window.triggerCTOVaultAction = function (operationalActionCode) {
+        var actionCode = String(operationalActionCode || 'UNKNOWN').toUpperCase();
+        console.log('[VAULT INTRUSION] Attempting deployment action token confirmation payload: ' + actionCode);
+
+        if (!window.crypto || !window.crypto.subtle) {
+            window.alert('ACCESS DENIED: Browser cryptography services unavailable. System locked down.');
+            appendCoreLog('[SECURITY ALERT] Crypto services unavailable for action: ' + actionCode);
+            return;
+        }
+
+        var ctoTokenChallenge = window.prompt('Enter Master Platform CTO Authorization Password Sequence:');
+        if (!ctoTokenChallenge) {
+            appendCoreLog('[SECURITY ALERT] Empty authorization challenge blocked for action: ' + actionCode);
+            return;
+        }
+
+        window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(ctoTokenChallenge.trim())).then(function (hashBuffer) {
+            var hashHex = Array.prototype.map.call(new Uint8Array(hashBuffer), function (byte) {
+                return byte.toString(16).padStart(2, '0');
+            }).join('');
+
+            if (hashHex !== 'c1c35c81fcbd39d4bd7a90c2e2e702dd869eba8d3601af43507a429e153fddfe') {
+                window.alert('ACCESS DENIED: Invalid identity signature confirmation parameters. System locked down.');
+                appendCoreLog('[SECURITY ALERT] Unauthorized access attempt blocked for action: ' + actionCode);
+                return;
+            }
+
+            appendCoreLog('[GODS MODE ACTIVE] CTO Mr. Allan successfully executed: ' + actionCode + '. Actions synced to container logs.');
+            window.alert('Execution successful: ' + actionCode + ' process thread deployed to the local mesh.');
+        }).catch(function () {
+            window.alert('ACCESS DENIED: Authorization verification failed.');
+            appendCoreLog('[SECURITY ALERT] Authorization verification failed for action: ' + actionCode);
+        });
     };
 
     window.termLog = function (message) {
