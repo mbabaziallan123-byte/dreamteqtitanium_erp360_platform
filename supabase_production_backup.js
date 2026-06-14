@@ -9,6 +9,7 @@
 const fs   = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
+const { broadcastBackupSuccessToWhatsApp } = require('./whatsapp_notifier');
 
 const BACKUP_LOG_PATH = path.join(__dirname, 'backups', 'local_state', 'supabase_cloud_backup_log.txt');
 
@@ -61,6 +62,7 @@ async function runProductionSupabaseBackup() {
                 writeLog(`-> Snapshot File Element Identity: ${targetFilename}`);
                 writeLog(`-> Allocated Document Disk Size: ${fileSizeKiloBytes} KB`);
                 writeLog("=== [PRODUCTION BACKUP MATRIX CONCLUDED SUCCESSFULLY] ===");
+                broadcastBackupSuccessToWhatsApp(targetFilename, fileSizeKiloBytes);
                 process.exit(0);
             } else {
                 writeLog("ERROR: Generated snapshot file contains 0 bytes. Database structure trace empty.");
