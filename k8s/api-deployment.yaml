@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dreamteq-api-deployment
+  namespace: dreamteq-erp
+  labels:
+    app: erp-scraper-api
+    app.kubernetes.io/part-of: dreamteq-platform
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: erp-scraper-api
+  template:
+    metadata:
+      labels:
+        app: erp-scraper-api
+    spec:
+      containers:
+        - name: api-container
+          image: yourcontainerregistry.azurecr.io/dreamteq/scraper-api:v1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+          envFrom:
+            - configMapRef:
+                name: dreamteq-configmap
+            - secretRef:
+                name: dreamteq-vault-secrets
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dreamteq-api-service
+  namespace: dreamteq-erp
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8000
+      protocol: TCP
+  selector:
+    app: erp-scraper-api

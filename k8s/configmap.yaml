@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dreamteq-configmap
+  namespace: dreamteq-erp
+data:
+  # Infrastructure connection coordinates — non-sensitive defaults
+  DATABASE_URL: "postgresql://dreamteq_operator:CHANGE_ME@postgres-service:5432/dreamteq_master_pool"
+  REDIS_URL: "redis://redis-service:6379/0"
+  MQTT_BROKER_HOST: "broker.hivemq.com"
+  MQTT_BROKER_PORT: "1883"
+  MQTT_TOPIC_PREFIX: "dreamteq/farm"
+  RATE_LIMIT_PER_MINUTE: "30"

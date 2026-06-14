@@ -35,6 +35,11 @@ class ModuleSettings(BaseSettings):
     MQTT_BROKER_PORT: int = 1883
     MQTT_TOPIC_PREFIX: str = "dreamteq/farm"
 
+    # ── Discord Watchdog Webhook (optional) ───────────────────────────────────
+    # Set to a Discord webhook URL to receive pipeline failure alerts.
+    # Format: https://discord.com/api/webhooks/{id}/{token}
+    DISCORD_WEBHOOK_URL: str = ""
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
 

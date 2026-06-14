@@ -22,6 +22,7 @@ from pipeline import DreamTeqDataPipeline
 from agents import DreamTeqCognitiveAgent
 from iot import DreamTeqIoTBridge
 from database import ping_database, DreamTeqDatabaseMap
+from monitor import alert_engineering_team_of_breakage
 
 # ── Rate limiter ──────────────────────────────────────────────────────────────
 _RATE_LIMIT = os.environ.get("RATE_LIMIT_PER_MINUTE", "30")
@@ -86,8 +87,20 @@ async def execute_automated_discovery_cycle(request: Request, payload: ScraperJo
         return structured_json
 
     except ValueError as ve:
+        # Catches Firecrawl empty-page anomalies
+        alert_engineering_team_of_breakage(
+            target_url=str(payload.target_url),
+            failure_phase="Stage 1/2: Firecrawl Page Fetch",
+            error_message=str(ve)
+        )
         raise HTTPException(status_code=422, detail=str(ve))
     except Exception as exc:
+        # Catches Gemini parsing failures and all other unexpected errors
+        alert_engineering_team_of_breakage(
+            target_url=str(payload.target_url),
+            failure_phase="Stage 3/4: Gemini Cognitive Analysis",
+            error_message=str(exc)
+        )
         raise HTTPException(
             status_code=500,
             detail=f"DreamTeQ Scraper Module execution failure: {str(exc)}"

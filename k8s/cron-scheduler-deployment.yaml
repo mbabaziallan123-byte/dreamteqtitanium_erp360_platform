@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dreamteq-weekly-crawler-job
+  namespace: dreamteq-erp
+  labels:
+    app.kubernetes.io/part-of: dreamteq-platform
+spec:
+  schedule: "0 4 * * 1"      # Every Monday at 04:00 AM UTC
+  concurrencyPolicy: Forbid   # Prevents overlapping runs if targets are slow
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: crawler-cron-worker
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: cron-runner
+              image: yourcontainerregistry.azurecr.io/dreamteq/scraper-api:v1.0.0
+              command: ["python", "/app/scheduler.py"]
+              resources:
+                limits:
+                  cpu: "500m"
+                  memory: "512Mi"
+                requests:
+                  cpu: "250m"
+                  memory: "256Mi"
+              envFrom:
+                - configMapRef:
+                    name: dreamteq-configmap
+                - secretRef:
+                    name: dreamteq-vault-secrets
