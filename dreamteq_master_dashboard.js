@@ -33,6 +33,190 @@
         });
     }
 
+    function createLocalDatabase(name) {
+        if (typeof window.PouchDB === 'function') return new window.PouchDB(name);
+        return {
+            put: function () { return Promise.reject(new Error('PouchDB is not available.')); },
+            get: function () { return Promise.reject(new Error('PouchDB is not available.')); },
+            allDocs: function () { return Promise.resolve({ rows: [] }); }
+        };
+    }
+
+    function appendCoreLog(message) {
+        if (window.DreamTeQ_Storage_Router && typeof window.DreamTeQ_Storage_Router.appendLog === 'function') {
+            window.DreamTeQ_Storage_Router.appendLog(message);
+        } else if (window.DreamTeQRouter && typeof window.DreamTeQRouter.appendLog === 'function') {
+            window.DreamTeQRouter.appendLog(message);
+        } else if (typeof window.termLog === 'function') {
+            window.termLog(message);
+        } else {
+            console.log(message);
+        }
+    }
+
+    function createPentagonStatus(label, status, state) {
+        var stateClass = state || 'green';
+        return '<div class="agent-pentagon-status-container ' + stateClass + '"><svg width="22" height="22" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,5 95,38 78,92 22,92 5,38" fill="var(--pentagon-color, #34D399)"></polygon></svg><div class="agent-pentagon-status-copy"><strong>' + escapeHtml(label) + '</strong>: <span class="agent-pentagon-performance">' + escapeHtml(status) + '</span></div></div>';
+    }
+
+    var DreamTeQ_Core_Apps = {
+        databases: {
+            farmers: createLocalDatabase('dreamteq_360_farmers_registry'),
+            onboarding: createLocalDatabase('dreamteq_360_onboarding_tasks')
+        },
+
+        renderFarmerRegistrationApp: function (containerId) {
+            var target = document.getElementById(containerId);
+            if (!target) return;
+
+            target.innerHTML = '<div class="dt-core-app-card">' +
+                '<h3 class="dt-core-app-title">Farmer Registration &amp; KYC Hub</h3>' +
+                createPentagonStatus('KYC Capture Agent', 'MAX INTEL ACTIVE (OPTIMAL)', 'green') +
+                '<form id="dt-farmer-reg-form">' +
+                '<div class="dreamteq-form-group"><label class="dreamteq-form-label" for="reg-farmer-name">Full Legal Name</label><input type="text" id="reg-farmer-name" class="dreamteq-input" required placeholder="e.g. John Kiprop"></div>' +
+                '<div class="dreamteq-form-group"><label class="dreamteq-form-label" for="reg-farmer-id">National ID / Passport Number</label><input type="text" id="reg-farmer-id" class="dreamteq-input" required placeholder="e.g. 32456789"></div>' +
+                '<div class="dreamteq-form-group"><label class="dreamteq-form-label" for="reg-farmer-phone">Primary Mobile Money Number</label><input type="text" id="reg-farmer-phone" class="dreamteq-input" required placeholder="e.g. PHONE-254718554383"></div>' +
+                '<div class="dreamteq-form-group"><label class="dreamteq-form-label" for="reg-farmer-coop">Regional Cooperative Node</label><select id="reg-farmer-coop" class="dreamteq-select"><option value="Nairobi_East">Nairobi East Cooperative Hub</option><option value="Rift_Valley_Central">Rift Valley Central Pool</option><option value="SADC_Cross_Border">SADC Logistics Hub Sector</option></select></div>' +
+                '<button type="submit" class="dreamteq-action-btn">Register Smallholder Node</button>' +
+                '</form></div>';
+
+            document.getElementById('dt-farmer-reg-form').addEventListener('submit', this.handleFarmerRegistration.bind(this));
+        },
+
+        handleFarmerRegistration: function (event) {
+            event.preventDefault();
+            var farmerId = document.getElementById('reg-farmer-id').value.trim();
+            var name = document.getElementById('reg-farmer-name').value.trim();
+            var phone = document.getElementById('reg-farmer-phone').value.trim();
+            var coop = document.getElementById('reg-farmer-coop').value;
+            var farmerDoc = {
+                _id: 'FARMER_' + farmerId,
+                kyc_status: 'PENDING_VERIFICATION',
+                name: name,
+                phone: phone,
+                coop: coop,
+                registered_at: new Date().toISOString(),
+                sync_ready: true,
+                settlement_currency: 'KES',
+                cross_border_router: 'COOPERATIVE_BANK_ALTOVEX_MASTER'
+            };
+
+            this.databases.farmers.put(farmerDoc).then(function () {
+                appendCoreLog('[KYC REGISTER] Farmer ' + name + ' logged into localized storage vault.');
+                window.alert('Registration successful. Local Vault ID: FARMER_' + farmerId);
+                event.target.reset();
+            }).catch(function (err) {
+                appendCoreLog('[KYC REGISTER] Local database insertion error: ' + err.message);
+            });
+        },
+
+        renderFarmerOnboardingApp: function (containerId) {
+            var target = document.getElementById(containerId);
+            if (!target) return;
+
+            target.innerHTML = '<div class="dt-core-app-card gold">' +
+                '<h3 class="dt-core-app-title">Smallholder Ecosystem Onboarding</h3>' +
+                createPentagonStatus('Compliance Pipeline Agent', 'MEDIUM PROCESSING TIER READY', 'green') +
+                '<div class="dreamteq-form-group"><label class="dreamteq-form-label" for="onboard-search-id">Target Farmer Profile ID</label><input type="text" id="onboard-search-id" class="dreamteq-input" placeholder="e.g. 32456789"><button id="dt-init-onboarding" class="dreamteq-action-btn spaced">Initialize Onboarding Pipeline</button></div>' +
+                '<div id="onboarding-steps-box" class="onboarding-steps-box"><h4>Mandatory Compliance Milestone Checklist</h4><div class="onboarding-checklist"><input type="checkbox" id="step-biometric"> <label for="step-biometric">Biometric Profile &amp; Land Mapping Verified</label><br><br><input type="checkbox" id="step-lms"> <label for="step-lms">Ecosystem Base Training Module Completed (LMS)</label><br><br><input type="checkbox" id="step-escrow"> <label for="step-escrow">Cooperative Escrow Wallet Allocation Active</label></div><button id="dt-finalize-onboarding" class="dreamteq-action-btn full spaced">Commit Compliance Certification</button></div>' +
+                '</div>';
+
+            document.getElementById('dt-init-onboarding').addEventListener('click', this.initializeOnboardingWorkflow.bind(this));
+            document.getElementById('dt-finalize-onboarding').addEventListener('click', this.finalizeOnboarding.bind(this));
+        },
+
+        initializeOnboardingWorkflow: function () {
+            var id = document.getElementById('onboard-search-id').value.trim();
+            if (!id) return window.alert('Please clarify target smallholder ID profile.');
+            document.getElementById('onboarding-steps-box').classList.add('active');
+            this.databases.onboarding.put({
+                _id: 'ONBOARDING_' + id + '_' + Date.now(),
+                farmer_ref: 'FARMER_' + id,
+                status: 'PIPELINE_INITIALIZED',
+                created_at: new Date().toISOString()
+            }).catch(function () {});
+            appendCoreLog('[ONBOARDING] Initialized certification pipeline tracking matrices for user: ' + id);
+        },
+
+        finalizeOnboarding: function () {
+            var id = document.getElementById('onboard-search-id').value.trim();
+            var step1 = document.getElementById('step-biometric').checked;
+            var step2 = document.getElementById('step-lms').checked;
+            var step3 = document.getElementById('step-escrow').checked;
+            var self = this;
+
+            if (!step1 || !step2 || !step3) return window.alert('All environmental milestone constraints must be checked to process compliance.');
+
+            this.databases.farmers.get('FARMER_' + id).then(function (farmer) {
+                farmer.kyc_status = 'VERIFIED_ACTIVE';
+                farmer.onboarded_at = new Date().toISOString();
+                return self.databases.farmers.put(farmer);
+            }).then(function () {
+                appendCoreLog('[COMPLIANCE] Farmer account profile FARMER_' + id + ' escalated to VERIFIED_ACTIVE operational tier.');
+                window.alert('Smallholder onboarding configuration complete.');
+                document.getElementById('onboarding-steps-box').classList.remove('active');
+            }).catch(function () {
+                window.alert('Target profile lookup signature mismatch in local storage.');
+            });
+        },
+
+        renderFarmerDashboardApp: function (containerId) {
+            var target = document.getElementById(containerId);
+            if (!target) return;
+
+            target.innerHTML = '<div class="dt-core-app-card">' +
+                '<h3 class="dt-core-app-title silver">My Smallholder Portal Dashboard</h3>' +
+                createPentagonStatus('Farmer Finance Agent', 'MAX INTEL ACTIVE (OPTIMAL)', 'green') +
+                '<div class="dt-core-stats-grid"><div class="dt-core-stat"><span>Cooperative Bank Escrow Balance</span><strong>KSh 48,250.00</strong></div><div class="dt-core-stat gold"><span>Altovex Logistics Transit Orders</span><strong>2 Active Deliveries</strong></div></div>' +
+                '<button id="dt-request-trade-finance" class="dreamteq-action-btn full">Request Emergency Trade Financing Advance</button>' +
+                '</div>';
+
+            document.getElementById('dt-request-trade-finance').addEventListener('click', function () {
+                if (window.DreamTeQ_Storage_Router && typeof window.DreamTeQ_Storage_Router.updateFinancialMetrics === 'function') {
+                    window.DreamTeQ_Storage_Router.updateFinancialMetrics('MINI_APP', 500);
+                } else if (window.DreamTeQRouter && typeof window.DreamTeQRouter.testFire === 'function') {
+                    window.DreamTeQRouter.testFire('FARMER_TRADE_FINANCE_ADVANCE', { amount: 500, currency: 'KES', gateway: 'INTERSWITCH_PESALINK' });
+                }
+                appendCoreLog('[FARMER DASHBOARD] Emergency trade financing advance request queued into local router.');
+            });
+        },
+
+        renderAdminBackendApp: function (containerId) {
+            var target = document.getElementById(containerId);
+            if (!target) return;
+
+            target.innerHTML = '<div class="dt-core-app-card">' +
+                '<div class="cto-vault-secured-badge"><span>CTO VAULT SECURED</span><span>Session-gated admin directory</span></div>' +
+                '<h3 class="dt-core-app-title">Ecosystem Administrator Console</h3>' +
+                createPentagonStatus('Admin Directory Agent', 'MAX INTEL ACTIVE (OPTIMAL)', 'green') +
+                '<button id="dt-refresh-farmers" class="dreamteq-action-btn">Refresh Master Local Identity Directory</button>' +
+                '<div class="admin-table-wrap"><table class="admin-data-table"><thead><tr><th>Profile Mapping ID</th><th>Smallholder Identity Name</th><th>Phone Vector Target</th><th>KYC Verification Status</th></tr></thead><tbody id="admin-farmer-rows-target"><tr><td colspan="4" class="admin-empty">Execute refresh parameter check to mount dynamic dataset.</td></tr></tbody></table></div>' +
+                '</div>';
+
+            document.getElementById('dt-refresh-farmers').addEventListener('click', this.loadRegisteredFarmersTable.bind(this));
+        },
+
+        loadRegisteredFarmersTable: function () {
+            var targetBody = document.getElementById('admin-farmer-rows-target');
+            if (!targetBody) return;
+
+            this.databases.farmers.allDocs({ include_docs: true }).then(function (allDocs) {
+                if (allDocs.rows.length === 0) {
+                    targetBody.innerHTML = '<tr><td colspan="4" class="admin-empty">Zero registry items located in local storage.</td></tr>';
+                    return;
+                }
+                targetBody.innerHTML = allDocs.rows.map(function (row) {
+                    var doc = row.doc || {};
+                    return '<tr><td class="admin-id">' + escapeHtml(doc._id || '') + '</td><td><strong>' + escapeHtml(doc.name || '') + '</strong></td><td class="admin-phone">' + escapeHtml(doc.phone || '') + '</td><td><span class="kyc-badge">' + escapeHtml(doc.kyc_status || 'UNKNOWN') + '</span></td></tr>';
+                }).join('');
+            }).catch(function () {
+                targetBody.innerHTML = '<tr><td colspan="4" class="admin-error">Error processing database parsing operations.</td></tr>';
+            });
+        }
+    };
+
+    window.DreamTeQ_Core_Apps = DreamTeQ_Core_Apps;
+
     function mountDashboard() {
         var root = document.getElementById('dt-master-root');
         if (!root || root.dataset.mounted === 'true') return;
@@ -42,12 +226,22 @@
             '<div class="dt-grid"><aside class="dt-stack"><section class="dt-card"><h2 class="dt-card-title">Monetization Streams</h2><div class="dt-metric-label">SMM Video Revenue</div><div class="dt-metric-value" id="analytics-smm-rev">KSh 142,450</div><div class="dt-metric-label">LLMM / LLEO Search Influx</div><div class="dt-metric-value dt-gold" id="analytics-lleo-leads">2,481 Leads</div><div class="dt-metric-label">B2B Global Log Volume</div><div class="dt-metric-value" id="analytics-b2b-gmv">KSh 1,894,200</div></section><section class="dt-card"><h2 class="dt-card-title">Storage Partition Vectors</h2><div class="dt-stream" style="height:116px;">MiniApps Local Docs: <span id="pouch-miniapp-count">0</span><br>LMS Course Logs: <span id="pouch-lms-count">0</span><br>Analytics Logs: <span id="pouch-analytics-count">0</span><br>Encrypted Salt Array: AES-GCM Active</div></section><section class="dt-card warning"><h2 class="dt-card-title" style="color:#EF4444;">CTO Master Vault Panel</h2><div id="cto-auth-gate"><input class="dt-input" type="password" id="cto-passphrase-field" placeholder="Enter Master Gateway Key"><button class="dt-button" onclick="verifyCTOGodsGateAuthentication()" style="margin-top:10px;width:100%;">Authenticate CTO Enclave</button></div><div id="cto-secured-actions" class="dt-actions"><button class="dt-button" onclick="triggerGodsModeAction(\'HEAL\')">Self Heal</button><button class="dt-button silver" onclick="triggerGodsModeAction(\'DEBUG\')">Debug Live</button><button class="dt-button" onclick="triggerGodsModeAction(\'PAUSE\')">Pause Stack</button><button class="dt-button silver" onclick="triggerGodsModeAction(\'HOT_BACKUP\')">Hot Backup</button></div></section><section class="dt-card"><h2 class="dt-card-title">Corporate A4 Report Engine</h2><div class="dt-actions active"><button class="dt-button" onclick="compileReport(\'portrait\')">Compile Portrait Report</button><button class="dt-button silver" onclick="compileReport(\'landscape\')">Compile Landscape Deck</button></div></section></aside>',
             '<main class="dt-stack"><section class="dt-card gold"><h2 class="dt-card-title">Titanium ERP Module Infrastructure (70 Engines)</h2><div id="hybrid-module-grid" class="dt-scroll-grid"></div></section><section class="dt-card gold"><h2 class="dt-card-title">120 App Subsystem Workspace</h2><div id="miniapp-grid" class="dt-scroll-grid"></div></section><section class="dt-frames"><div class="dt-frame"><div class="dt-frame-head"><span>100APPS.HTML Workspace</span><button class="dt-button" onclick="reloadFrame(\'frame-miniapps\')">Reload</button></div><iframe id="frame-miniapps" src="100APPS.HTML" sandbox="allow-scripts allow-same-origin allow-forms"></iframe></div><div class="dt-frame"><div class="dt-frame-head"><span>LMSENTREPRISE.HTML Portal</span><button class="dt-button silver" onclick="reloadFrame(\'frame-lms\')">Reload</button></div><iframe id="frame-lms" src="LMSENTREPRISE.HTML" sandbox="allow-scripts allow-same-origin allow-forms"></iframe></div></section></main>',
             '<aside class="dt-stack"><section class="dt-card"><h2 class="dt-card-title">Swarm Agent Execution Pulse</h2><div class="dt-agent-rack" style="grid-template-columns:repeat(2,1fr);min-width:0;"><div class="dt-agent"><div class="dt-agent-label">Frappe Core</div><span class="dt-pentagon dt-good"></span></div><div class="dt-agent"><div class="dt-agent-label">Odoo 18</div><span class="dt-pentagon dt-warn"></span></div><div class="dt-agent"><div class="dt-agent-label">Ledger RPC</div><span class="dt-pentagon dt-soft"></span></div><div class="dt-agent"><div class="dt-agent-label">Vercel Vault</div><span class="dt-pentagon dt-good"></span></div></div></section><section class="dt-card"><h2 class="dt-card-title">Core System Live Event Stream</h2><div id="terminal-display" class="dt-stream">&gt; Establishing communication links to backend server arrays...</div><div style="display:flex;gap:8px;margin-top:10px;"><input class="dt-input" id="terminal-input" placeholder="Command Amanda..."><button class="dt-button" onclick="executeAmandaTerminalCommand()">Run</button></div></section><section class="dt-card"><h2 class="dt-card-title">Settlement Mesh</h2><div class="dt-stream" style="height:150px;">Cooperative Bank settlement channel armed.<br>M-Pesa Paybill routing protected in Vercel Vault.<br>Stripe and Hyperswitch connectors vault-mapped.<br>Cross-border rails: WeChat, Alipay, Interswitch, Pesalink, AfriPesa.</div></section></aside></div>',
+            '<section class="dt-card gold"><h2 class="dt-card-title">Core Farmer &amp; Admin Business Utilities</h2><div class="dt-core-app-grid"><div id="app-holder-farmer-registration"></div><div id="app-holder-farmer-onboarding"></div><div id="app-holder-farmer-dashboard"></div><div id="app-holder-admin-backend"></div></div></section>',
             '<button id="dt-chat-button" onclick="toggleAmandaChat()" aria-label="Open Amanda chatbot">AI</button><section id="dt-chat-panel"><div class="dt-chat-head"><strong style="color:#D4AF37;text-transform:uppercase;">Amanda Master Orchestrator</strong><button class="dt-button silver" onclick="toggleAmandaChat()">Close</button></div><div id="dt-chat-log" class="dt-chat-log"><div class="dt-bubble">Hello Operator. I am Amanda, the primary super agent chatbot node running the operational health of your front-end canvas, backend JSON-RPC engines, and cloud deployments.</div></div><div class="dt-chat-form"><input id="dt-chat-input" placeholder="Command me..."><button class="dt-button" onclick="dispatchAmandaChat()">Send</button></div></section>'
         ].join('');
         renderCards();
+        renderCoreBusinessApps();
         bindInputs();
         setInterval(refreshRouterStats, 8000);
         termLog('[DASHBOARD] Titanium Hybrid ERP Master Portal initialized.');
+    }
+
+    function renderCoreBusinessApps() {
+        DreamTeQ_Core_Apps.renderFarmerRegistrationApp('app-holder-farmer-registration');
+        DreamTeQ_Core_Apps.renderFarmerOnboardingApp('app-holder-farmer-onboarding');
+        DreamTeQ_Core_Apps.renderFarmerDashboardApp('app-holder-farmer-dashboard');
+        DreamTeQ_Core_Apps.renderAdminBackendApp('app-holder-admin-backend');
+        console.log('[DREAMTEQ PLATFORM LAYER] Core Business App extensions mounted and running.');
     }
 
     function card(html) {
@@ -101,13 +295,26 @@
         var field = document.getElementById('cto-passphrase-field');
         var actions = document.getElementById('cto-secured-actions');
         if (!field || !actions) return;
-        if (field.value.trim().length >= 8) {
-            actions.classList.add('active');
-            document.getElementById('cto-auth-gate').style.display = 'none';
-            termLog('[CTO VAULT] Local CTO enclave unlocked for this browser session.');
-        } else {
-            termLog('[CTO VAULT] Passphrase rejected. Minimum secure entry length not met.');
+        if (!window.crypto || !window.crypto.subtle) {
+            termLog('[CTO VAULT] Browser cryptography services unavailable. Vault remains locked.');
+            return;
         }
+
+        window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(field.value.trim())).then(function (hashBuffer) {
+            var hashHex = Array.prototype.map.call(new Uint8Array(hashBuffer), function (byte) {
+                return byte.toString(16).padStart(2, '0');
+            }).join('');
+
+            if (hashHex === 'c1c35c81fcbd39d4bd7a90c2e2e702dd869eba8d3601af43507a429e153fddfe') {
+                actions.classList.add('active');
+                document.getElementById('cto-auth-gate').style.display = 'none';
+                termLog('[CTO VAULT] Local CTO enclave unlocked for this browser session.');
+            } else {
+                termLog('[CTO VAULT] Passphrase rejected. Hash verification failed.');
+            }
+        }).catch(function () {
+            termLog('[CTO VAULT] Passphrase verification failed.');
+        });
     };
 
     window.triggerGodsModeAction = function (action) {

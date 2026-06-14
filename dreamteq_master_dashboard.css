@@ -49,3 +49,51 @@
 .dt-chat-form input { background: #000; border: 1px solid #C0C0C0; border-radius: 4px; color: #fff; flex: 1; min-width: 0; padding: 10px; }
 @media (max-width:1280px) { .dt-grid { grid-template-columns: 1fr; } .dt-frames { grid-template-columns: 1fr; } }
 @media (max-width:680px) { .dt-agent-rack { grid-template-columns: repeat(2,1fr); width: 100%; } .dt-actions { grid-template-columns: 1fr; } }
+
+/* ========================================================================== */
+/* DREAMTEQ MASTER REGISTRATION, ADMIN, AND ONBOARDING UI EXTENSIONS */
+/* ========================================================================== */
+.dt-core-app-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; margin: 24px 0; }
+.dt-core-app-card { background: #0B130E; border: 1px solid #C0C0C0; border-radius: 12px; padding: 30px; box-shadow: 0 8px 25px rgba(0,0,0,.5); min-width: 0; }
+.dt-core-app-card.gold { border-color: #D4AF37; }
+.dt-core-app-title { color: #D4AF37; margin: 0 0 18px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #222; padding-bottom: 10px; font-size: 1rem; }
+.dt-core-app-title.silver { color: #FFF; }
+.dt-core-stats-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; margin-bottom: 20px; }
+.dt-core-stat { background: #030504; padding: 15px; border-radius: 6px; border-top: 2px solid #34D399; }
+.dt-core-stat.gold { border-top-color: #D4AF37; }
+.dt-core-stat span { color: #888; font-size: .75rem; text-transform: uppercase; }
+.dt-core-stat strong { color: #FFF; display: block; font-size: 1.35rem; margin-top: 5px; }
+.dt-core-stat.gold strong { color: #D4AF37; }
+.dreamteq-form-group { margin-bottom: 20px; text-align: left; }
+.dreamteq-form-label { display: block; color: #D4AF37; font-size: .85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: bold; }
+.dreamteq-input { width: 100%; background-color: #030504; border: 1px solid #C0C0C0; border-radius: 6px; padding: 12px; color: #FFF; font-family: inherit; box-sizing: border-box; transition: border-color .3s ease, box-shadow .3s ease; }
+.dreamteq-input:focus { border-color: #D4AF37; outline: none; box-shadow: 0 0 10px rgba(212,175,55,.2); }
+.dreamteq-select { width: 100%; background-color: #030504; border: 1px solid #C0C0C0; border-radius: 6px; padding: 12px; color: #FFF; font-family: inherit; box-sizing: border-box; }
+.dreamteq-action-btn { background: #D4AF37; color: #050A06; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; text-transform: uppercase; cursor: pointer; letter-spacing: 1px; transition: all .3s ease; }
+.dreamteq-action-btn:hover { background: #bfa032; box-shadow: 0 4px 15px rgba(212,175,55,.3); }
+.dreamteq-action-btn.full { width: 100%; }
+.dreamteq-action-btn.spaced { margin-top: 10px; }
+.admin-data-table { width: 100%; border-collapse: collapse; margin-top: 15px; color: #C0C0C0; font-size: .9rem; }
+.admin-data-table th { background: #030504; color: #D4AF37; text-align: left; padding: 12px; border-bottom: 2px solid #D4AF37; text-transform: uppercase; font-size: .8rem; }
+.admin-data-table td { padding: 12px; border-bottom: 1px solid #111; }
+.admin-table-wrap { overflow-x: auto; }
+.admin-id { font-family: Consolas, 'Courier New', monospace; color: #D4AF37; }
+.admin-phone { font-family: Consolas, 'Courier New', monospace; }
+.admin-empty { text-align: center; color: #D4AF37; }
+.admin-error { text-align: center; color: #EF4444; }
+.kyc-badge { background: rgba(52,211,153,.1); color: #34D399; padding: 2px 8px; border-radius: 4px; font-size: .75rem; font-weight: bold; }
+.cto-vault-secured-badge { background: rgba(212,175,55,.1); border: 1px solid #D4AF37; color: #D4AF37; padding: 10px; border-radius: 6px; font-family: Consolas, 'Courier New', monospace; font-size: .8rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.onboarding-steps-box { margin-top: 20px; display: none; }
+.onboarding-steps-box.active { display: block; }
+.onboarding-steps-box h4 { color: #FFF; text-transform: uppercase; font-size: .85rem; }
+.onboarding-checklist { background: #030504; padding: 15px; border-radius: 6px; border-left: 3px solid #D4AF37; color: #C0C0C0; font-size: .9rem; }
+.onboarding-checklist label { color: #C0C0C0; }
+.agent-pentagon-status-container { display: flex; align-items: center; gap: 10px; background: #030504; padding: 10px; border-radius: 6px; border: 1px solid #222; margin: 10px 0; }
+.agent-pentagon-status-container svg { filter: drop-shadow(0 0 5px var(--pentagon-glow, #34D399)); flex: 0 0 auto; }
+.agent-pentagon-status-copy { font-size: .8rem; font-family: Consolas, 'Courier New', monospace; color: #C0C0C0; }
+.agent-pentagon-status-copy strong { color: #FFF; }
+.agent-pentagon-performance { color: var(--pentagon-color, #34D399); }
+.agent-pentagon-status-container.green { --pentagon-color: #34D399; --pentagon-glow: #34D399; }
+.agent-pentagon-status-container.yellow { --pentagon-color: #FBBF24; --pentagon-glow: #FBBF24; }
+.agent-pentagon-status-container.maroon { --pentagon-color: #991B1B; --pentagon-glow: #991B1B; }
+@media (max-width:680px) { .dt-core-app-grid, .dt-core-stats-grid { grid-template-columns: 1fr; } .dt-core-app-card { padding: 18px; } }
