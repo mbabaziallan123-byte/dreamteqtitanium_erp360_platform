@@ -21,7 +21,7 @@ from schemas import ScraperJobRequest, DiscoveryBatchResponse
 from pipeline import DreamTeqDataPipeline
 from agents import DreamTeqCognitiveAgent
 from iot import DreamTeqIoTBridge
-from database import ping_database
+from database import ping_database, DreamTeqDatabaseMap
 
 # ── Rate limiter ──────────────────────────────────────────────────────────────
 _RATE_LIMIT = os.environ.get("RATE_LIMIT_PER_MINUTE", "30")
@@ -78,6 +78,10 @@ async def execute_automated_discovery_cycle(request: Request, payload: ScraperJo
         for op in structured_json.get("opportunities", []):
             if op.get("priority_flag") in ("Urgent", "High-Value"):
                 DreamTeqIoTBridge.broadcast_to_field_devices(op)
+
+        # Stage 6: Persist all discovered opportunities into Core ERP PostgreSQL
+        if structured_json.get("opportunities"):
+            DreamTeqDatabaseMap.save_discovered_opportunities(structured_json["opportunities"])
 
         return structured_json
 
