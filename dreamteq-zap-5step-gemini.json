@@ -1,0 +1,191 @@
+{
+  "metadata": { "version": 2 },
+  "zaps": [
+    {
+      "id": 1,
+      "title": "DreamTeQ — Agri Opportunity Intelligence Pipeline (Sheets → Scrape → Gemini → Telegram → Sheets)",
+      "nodes": {
+
+        "1": {
+          "id": 1,
+          "paused": false,
+          "type_of": "read",
+          "params": {
+            "spreadsheet": "1GZmR4pX8CQlsb0n4ATmOGzOmr7kkMfCH4ZW7DO4l024",
+            "worksheet": "878232102"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {
+              "spreadsheet": "Memory for DreamTeq Suite",
+              "worksheet": "orchestration_logic"
+            },
+            "stepTitle": "Step 1: New Target URL Row"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": null,
+          "root_id": null,
+          "action": "new_row_notify_hook",
+          "selected_api": "GoogleSheetsV2CLIAPI@2.13.1",
+          "title": null,
+          "authentication_id": "9b187856b2529a9e9f5b60a8f06bf63664012df614df63003951e17210ac0e5b"
+        },
+
+        "2": {
+          "id": 2,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "extraction_schema": "{\"type\":\"object\",\"properties\":{\"opportunity_type\":{\"type\":\"string\",\"description\":\"Type: Tender, Grant, Course, Contract, Market Listing, Funding, Scholarship, Other\"},\"title\":{\"type\":\"string\",\"description\":\"Official name or title of the opportunity\"},\"organization\":{\"type\":\"string\",\"description\":\"Organization offering the opportunity\"},\"description\":{\"type\":\"string\",\"description\":\"Detailed description\"},\"eligibility\":{\"type\":\"string\",\"description\":\"Who can apply and key requirements\"},\"amount_value\":{\"type\":\"string\",\"description\":\"Financial amount if applicable\"},\"currency\":{\"type\":\"string\",\"description\":\"Currency (USD, KES, UGX, ZWL, GHS, ETB, etc)\"},\"deadline\":{\"type\":\"string\",\"description\":\"Application or event deadline date\"},\"application_url\":{\"type\":\"string\",\"description\":\"Direct link to apply\"},\"contact_email\":{\"type\":\"string\",\"description\":\"Contact email\"},\"contact_phone\":{\"type\":\"string\",\"description\":\"Contact phone\"},\"key_benefits\":{\"type\":\"string\",\"description\":\"Main benefits and outcomes\"},\"countries\":{\"type\":\"string\",\"description\":\"Targeted countries or regions\"},\"sectors\":{\"type\":\"string\",\"description\":\"Agriculture sectors (crops, livestock, agritech, etc)\"}},\"required\":[\"opportunity_type\",\"title\",\"organization\",\"deadline\"]}",
+            "prompt": "Extract detailed information about agricultural opportunities (tenders, grants, courses, contracts, market listings) for East African and SADC farmers. Focus on: opportunity type, eligibility requirements, funding amount, application deadline, contact information, and key benefits. Also extract any references to opportunities in {{1__COL$B}}",
+            "URLs": "{{1__COL$C}}",
+            "enableWebSearch": "true",
+            "ignoreSitemap": "false",
+            "includeSubdomains": "false",
+            "showSources": "true"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {
+              "enableWebSearch": "True",
+              "ignoreSitemap": "False",
+              "includeSubdomains": "False",
+              "showSources": "True"
+            },
+            "stepTitle": "Step 2: Extract Opportunity Data (Web Scrape)"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 1,
+          "root_id": 1,
+          "action": "Extract",
+          "selected_api": "App204168CLIAPI@3.1.0",
+          "title": null,
+          "authentication_id": "373d1a19355dade058c92435ee93f9c69446078a37a3a28ce987330629937457"
+        },
+
+        "3": {
+          "id": 3,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "model": "gemini-1.5-pro",
+            "prompt": "You are the DreamTeQ AI Core Engine for an East African & SADC Farmer ERP platform.\n\nAnalyze the following extracted agricultural opportunity data and return a structured JSON response:\n\nSOURCE URL: {{1__COL$C}}\nROW CONTEXT: {{1__COL$B}}\nEXTRACTED DATA: {{2__output}}\n\nReturn a JSON object with these fields:\n- priority_flag: \"Urgent\" | \"High-Value\" | \"Standard\" (based on deadline urgency and value)\n- economic_bloc: \"EAC\" | \"SADC\" | \"Both\" | \"Other\"\n- financial_value_usd: (numeric estimate in USD, 0 if unknown)\n- recommended_action: (1-2 sentence recommendation for East African farmers)\n- quality_score: (0-100, how complete and reliable is this opportunity)\n- tags: (comma-separated: crops/sectors involved)\n\nReturn ONLY valid JSON. No explanation text.",
+            "apiKey": "{{GEMINI_API_KEY}}"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 3: Gemini AI — Classify & Score Opportunity"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 2,
+          "root_id": 1,
+          "action": "generate_content",
+          "selected_api": "GoogleGeminiCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "4": {
+          "id": 4,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "chat_id": "{{TELEGRAM_CHAT_ID}}",
+            "text": "🌾 *DreamTeQ Opportunity Alert*\n\n*{{2__title}}*\n📌 Type: {{2__opportunity_type}}\n🏢 {{2__organization}}\n🌍 {{2__countries}} | Sectors: {{2__sectors}}\n💰 {{2__amount_value}} {{2__currency}}\n⏰ Deadline: {{2__deadline}}\n\n🤖 AI Score: {{3__quality_score}}/100 | Priority: {{3__priority_flag}}\n📊 Bloc: {{3__economic_bloc}} | Est. USD: ${{3__financial_value_usd}}\n\n✅ {{3__recommended_action}}\n\n🔗 Apply: {{2__application_url}}",
+            "parse_mode": "Markdown",
+            "disable_notification": "false"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {
+              "parse_mode": "Markdown",
+              "disable_notification": "False"
+            },
+            "stepTitle": "Step 4: Telegram — Notify Team of New Opportunity"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 3,
+          "root_id": 1,
+          "action": "send_message",
+          "selected_api": "TelegramCLIAPI@1.3.2",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "5": {
+          "id": 5,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "spreadsheet": "1GZmR4pX8CQlsb0n4ATmOGzOmr7kkMfCH4ZW7DO4l024",
+            "worksheet": "opportunities_discovered",
+            "COL$A": "{{2__title}}",
+            "COL$B": "{{2__opportunity_type}}",
+            "COL$C": "{{2__organization}}",
+            "COL$D": "{{2__deadline}}",
+            "COL$E": "{{2__amount_value}} {{2__currency}}",
+            "COL$F": "{{2__countries}}",
+            "COL$G": "{{2__sectors}}",
+            "COL$H": "{{2__eligibility}}",
+            "COL$I": "{{2__application_url}}",
+            "COL$J": "{{2__contact_email}}",
+            "COL$K": "{{3__priority_flag}}",
+            "COL$L": "{{3__economic_bloc}}",
+            "COL$M": "{{3__financial_value_usd}}",
+            "COL$N": "{{3__recommended_action}}",
+            "COL$O": "{{3__quality_score}}",
+            "COL$P": "{{3__tags}}",
+            "COL$Q": "{{zap__humanize_datetime_now}}"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {
+              "spreadsheet": "Memory for DreamTeq Suite",
+              "worksheet": "opportunities_discovered"
+            },
+            "stepTitle": "Step 5: Write to ERP — opportunities_discovered Sheet"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 4,
+          "root_id": 1,
+          "action": "create_spreadsheet_row",
+          "selected_api": "GoogleSheetsV2CLIAPI@2.13.1",
+          "title": null,
+          "authentication_id": "9b187856b2529a9e9f5b60a8f06bf63664012df614df63003951e17210ac0e5b"
+        }
+
+      }
+    }
+  ]
+}

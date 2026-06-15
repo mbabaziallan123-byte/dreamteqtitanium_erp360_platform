@@ -45,7 +45,17 @@ services:
     volumes:
       - .:/usr/src/app
     working_dir: /usr/src/app
-    command: sh -c "npm install ws ioredis && node websocket_broadcast_server.js"
+    command: sh -c "npm install ws ioredis nodemailer && node websocket_broadcast_server.js"
+    environment:
+      - WS_PORT=8085
+      - REDIS_HOST=dreamteq-cache
+      - REDIS_PORT=6379
+      - DREAMTEQ_MAIL_HOST=${DREAMTEQ_MAIL_HOST}
+      - DREAMTEQ_MAIL_PORT=${DREAMTEQ_MAIL_PORT}
+      - DREAMTEQ_MAIL_USER=${DREAMTEQ_MAIL_USER}
+      - DREAMTEQ_MAIL_PASSWORD=${DREAMTEQ_MAIL_PASSWORD}
+      - DREAMTEQ_NOTIFY_LIST=${DREAMTEQ_NOTIFY_LIST}
+      - DREAMTEQ_MAIL_DRY_RUN=${DREAMTEQ_MAIL_DRY_RUN}
     depends_on:
       - dreamteq-cache
     networks:
@@ -76,6 +86,14 @@ services:
       - .:/usr/src/app
     working_dir: /usr/src/app
     command: sh -c "npm install ioredis pdfkit && node odoo_rpc_middleware.js"
+    environment:
+      - ODOO_URL=http://odoo18-core:8069
+      - ODOO_RPC_PASSWORD=${ODOO_RPC_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - REDIS_HOST=dreamteq-cache
+      - REDIS_PORT=6379
+      - LEDGER_PORT=8090
     depends_on:
       - dreamteq-cache
       - odoo18-core

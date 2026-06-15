@@ -3,6 +3,10 @@
  * Compliance Matrix: Safaricom M-Pesa Daraja API OpenAPI Structural Spec
  * Product of Dreamteam Consulting Company, Box 3515-00100, Nairobi, Kenya
  */
+'use strict';
+
+// Ledger sync URL — configurable via env so it works across Docker, Vercel, and local.
+const LEDGER_SYNC_URL = process.env.DREAMTEQ_LEDGER_SYNC_URL || 'http://localhost:8090/sync/ledger';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -43,7 +47,7 @@ export default async function handler(req, res) {
             amount: amountPaid
         }];
 
-        const response = await fetch('http://localhost:8090/sync/ledger', {
+        const response = await fetch(LEDGER_SYNC_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(ledgerSyncPacket)

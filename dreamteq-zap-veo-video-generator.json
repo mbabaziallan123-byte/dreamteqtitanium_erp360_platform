@@ -1,0 +1,476 @@
+{
+  "metadata": { "version": 2 },
+  "zaps": [
+
+    {
+      "id": 300,
+      "title": "DreamTeQ — AI Video Generator: Ingest Catalog URL + Scrape Products",
+      "nodes": {
+
+        "300": {
+          "id": 300,
+          "paused": false,
+          "type_of": "read",
+          "params": {
+            "instructions": "POST JSON body: { \"catalog_url\": \"https://...\", \"product_limit\": 10, \"store_name\": \"My Store\", \"google_drive_folder_id\": \"YOUR_FOLDER_ID\" }"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 1: Receive Catalog URL (Webhook)"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": null,
+          "root_id": null,
+          "action": "catch_hook",
+          "selected_api": "WebhooksCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "301": {
+          "id": 301,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "method": "POST",
+            "url": "https://api.firecrawl.dev/v1/scrape",
+            "headers": "Authorization: Bearer {{FIRECRAWL_API_KEY}}\nContent-Type: application/json",
+            "payload_type": "json",
+            "data": "{\"url\":\"{{300__catalog_url}}\",\"formats\":[\"markdown\",\"links\",\"screenshot\"],\"actions\":[{\"type\":\"scroll\",\"direction\":\"down\",\"amount\":2000}],\"waitFor\":3000,\"includeTags\":[\"img\",\"h1\",\"h2\",\"h3\",\"p\",\"a\"],\"removeBase64Images\":false}"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 2: Firecrawl — Scrape Catalog Page"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 300,
+          "root_id": 300,
+          "action": "custom_request",
+          "selected_api": "WebhooksCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "302": {
+          "id": 302,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "method": "POST",
+            "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key={{GEMINI_API_KEY}}",
+            "headers": "Content-Type: application/json",
+            "payload_type": "json",
+            "data": "{\"contents\":[{\"parts\":[{\"text\":\"You are a product catalog parser. Extract product listings from this scraped eCommerce catalog page.\\n\\nSCRAPED CONTENT:\\n{{301__data__markdown}}\\n\\nADDITIONAL PAGE LINKS:\\n{{301__data__links}}\\n\\nExtract up to {{300__product_limit}} products and return a JSON array ONLY (no explanation):\\n[\\n  {\\n    \\\"product_index\\\": 1,\\n    \\\"title\\\": \\\"product name\\\",\\n    \\\"image_url\\\": \\\"full absolute https URL to main product image\\\",\\n    \\\"product_url\\\": \\\"link to product detail page\\\",\\n    \\\"price\\\": \\\"price string or empty\\\",\\n    \\\"description\\\": \\\"1 sentence max\\\",\\n    \\\"category\\\": \\\"clothing type (dress, shirt, pants, etc.)\\\",\\n    \\\"colors\\\": \\\"color(s) mentioned\\\"\\n  }\\n]\\n\\nOnly include products with valid image URLs. Prioritize fashion/apparel items. Return ONLY the JSON array.\"}]}]}"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 3: Gemini AI — Parse & Extract Product List"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 301,
+          "root_id": 300,
+          "action": "custom_request",
+          "selected_api": "WebhooksCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "303": {
+          "id": 303,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "items": "{{302__candidates__0__content__parts__0__text}}",
+            "by": "line_items"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 4: Looping by Zapier — Iterate Each Product"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 302,
+          "root_id": 300,
+          "action": "create_loop_from_line_items",
+          "selected_api": "LoopingCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "304": {
+          "id": 304,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "method": "POST",
+            "url": "https://hooks.zapier.com/hooks/catch/{{VIDEO_PROCESSOR_HOOK_ID}}/",
+            "headers": "Content-Type: application/json",
+            "payload_type": "json",
+            "data": "{\"product_title\":\"{{303__title}}\",\"image_url\":\"{{303__image_url}}\",\"product_url\":\"{{303__product_url}}\",\"price\":\"{{303__price}}\",\"category\":\"{{303__category}}\",\"colors\":\"{{303__colors}}\",\"description\":\"{{303__description}}\",\"store_name\":\"{{300__store_name}}\",\"drive_folder_id\":\"{{300__google_drive_folder_id}}\",\"catalog_url\":\"{{300__catalog_url}}\",\"product_index\":\"{{303__product_index}}\"}"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 5: Trigger Video Processor Zap for Each Product"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 303,
+          "root_id": 300,
+          "action": "custom_request",
+          "selected_api": "WebhooksCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        }
+
+      }
+    },
+
+    {
+      "id": 400,
+      "title": "DreamTeQ — AI Video Generator: Veo 3.1 Video Generation + Drive Upload",
+      "nodes": {
+
+        "400": {
+          "id": 400,
+          "paused": false,
+          "type_of": "read",
+          "params": {
+            "instructions": "Receives per-product data from the catalog ingestion Zap. Fields: product_title, image_url, product_url, category, colors, description, store_name, drive_folder_id, product_index"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 1: Receive Product Data (Webhook trigger)"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": null,
+          "root_id": null,
+          "action": "catch_hook",
+          "selected_api": "WebhooksCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "401": {
+          "id": 401,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "method": "POST",
+            "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key={{GEMINI_API_KEY}}",
+            "headers": "Content-Type: application/json",
+            "payload_type": "json",
+            "data": "{\"contents\":[{\"parts\":[{\"text\":\"You are a creative director for fashion eCommerce video ads.\\n\\nCreate a detailed 8-second video prompt for Google Veo 3.1 to generate a product showcase video.\\n\\nPRODUCT: {{400__product_title}}\\nCATEGORY: {{400__category}}\\nCOLORS: {{400__colors}}\\nDESCRIPTION: {{400__description}}\\n\\nReturn a JSON object ONLY:\\n{\\n  \\\"video_prompt\\\": \\\"(A detailed 60-80 word cinematic prompt: professional fashion model wearing the {{400__category}}, shot in clean white studio, model gracefully turns 360 degrees showcasing all angles, subtle fabric movement, professional lighting, 4K quality, smooth rotation, brand showcase style)\\\",\\n  \\\"negative_prompt\\\": \\\"blurry, low quality, distorted, watermark, text overlay, multiple outfits, changing clothes\\\",\\n  \\\"aspect_ratio\\\": \\\"9:16\\\",\\n  \\\"duration_seconds\\\": 8\\n}\"}]}]}"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 2: Gemini AI — Generate Veo Video Prompt"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 400,
+          "root_id": 400,
+          "action": "custom_request",
+          "selected_api": "WebhooksCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "402": {
+          "id": 402,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "method": "POST",
+            "url": "https://generativelanguage.googleapis.com/v1beta/models/veo-003:predictLongRunning?key={{GEMINI_API_KEY}}",
+            "headers": "Content-Type: application/json",
+            "payload_type": "json",
+            "data": "{\"instances\":[{\"prompt\":\"{{401__candidates__0__content__parts__0__text__video_prompt}}\",\"image\":{\"gcsUri\":\"\",\"bytesBase64Encoded\":\"\",\"url\":\"{{400__image_url}}\"}}],\"parameters\":{\"aspectRatio\":\"{{401__candidates__0__content__parts__0__text__aspect_ratio}}\",\"durationSeconds\":{{401__candidates__0__content__parts__0__text__duration_seconds}},\"negativePrompt\":\"{{401__candidates__0__content__parts__0__text__negative_prompt}}\",\"generateAudio\":false,\"numberOfVideos\":1,\"enhancePrompt\":true}}"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 3: Google Veo 3.1 — Submit Video Generation Job"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 401,
+          "root_id": 400,
+          "action": "custom_request",
+          "selected_api": "WebhooksCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "403": {
+          "id": 403,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "seconds": "15"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 4: Delay 15 Seconds — Wait for Veo to Process"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 402,
+          "root_id": 400,
+          "action": "delay_for",
+          "selected_api": "DelayCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "404": {
+          "id": 404,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "method": "GET",
+            "url": "https://generativelanguage.googleapis.com/v1beta/{{402__name}}?key={{GEMINI_API_KEY}}",
+            "headers": "Content-Type: application/json"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 5: Poll — Check Veo Job Status"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 403,
+          "root_id": 400,
+          "action": "custom_request",
+          "selected_api": "WebhooksCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "405": {
+          "id": 405,
+          "paused": false,
+          "type_of": "filter",
+          "params": {
+            "conditions": [
+              {
+                "field": "{{404__done}}",
+                "operator": "contains",
+                "value": "true"
+              }
+            ],
+            "type": "any"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 6: Filter — Only Continue if Video is Ready"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 404,
+          "root_id": 400,
+          "action": "zapier_filter",
+          "selected_api": "FilterCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "406": {
+          "id": 406,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "method": "GET",
+            "url": "{{404__response__predictions__0__videoUri}}",
+            "headers": "Authorization: Bearer {{GEMINI_API_KEY}}"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 7: Download Generated Video File"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 405,
+          "root_id": 400,
+          "action": "custom_request",
+          "selected_api": "WebhooksCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "407": {
+          "id": 407,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "parent": "{{400__drive_folder_id}}",
+            "name": "{{400__store_name}}_product{{400__product_index}}_{{400__product_title}}.mp4",
+            "content": "{{406__response}}",
+            "mimeType": "video/mp4",
+            "convert": "false"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {
+              "convert": "False"
+            },
+            "stepTitle": "Step 8: Upload Video to Google Drive"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 406,
+          "root_id": 400,
+          "action": "upload_file",
+          "selected_api": "GoogleDriveCLIAPI@2.3.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "408": {
+          "id": 408,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "parent": "{{400__drive_folder_id}}",
+            "name": "{{400__store_name}}_product{{400__product_index}}_{{400__product_title}}_source.jpg",
+            "url": "{{400__image_url}}",
+            "mimeType": "image/jpeg",
+            "convert": "false"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {
+              "convert": "False"
+            },
+            "stepTitle": "Step 9: Save Source Product Image to Google Drive"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 407,
+          "root_id": 400,
+          "action": "upload_file",
+          "selected_api": "GoogleDriveCLIAPI@2.3.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "409": {
+          "id": 409,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "chat_id": "{{TELEGRAM_CHAT_ID}}",
+            "text": "🎬 *AI Product Video Ready!*\n\n✅ Video generated successfully\n\n🛍️ *{{400__product_title}}*\n📂 Category: {{400__category}}\n🎨 Colors: {{400__colors}}\n💰 Price: {{400__price}}\n🏪 Store: {{400__store_name}}\n\n📁 *Google Drive:*\n🎥 Video: `{{407__name}}`\n🖼️ Source: `{{408__name}}`\n\n🔗 Drive Folder: https://drive.google.com/drive/folders/{{400__drive_folder_id}}\n🛒 Product: {{400__product_url}}\n\n⏰ Completed: {{zap__humanize_datetime_now}}",
+            "parse_mode": "Markdown",
+            "disable_notification": "false"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {
+              "parse_mode": "Markdown"
+            },
+            "stepTitle": "Step 10: Telegram — Notify Video Complete"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 408,
+          "root_id": 400,
+          "action": "send_message",
+          "selected_api": "TelegramCLIAPI@1.3.2",
+          "title": null,
+          "authentication_id": null
+        }
+
+      }
+    }
+
+  ]
+}

@@ -5,6 +5,7 @@
  * Logistics Operator: ALTOVEX GLOBAL LOGISTICS COMPANY LTD (Paybill: 400200 / Acc: 40045731)
  * Product of Dreamteam Consulting Company, Box 3515-00100, Nairobi, Kenya
  */
+'use strict';
 
 const http = require('http');
 const fs = require('fs');
@@ -12,13 +13,18 @@ const path = require('path');
 const Redis = require('ioredis');
 const PDFDocument = require('pdfkit');
 
+// All secrets injected from environment — never hardcode credentials in source.
+if (!process.env.ODOO_RPC_PASSWORD) {
+    console.warn('[CONFIG] ODOO_RPC_PASSWORD not set — Odoo RPC calls will fail authentication.');
+}
+
 const CONFIG = {
-    odooUrl: 'http://odoo18-core:8069',
-    dbName: 'dreamteq_master_pool',
-    username: 'dreamteq_operator',
-    password: 'SecretTitaniumPassword360',
-    redisHost: 'dreamteq-cache',
-    listenPort: 8090,
+    odooUrl: process.env.ODOO_URL || 'http://odoo18-core:8069',
+    dbName: process.env.POSTGRES_DB || 'dreamteq_master_pool',
+    username: process.env.POSTGRES_USER || 'dreamteq_operator',
+    password: process.env.ODOO_RPC_PASSWORD || '',
+    redisHost: process.env.REDIS_HOST || 'dreamteq-cache',
+    listenPort: parseInt(process.env.LEDGER_PORT || '8090', 10),
     pdfStorageDir: './media/optimized_output',
     settlement: {
         beneficiary: 'ALTOVEX GLOBAL LOGISTICS COMPANY LTD',

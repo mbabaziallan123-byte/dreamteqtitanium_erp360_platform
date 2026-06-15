@@ -1,4 +1,31 @@
 {
+  "name": "dreamteq-titanium-erp360-platform",
+  "version": "1.0.0",
+  "description": "DreamTeQ_360 Titanium Hybrid ERP — AI-Driven Agricultural & Enterprise Automation Platform",
+  "author": "Dreamteam Consulting Company <dreamteamconsult@gmx.com>",
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "start": "node websocket_broadcast_server.js",
+    "start:router": "node whatsapp_ai_router.js",
+    "start:ledger": "node odoo_rpc_middleware.js",
+    "start:ollama": "node ollama-bridge.js",
+    "test": "node live_simulated_test_suite.js && node test_firecrawl_integration.js",
+    "test:firecrawl": "node test_firecrawl_integration.js",
+    "test:daraja": "node test_daraja_simulation.js",
+    "test:ollama": "node test_ollama_bridge.js",
+    "test:pipeline": "node test_pipeline_exception_notifier.js",
+    "test:registration": "node test_registration_encryption.js",
+    "test:report": "node test_report_compilation.js",
+    "test:vercel": "node test_vercel_push.js",
+    "test:whatsapp": "node test_whatsapp_ai_pipeline.js",
+    "test:api": "node test-api-endpoints.js",
+    "backup": "node supabase_production_backup.js",
+    "dev": "node websocket_broadcast_server.js"
+  },
   "dependencies": {
     "ioredis": "^5.11.1",
     "nodemailer": "^9.0.0",

@@ -1,0 +1,429 @@
+{
+  "metadata": { "version": 2 },
+  "zaps": [
+
+    {
+      "id": 10,
+      "title": "DreamTeQ Agri Products — Step 1: Ingest & Store Raw Product",
+      "nodes": {
+
+        "10": {
+          "id": 10,
+          "paused": false,
+          "type_of": "read",
+          "params": {
+            "instructions": "Send product data as JSON POST body to the webhook URL. Fields: name, sku, supplier, category_hint, price, stock_qty, reorder_threshold, source_platform, image_url, compliance_region"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 1: Receive Product Data (Webhook — any source)"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": null,
+          "root_id": null,
+          "action": "catch_hook",
+          "selected_api": "WebhooksCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "11": {
+          "id": 11,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "table_name": "agri_products_raw",
+            "data__name": "{{10__name}}",
+            "data__sku": "{{10__sku}}",
+            "data__supplier": "{{10__supplier}}",
+            "data__category_hint": "{{10__category_hint}}",
+            "data__price": "{{10__price}}",
+            "data__stock_qty": "{{10__stock_qty}}",
+            "data__reorder_threshold": "{{10__reorder_threshold}}",
+            "data__source_platform": "{{10__source_platform}}",
+            "data__image_url": "{{10__image_url}}",
+            "data__compliance_region": "{{10__compliance_region}}",
+            "data__status": "raw",
+            "data__ingested_at": "{{zap__humanize_datetime_now}}"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 2: Store Raw Product in Zapier Tables"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 10,
+          "root_id": 10,
+          "action": "create_record",
+          "selected_api": "ZapierTablesCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "12": {
+          "id": 12,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "method": "POST",
+            "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=AIzaSyAb8RN6KSgmy87-LcwPfrOUVyWwq_OzbSMfiI4v8_fwuXcjYMTA",
+            "headers": "Content-Type: application/json",
+            "payload_type": "json",
+            "data": "{\"contents\":[{\"parts\":[{\"text\":\"You are the DreamTeQ Agricultural Product Intelligence Engine for East African & SADC markets.\\n\\nAnalyze this product and return a JSON object ONLY (no explanation text):\\n\\nProduct Name: {{10__name}}\\nSKU: {{10__sku}}\\nSupplier: {{10__supplier}}\\nCategory Hint: {{10__category_hint}}\\nPrice: {{10__price}}\\nStock: {{10__stock_qty}}\\nCompliance Region: {{10__compliance_region}}\\n\\nReturn this exact JSON schema:\\n{\\n  \\\"primary_category\\\": \\\"(one of: Seeds, Fertilizers, Pesticides, Tools, Irrigation, Livestock, Animal Feed, Agritech, Storage, PPE, Other)\\\",\\n  \\\"subcategory\\\": \\\"(specific subcategory)\\\",\\n  \\\"product_description\\\": \\\"(2-3 sentence marketing description for East African farmers)\\\",\\n  \\\"key_features\\\": \\\"(comma-separated 3-5 bullet features)\\\",\\n  \\\"compliance_status\\\": \\\"(Pass | Flag | Review — based on region)\\\",\\n  \\\"compliance_notes\\\": \\\"(any regulatory or quality concerns for EAC/SADC)\\\",\\n  \\\"dropship_eligible\\\": \\\"(true | false)\\\",\\n  \\\"suggested_retail_price_usd\\\": \\\"(number only)\\\",\\n  \\\"reorder_recommendation\\\": \\\"(Urgent | Normal | Surplus)\\\",\\n  \\\"tags\\\": \\\"(comma-separated SEO tags)\\\",\\n  \\\"quality_score\\\": \\\"(0-100)\\\"\\n}\"}]}]}"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 3: Gemini AI — Categorize, Describe & Compliance Check"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 11,
+          "root_id": 10,
+          "action": "custom_request",
+          "selected_api": "WebhooksCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "13": {
+          "id": 13,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "table_name": "agri_products_processed",
+            "data__name": "{{10__name}}",
+            "data__sku": "{{10__sku}}",
+            "data__supplier": "{{10__supplier}}",
+            "data__price": "{{10__price}}",
+            "data__stock_qty": "{{10__stock_qty}}",
+            "data__reorder_threshold": "{{10__reorder_threshold}}",
+            "data__source_platform": "{{10__source_platform}}",
+            "data__image_url": "{{10__image_url}}",
+            "data__primary_category": "{{12__candidates__0__content__parts__0__text__primary_category}}",
+            "data__subcategory": "{{12__candidates__0__content__parts__0__text__subcategory}}",
+            "data__product_description": "{{12__candidates__0__content__parts__0__text__product_description}}",
+            "data__key_features": "{{12__candidates__0__content__parts__0__text__key_features}}",
+            "data__compliance_status": "{{12__candidates__0__content__parts__0__text__compliance_status}}",
+            "data__compliance_notes": "{{12__candidates__0__content__parts__0__text__compliance_notes}}",
+            "data__dropship_eligible": "{{12__candidates__0__content__parts__0__text__dropship_eligible}}",
+            "data__suggested_retail_price_usd": "{{12__candidates__0__content__parts__0__text__suggested_retail_price_usd}}",
+            "data__reorder_recommendation": "{{12__candidates__0__content__parts__0__text__reorder_recommendation}}",
+            "data__tags": "{{12__candidates__0__content__parts__0__text__tags}}",
+            "data__quality_score": "{{12__candidates__0__content__parts__0__text__quality_score}}",
+            "data__status": "processed",
+            "data__processed_at": "{{zap__humanize_datetime_now}}"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 4: Save AI-Enriched Product to Zapier Tables"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 12,
+          "root_id": 10,
+          "action": "create_record",
+          "selected_api": "ZapierTablesCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "14": {
+          "id": 14,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "method": "POST",
+            "url": "{{10__erp_webhook_url}}",
+            "headers": "Content-Type: application/json\nAuthorization: Bearer {{ERP_API_KEY}}",
+            "payload_type": "json",
+            "data": "{\"product\":{\"name\":\"{{10__name}}\",\"sku\":\"{{10__sku}}\",\"supplier\":\"{{10__supplier}}\",\"primary_category\":\"{{12__candidates__0__content__parts__0__text__primary_category}}\",\"subcategory\":\"{{12__candidates__0__content__parts__0__text__subcategory}}\",\"description\":\"{{12__candidates__0__content__parts__0__text__product_description}}\",\"key_features\":\"{{12__candidates__0__content__parts__0__text__key_features}}\",\"price\":\"{{10__price}}\",\"suggested_retail_usd\":\"{{12__candidates__0__content__parts__0__text__suggested_retail_price_usd}}\",\"stock_qty\":\"{{10__stock_qty}}\",\"image_url\":\"{{10__image_url}}\",\"compliance_status\":\"{{12__candidates__0__content__parts__0__text__compliance_status}}\",\"compliance_notes\":\"{{12__candidates__0__content__parts__0__text__compliance_notes}}\",\"dropship_eligible\":\"{{12__candidates__0__content__parts__0__text__dropship_eligible}}\",\"tags\":\"{{12__candidates__0__content__parts__0__text__tags}}\",\"quality_score\":\"{{12__candidates__0__content__parts__0__text__quality_score}}\",\"source_platform\":\"{{10__source_platform}}\",\"synced_at\":\"{{zap__humanize_datetime_now}}\"}}"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 5: Push Enriched Product to DreamTeQ ERP API"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 13,
+          "root_id": 10,
+          "action": "custom_request",
+          "selected_api": "WebhooksCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "15": {
+          "id": 15,
+          "paused": false,
+          "type_of": "filter",
+          "params": {
+            "conditions": [
+              {
+                "field": "{{12__candidates__0__content__parts__0__text__reorder_recommendation}}",
+                "operator": "contains",
+                "value": "Urgent"
+              }
+            ],
+            "type": "any"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 6: Filter — Only if Reorder = Urgent"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 14,
+          "root_id": 10,
+          "action": "zapier_filter",
+          "selected_api": "FilterCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "16": {
+          "id": 16,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "chat_id": "{{TELEGRAM_CHAT_ID}}",
+            "text": "🚨 *DreamTeQ REORDER ALERT*\n\n⚠️ Low Stock Detected!\n\n📦 *{{10__name}}*\n🏷️ SKU: {{10__sku}}\n🏢 Supplier: {{10__supplier}}\n📂 Category: {{12__candidates__0__content__parts__0__text__primary_category}}\n\n📊 Current Stock: {{10__stock_qty}}\n🔁 Reorder Threshold: {{10__reorder_threshold}}\n💰 Price: ${{10__price}}\n\n🤖 AI Recommendation: {{12__candidates__0__content__parts__0__text__reorder_recommendation}}\n✅ Compliance: {{12__candidates__0__content__parts__0__text__compliance_status}}\n\n📌 {{12__candidates__0__content__parts__0__text__compliance_notes}}\n\n⏰ Alert triggered: {{zap__humanize_datetime_now}}",
+            "parse_mode": "Markdown",
+            "disable_notification": "false"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {
+              "parse_mode": "Markdown",
+              "disable_notification": "False"
+            },
+            "stepTitle": "Step 7: Telegram — Send Urgent Reorder Alert"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 15,
+          "root_id": 10,
+          "action": "send_message",
+          "selected_api": "TelegramCLIAPI@1.3.2",
+          "title": null,
+          "authentication_id": null
+        }
+
+      }
+    },
+
+    {
+      "id": 20,
+      "title": "DreamTeQ Agri Products — Dropship: Shopify Sync",
+      "nodes": {
+
+        "20": {
+          "id": 20,
+          "paused": false,
+          "type_of": "read",
+          "params": {
+            "table_name": "agri_products_processed",
+            "filter_field": "dropship_eligible",
+            "filter_value": "true"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 1: New Dropship-Eligible Product in Zapier Tables"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": null,
+          "root_id": null,
+          "action": "new_record",
+          "selected_api": "ZapierTablesCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "21": {
+          "id": 21,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "title": "{{20__name}}",
+            "body_html": "<p>{{20__product_description}}</p><ul>{{20__key_features}}</ul><p><em>Compliance: {{20__compliance_status}} — {{20__compliance_notes}}</em></p>",
+            "vendor": "{{20__supplier}}",
+            "product_type": "{{20__primary_category}}",
+            "tags": "{{20__tags}}, dreamteq, agri, {{20__subcategory}}",
+            "variants": "[{\"price\":\"{{20__suggested_retail_price_usd}}\",\"sku\":\"{{20__sku}}\",\"inventory_quantity\":\"{{20__stock_qty}}\",\"inventory_management\":\"shopify\",\"inventory_policy\":\"deny\"}]",
+            "images": "[{\"src\":\"{{20__image_url}}\",\"alt\":\"{{20__name}}\"}]",
+            "published": "true",
+            "status": "active"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 2: Create Product in Shopify"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 20,
+          "root_id": 20,
+          "action": "create_product",
+          "selected_api": "ShopifyCLIAPI@2.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "22": {
+          "id": 22,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "table_name": "agri_products_processed",
+            "record_id": "{{20__id}}",
+            "data__status": "shopify_published",
+            "data__shopify_product_id": "{{21__id}}",
+            "data__published_at": "{{zap__humanize_datetime_now}}"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 3: Update Table — Mark as Shopify Published"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 21,
+          "root_id": 20,
+          "action": "update_record",
+          "selected_api": "ZapierTablesCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        }
+
+      }
+    },
+
+    {
+      "id": 30,
+      "title": "DreamTeQ Agri Products — Compliance Flagged: Review Alert",
+      "nodes": {
+
+        "30": {
+          "id": 30,
+          "paused": false,
+          "type_of": "read",
+          "params": {
+            "table_name": "agri_products_processed",
+            "filter_field": "compliance_status",
+            "filter_value": "Flag"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 1: New Compliance-Flagged Product in Zapier Tables"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": null,
+          "root_id": null,
+          "action": "new_record",
+          "selected_api": "ZapierTablesCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "31": {
+          "id": 31,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "chat_id": "{{TELEGRAM_CHAT_ID}}",
+            "text": "🔴 *DreamTeQ COMPLIANCE ALERT*\n\n⚠️ Product Flagged for Review!\n\n📦 *{{30__name}}*\n🏷️ SKU: {{30__sku}}\n🏢 Supplier: {{30__supplier}}\n📂 Category: {{30__primary_category}}\n\n🚦 Compliance Status: *{{30__compliance_status}}*\n📋 Issue: {{30__compliance_notes}}\n\n🌍 Region: {{30__compliance_region}}\n💰 Price: ${{30__price}}\n📊 Quality Score: {{30__quality_score}}/100\n\n⏰ Flagged: {{zap__humanize_datetime_now}}\n\n🛑 *Action required before publishing to any platform.*",
+            "parse_mode": "Markdown",
+            "disable_notification": "false"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {
+              "parse_mode": "Markdown"
+            },
+            "stepTitle": "Step 2: Telegram — Send Compliance Flag Alert to Team"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 30,
+          "root_id": 30,
+          "action": "send_message",
+          "selected_api": "TelegramCLIAPI@1.3.2",
+          "title": null,
+          "authentication_id": null
+        }
+
+      }
+    }
+
+  ]
+}

@@ -1,12 +1,16 @@
 node_modules/
 backups/local_state/*
+!backups/local_state/.gitkeep
 .DS_Store
 desktop.ini
 .env
+.env.local
+.env.production
+.env.development
+# DO NOT ignore .env.example — it is a safe template committed intentionally
 .vscode/
 ~$*
 .vercel
-.env*
 ApiKeys.tsx
 config-api.js
 API.html
@@ -15,3 +19,4 @@ API.md
 *.xlsx
 *.pdf
 *.zip
+_tmp_key.txt

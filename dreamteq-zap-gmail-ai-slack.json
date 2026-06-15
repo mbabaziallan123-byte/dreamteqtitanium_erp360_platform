@@ -1,0 +1,277 @@
+{
+  "metadata": { "version": 2 },
+  "zaps": [
+
+    {
+      "id": 100,
+      "title": "DreamTeQ — Gmail to Slack (2-Step FREE Plan)",
+      "nodes": {
+
+        "100": {
+          "id": 100,
+          "paused": false,
+          "type_of": "read",
+          "params": {
+            "label": "",
+            "search_string": "is:unread"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {
+              "search_string": "is:unread"
+            },
+            "stepTitle": "Step 1: New Email in Gmail (unread)"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": null,
+          "root_id": null,
+          "action": "new_email",
+          "selected_api": "GoogleMailV2CLIAPI@2.10.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "101": {
+          "id": 101,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "channel": "#general",
+            "text": "📬 *New Email* from *{{100__from__name}}* <{{100__from__email}}>\n\n*Subject:* {{100__subject}}\n\n*Preview:*\n{{100__snippet}}\n\n_Received: {{100__date}}_",
+            "as_user": "true",
+            "username": "DreamTeQ Mail Bot",
+            "icon_emoji": ":email:"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {
+              "as_user": "True"
+            },
+            "stepTitle": "Step 2: Send Channel Message in Slack"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 100,
+          "root_id": 100,
+          "action": "send_channel_message",
+          "selected_api": "SlackCLIAPI@1.38.1",
+          "title": null,
+          "authentication_id": null
+        }
+
+      }
+    },
+
+    {
+      "id": 200,
+      "title": "DreamTeQ — Gmail + Gemini AI Summary → Slack (Professional Plan)",
+      "nodes": {
+
+        "200": {
+          "id": 200,
+          "paused": false,
+          "type_of": "read",
+          "params": {
+            "label": "",
+            "search_string": "is:unread"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {
+              "search_string": "is:unread"
+            },
+            "stepTitle": "Step 1: New Email in Gmail (trigger)"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": null,
+          "root_id": null,
+          "action": "new_email",
+          "selected_api": "GoogleMailV2CLIAPI@2.10.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "201": {
+          "id": 201,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "method": "POST",
+            "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=AIzaSyAb8RN6KSgmy87-LcwPfrOUVyWwq_OzbSMfiI4v8_fwuXcjYMTA",
+            "headers": "Content-Type: application/json",
+            "payload_type": "json",
+            "data": "{\"contents\":[{\"parts\":[{\"text\":\"You are a professional email assistant for the DreamTeQ platform.\\n\\nAnalyze this email and return a JSON object ONLY (no explanation):\\n\\nFROM: {{200__from__name}} <{{200__from__email}}>\\nSUBJECT: {{200__subject}}\\nBODY PREVIEW: {{200__snippet}}\\n\\nReturn this exact JSON schema:\\n{\\n  \\\"priority\\\": \\\"(Urgent | High | Normal | Low)\\\",\\n  \\\"category\\\": \\\"(Business | Support | Spam | Newsletter | Partner | Finance | Other)\\\",\\n  \\\"one_line_summary\\\": \\\"(1 sentence, max 120 chars)\\\",\\n  \\\"key_points\\\": \\\"(2-3 bullet points as a single string)\\\",\\n  \\\"recommended_action\\\": \\\"(Reply | Archive | Forward | Review | Ignore)\\\",\\n  \\\"sentiment\\\": \\\"(Positive | Neutral | Negative | Urgent)\\\",\\n  \\\"requires_reply\\\": \\\"(true | false)\\\",\\n  \\\"estimated_reply_time_mins\\\": \\\"(number only, 0 if no reply needed)\\\"\\n}\"}]}]}"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 2: Gemini AI — Classify, Summarize & Prioritize Email"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 200,
+          "root_id": 200,
+          "action": "custom_request",
+          "selected_api": "WebhooksCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "202": {
+          "id": 202,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "channel": "#inbox-ai-summaries",
+            "text": "{{201__candidates__0__content__parts__0__text__priority_emoji}} *{{201__candidates__0__content__parts__0__text__priority}} Priority Email*\n\n*From:* {{200__from__name}} <{{200__from__email}}>\n*Subject:* {{200__subject}}\n*Category:* {{201__candidates__0__content__parts__0__text__category}} | *Sentiment:* {{201__candidates__0__content__parts__0__text__sentiment}}\n\n🤖 *AI Summary:*\n{{201__candidates__0__content__parts__0__text__one_line_summary}}\n\n📋 *Key Points:*\n{{201__candidates__0__content__parts__0__text__key_points}}\n\n✅ *Recommended Action:* {{201__candidates__0__content__parts__0__text__recommended_action}}\n⏱ Estimated reply time: {{201__candidates__0__content__parts__0__text__estimated_reply_time_mins}} min\n\n_Received: {{200__date}}_",
+            "as_user": "true",
+            "username": "DreamTeQ AI Mail",
+            "icon_emoji": ":robot_face:"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {
+              "as_user": "True"
+            },
+            "stepTitle": "Step 3: Send AI-Enhanced Summary to Slack"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 201,
+          "root_id": 200,
+          "action": "send_channel_message",
+          "selected_api": "SlackCLIAPI@1.38.1",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "203": {
+          "id": 203,
+          "paused": false,
+          "type_of": "filter",
+          "params": {
+            "conditions": [
+              {
+                "field": "{{201__candidates__0__content__parts__0__text__requires_reply}}",
+                "operator": "contains",
+                "value": "true"
+              }
+            ],
+            "type": "any"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 4: Filter — Only if Reply Required"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 202,
+          "root_id": 200,
+          "action": "zapier_filter",
+          "selected_api": "FilterCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "204": {
+          "id": 204,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "method": "POST",
+            "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=AIzaSyAb8RN6KSgmy87-LcwPfrOUVyWwq_OzbSMfiI4v8_fwuXcjYMTA",
+            "headers": "Content-Type: application/json",
+            "payload_type": "json",
+            "data": "{\"contents\":[{\"parts\":[{\"text\":\"You are a professional email reply assistant for DreamTeQ, an East African agricultural ERP platform.\\n\\nDraft a professional reply to this email:\\n\\nFROM: {{200__from__name}}\\nSUBJECT: {{200__subject}}\\nEMAIL PREVIEW: {{200__snippet}}\\nAI CONTEXT: {{201__candidates__0__content__parts__0__text__one_line_summary}}\\n\\nWrite a concise, professional reply email body only (no subject line, no headers). 3-5 sentences max. Friendly but professional tone.\"}]}]}"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {},
+            "stepTitle": "Step 5: Gemini AI — Draft Reply Email"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 203,
+          "root_id": 200,
+          "action": "custom_request",
+          "selected_api": "WebhooksCLIAPI@1.0.0",
+          "title": null,
+          "authentication_id": null
+        },
+
+        "205": {
+          "id": 205,
+          "paused": false,
+          "type_of": "write",
+          "params": {
+            "channel": "#inbox-ai-summaries",
+            "text": "✍️ *AI Draft Reply Ready*\n\n*To:* {{200__from__name}} <{{200__from__email}}>\n*Re:* {{200__subject}}\n\n*Suggested Reply:*\n```\n{{204__candidates__0__content__parts__0__text}}\n```\n\n_Review and send manually, or approve to auto-send._",
+            "as_user": "true",
+            "username": "DreamTeQ AI Mail",
+            "icon_emoji": ":writing_hand:"
+          },
+          "meta": {
+            "$editor": { "has_automatic_issues": false },
+            "parammap": {
+              "as_user": "True"
+            },
+            "stepTitle": "Step 6: Post AI Draft Reply to Slack for Review"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 204,
+          "root_id": 200,
+          "action": "send_channel_message",
+          "selected_api": "SlackCLIAPI@1.38.1",
+          "title": null,
+          "authentication_id": null
+        }
+
+      }
+    }
+
+  ]
+}

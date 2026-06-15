@@ -1,0 +1,3889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamTeQ Modern Farmstead Estate - 30-Page Deep Delve Blueprint</title>
+    <style>
+        :root {
+            --obsidian: #0B1B3D;
+            --gold: #C5A059;
+            --silver: #E0E0E0;
+            --cream: #FAF8F5;
+            --charcoal: #1A1A1A;
+            --card-bg: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        body {
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            background-color: #121212;
+            color: #333333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Control Framework Panel */
+        .workspace-control-panel {
+            width: 210mm;
+            background: var(--obsidian);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--gold);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .panel-meta h2 {
+            margin: 0;
+            font-size: 14px;
+            letter-spacing: 1px;
+            color: var(--gold);
+            text-transform: uppercase;
+        }
+
+        .panel-meta p {
+            margin: 2px 0 0 0;
+            font-size: 11px;
+            color: var(--silver);
+        }
+
+        .control-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .ctrl-btn {
+            background: transparent;
+            border: 1px solid var(--silver);
+            color: white;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 11px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .ctrl-btn:hover, .ctrl-btn.active {
+            background: var(--gold);
+            color: var(--obsidian);
+            border-color: var(--gold);
+        }
+
+        /* Live Page Fill Warning Alert System */
+        .alert-banner {
+            width: 210mm;
+            background: #2A1A08;
+            border-left: 4px solid var(--gold);
+            color: #E6C280;
+            padding: 10px 20px;
+            font-size: 11px;
+            display: none;
+            box-sizing: border-box;
+        }
+
+        /* Master Canvas */
+        .document-canvas {
+            width: 210mm;
+            background-color: var(--cream);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            padding: 15mm;
+            box-sizing: border-box;
+        }
+
+        /* Exact A4 Sheet Blueprint Rules */
+        .a4-page {
+            background: #ffffff;
+            width: 100%;
+            height: 266mm;
+            padding: 12mm;
+            margin-bottom: 15mm;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #E5E5E5;
+            page-break-after: always;
+        }
+
+        .a4-page:last-child {
+            margin-bottom: 0;
+            page-break-after: avoid;
+        }
+
+        /* Typography & Layout Profiles */
+        .letterhead-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        .letterhead-table td {
+            vertical-align: top;
+            padding: 0;
+        }
+
+        .main-title {
+            font-size: 22pt;
+            font-weight: 800;
+            color: var(--obsidian);
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+
+        .sub-title {
+            font-size: 9pt;
+            color: var(--gold);
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            margin-top: 4px;
+        }
+
+        .doc-meta-right {
+            text-align: right;
+            font-size: 9pt;
+            color: #555555;
+            line-height: 1.4;
+        }
+
+        .accent-stripe {
+            background: var(--obsidian);
+            height: 28px;
+            border-bottom: 2px solid var(--gold);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+        }
+
+        .accent-stripe h3 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 10pt;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        /* Content Structure Blocks */
+        h2.section-header {
+            font-size: 13pt;
+            color: var(--obsidian);
+            border-bottom: 1px solid var(--gold);
+            padding-bottom: 4px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        h3.sub-section-header {
+            font-size: 11pt;
+            color: var(--obsidian);
+            margin-top: 12px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        p.narrative {
+            font-size: 9.5pt;
+            line-height: 1.45;
+            color: #222222;
+            margin-top: 0;
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        .grid-two-col {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .grid-three-col {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .col-box {
+            flex: 1;
+            background: #FCFAF7;
+            border: 1px solid #E6E1DA;
+            padding: 10px 12px;
+        }
+
+        .col-box h4 {
+            margin-top: 0;
+            margin-bottom: 6px;
+            font-size: 10pt;
+            color: var(--obsidian);
+            text-transform: uppercase;
+            border-bottom: 1px solid #E6E1DA;
+            padding-bottom: 2px;
+        }
+
+        .col-box p, .col-box li {
+            margin: 0;
+            font-size: 9pt;
+            color: #444;
+            line-height: 1.4;
+        }
+
+        .col-box ul {
+            margin: 0;
+            padding-left: 16px;
+        }
+
+        /* Analytical Embedded Spreadsheet Module */
+        .spreadsheet-container {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .sheet-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+        }
+
+        .sheet-table th {
+            background-color: var(--obsidian);
+            color: white;
+            font-size: 8.5pt;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 6px 8px;
+            border: 1px solid var(--obsidian);
+            text-align: left;
+        }
+
+        .sheet-table td {
+            padding: 5px 8px;
+            border: 1px solid #DCDCDC;
+            font-size: 9pt;
+            color: #333333;
+        }
+
+        .sheet-table tr:nth-child(even) {
+            background-color: #FDFBF8;
+        }
+
+        .total-row {
+            background-color: #F0EAE1 !important;
+            font-weight: bold;
+        }
+
+        .total-row td {
+            border-top: 2px solid var(--obsidian);
+            color: var(--obsidian);
+        }
+
+        .highlight-row {
+            background-color: #FFF8E7 !important;
+        }
+
+        /* Chart Visualization Blocks */
+        .chart-box-wrapper {
+            background: white;
+            border: 1px solid #E6E1DA;
+            padding: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        .bar-chart-mock {
+            display: flex;
+            align-items: flex-end;
+            gap: 20px;
+            height: 110px;
+            padding-top: 15px;
+            width: 60%;
+        }
+
+        .chart-bar-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            justify-content: flex-end;
+        }
+
+        .bar-fill {
+            width: 100%;
+            background: var(--obsidian);
+            border-top: 3px solid var(--gold);
+            transition: height 0.3s ease;
+            position: relative;
+        }
+
+        .bar-val {
+            position: absolute;
+            top: -16px;
+            width: 100%;
+            text-align: center;
+            font-size: 7.5pt;
+            font-weight: bold;
+            color: var(--obsidian);
+        }
+
+        .bar-label {
+            font-size: 8px;
+            text-transform: uppercase;
+            color: #555;
+            margin-top: 4px;
+            white-space: nowrap;
+        }
+
+        /* Structural Image Element Systems */
+        .image-placeholder-block {
+            width: 100%;
+            height: 140px;
+            background: #EAEAEA;
+            border: 1px dashed #A0A0A0;
+            position: relative;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .image-placeholder-block.hidden-state {
+            display: none !important;
+        }
+
+        .placeholder-svg-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #666666;
+            font-size: 9pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #F5F5F5 25%, #EEEEEE 25%, #EEEEEE 50%, #F5F5F5 50%, #F5F5F5 75%, #EEEEEE 75%, #EEEEEE 100%);
+            background-size: 20px 20px;
+        }
+
+        .user-uploaded-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        .img-upload-trigger {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(11,27,61,0.85);
+            color: white;
+            border: 1px solid var(--gold);
+            padding: 3px 8px;
+            font-size: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        /* Footers */
+        .page-footer-meta {
+            position: absolute;
+            bottom: 10mm;
+            left: 12mm;
+            right: 12mm;
+            border-top: 1px solid #E5E5E5;
+            padding-top: 5px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 8pt;
+            color: #777777;
+        }
+
+        .toc-list {
+            column-count: 2;
+            column-gap: 30px;
+            font-size: 9pt;
+            line-height: 1.8;
+        }
+
+        .toc-list a {
+            color: var(--obsidian);
+            text-decoration: none;
+        }
+
+        .toc-list a:hover {
+            color: var(--gold);
+        }
+
+        .toc-section {
+            font-weight: bold;
+            color: var(--obsidian);
+            margin-top: 8px;
+        }
+
+        .toc-item {
+            padding-left: 15px;
+            color: #555;
+        }
+
+        .spec-list {
+            font-size: 9pt;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .spec-list li {
+            margin-bottom: 4px;
+        }
+
+        .warning-box {
+            background: #FFF3E0;
+            border-left: 4px solid var(--gold);
+            padding: 8px 12px;
+            font-size: 9pt;
+            color: #5D4037;
+            margin-bottom: 12px;
+        }
+
+        .info-box {
+            background: #E3F2FD;
+            border-left: 4px solid #1976D2;
+            padding: 8px 12px;
+            font-size: 9pt;
+            color: #0D47A1;
+            margin-bottom: 12px;
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .workspace-control-panel, .alert-banner, .img-upload-trigger { display: none !important; }
+            .document-canvas { box-shadow: none; padding: 0; width: 210mm; background: transparent; }
+            .a4-page { border: none; margin-bottom: 0; page-break-after: always; height: 266mm !important; }
+            .a4-page:last-child { page-break-after: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="workspace-control-panel">
+        <div class="panel-meta">
+            <h2>DreamTeQ Farmstead Blueprint Console</h2>
+            <p>30-Page Deep Delve Master Plan | System Engine Configuration: Active Strategy Mapping</p>
+        </div>
+        <div class="control-actions">
+            <button class="ctrl-btn active" id="toggle-img-on" onclick="setImageDisplay(true)">Show Imagery</button>
+            <button class="ctrl-btn" id="toggle-img-off" onclick="setImageDisplay(false)">Hide Imagery</button>
+            <button class="ctrl-btn" onclick="window.print()">Export Document</button>
+        </div>
+    </div>
+
+    <div class="alert-banner" id="page-overflow-alert">
+        <strong>CRITICAL LAYOUT LIMITATION NOTICE:</strong> Structural text densities are reaching structural boundaries. Elements risk bleeding or cross-page truncation on physical export grids.
+    </div>
+
+    <div class="document-canvas" id="master-canvas">
+
+        <div class="a4-page" id="page-block-1">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Date:</strong> 14th June, 2026<br>
+                        <strong>Status:</strong> Hardened Deep Delve Blueprint<br>
+                        <strong>Classification:</strong> Strategic Asset Framework
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>30-Page Deep Delve Master Plan</h3>
+            </div>
+
+            <div style="text-align: center; margin: 40px 0;">
+                <div style="font-size: 28pt; font-weight: 800; color: var(--obsidian); letter-spacing: 2px;">ARCHITECTURAL BLUEPRINT</div>
+                <div style="font-size: 14pt; color: var(--gold); margin-top: 10px; text-transform: uppercase; letter-spacing: 3px;">Complete System Architecture</div>
+            </div>
+
+            <div class="image-placeholder-block" id="img-zone-cover" style="height: 200px;">
+                <div class="placeholder-svg-bg">
+                    <span>[Master Plan Visual: Aerial 3D Render of Complete Farmstead Estate]</span>
+                    <span style="font-size:7pt; color:#888; margin-top:3px;">Perspective: Full 1-Acre Integrated System Overview</span>
+                </div>
+                <img id="render-view-cover" class="user-uploaded-img" />
+                <button class="img-upload-trigger" onclick="triggerImgUpload('file-zone-cover')">Upload AI Media</button>
+                <input type="file" id="file-zone-cover" style="display:none;" accept="image/*" onchange="loadLocalAsset(this, 'render-view-cover')"/>
+            </div>
+
+            <h2 class="section-header">Document Scope & Purpose</h2>
+            <p class="narrative" contenteditable="true">
+                This 30-page Deep Delve Blueprint constitutes the definitive architectural and operational framework for the DreamTeQ Modern Farmstead Estate. It transforms a standard one-acre land parcel into a fully automated, high-yield smart asset matrix. The document covers infrastructure design, production systems, financial modeling, operational protocols, risk mitigation, and scalability pathways. Every section is engineered for precision execution and long-term sustainability.
+            </p>
+
+            <div class="grid-two-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Document Control</h4>
+                    <p style="margin:0; font-size:9pt; color:#444;">
+                        <strong>Version:</strong> 3.0 Deep Delve<br>
+                        <strong>Author:</strong> DreamTeQ Sovereign Ecosystem Framework<br>
+                        <strong>Review Cycle:</strong> Quarterly<br>
+                        <strong>Distribution:</strong> Strategic Partners & Investors
+                    </p>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Key Metrics Overview</h4>
+                    <p style="margin:0; font-size:9pt; color:#444;">
+                        <strong>Total Acreage:</strong> 1 Acre (4,047 sqm)<br>
+                        <strong>Capital Investment:</strong> $93,500.00<br>
+                        <strong>Annual Revenue Target:</strong> $106,800.00<br>
+                        <strong>ROI Timeline:</strong> 26 Months
+                    </p>
+                </div>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 1 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-2">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Navigation Matrix<br>
+                        <strong>Ref:</strong> DTQ-NAV-01
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Table of Contents</h3>
+            </div>
+
+            <div class="toc-list">
+                <div class="toc-section">SECTION 1: EXECUTIVE SYSTEM ARCHITECTURE (Pages 3-5)</div>
+                <div class="toc-item">1.1 Infrastructure Concept & Strategic Intent</div>
+                <div class="toc-item">1.2 Spatial Allocation Matrix</div>
+                <div class="toc-item">1.3 Quadrant Design Philosophy</div>
+                <div class="toc-item">1.4 Integration Topology</div>
+                <div class="toc-item">1.5 Sustainability Framework</div>
+
+                <div class="toc-section">SECTION 2: RESIDENTIAL CORE DESIGN (Pages 6-8)</div>
+                <div class="toc-item">2.1 Prefab Sandwich Panel Architecture</div>
+                <div class="toc-item">2.2 Thermal Regulation Systems</div>
+                <div class="toc-item">2.3 Smart Home Integration</div>
+                <div class="toc-item">2.4 Living Space Optimization</div>
+                <div class="toc-item">2.5 Structural Engineering Specs</div>
+
+                <div class="toc-section">SECTION 3: HYDROPONICS & PRODUCTION (Pages 9-14)</div>
+                <div class="toc-item">3.1 Vertical Container Systems</div>
+                <div class="toc-item">3.2 Automated Nutrient Delivery</div>
+                <div class="toc-item">3.3 LED Spectrum Optimization</div>
+                <div class="toc-item">3.4 Crop Rotation & Yield Planning</div>
+                <div class="toc-item">3.5 Water Management & Recycling</div>
+                <div class="toc-item">3.6 Production Forecasting Models</div>
+
+                <div class="toc-section">SECTION 4: SMART APIARY INTEGRATION (Pages 15-17)</div>
+                <div class="toc-item">4.1 IoT Flight Path Tracking</div>
+                <div class="toc-item">4.2 Hive Architecture & Management</div>
+                <div class="toc-item">4.3 Pollination Coordination</div>
+                <div class="toc-item">4.4 Honey Production & Processing</div>
+                <div class="toc-item">4.5 Apiary Safety Protocols</div>
+
+                <div class="toc-section">SECTION 5: ENERGY & POWER SYSTEMS (Pages 18-20)</div>
+                <div class="toc-item">5.1 Solar Array Configuration</div>
+                <div class="toc-item">5.2 Battery Storage & Micro-Grid</div>
+                <div class="toc-item">5.3 Backup Power Systems</div>
+                <div class="toc-item">5.4 Energy Consumption Modeling</div>
+                <div class="toc-item">5.5 Grid Independence Roadmap</div>
+
+                <div class="toc-section">SECTION 6: WATER & WASTE MANAGEMENT (Pages 21-23)</div>
+                <div class="toc-item">6.1 Rainwater Harvesting</div>
+                <div class="toc-item">6.2 Graywater Treatment</div>
+                <div class="toc-item">6.3 Blackwater Processing</div>
+                <div class="toc-item">6.4 Composting & Soil Amendment</div>
+                <div class="toc-item">6.5 Water Quality Monitoring</div>
+
+                <div class="toc-section">SECTION 7: FINANCIAL MATRIX (Pages 24-26)</div>
+                <div class="toc-item">7.1 Capital Expense Breakdown</div>
+                <div class="toc-item">7.2 Operational Cost Projections</div>
+                <div class="toc-item">7.3 Revenue Stream Analysis</div>
+                <div class="toc-item">7.4 Cash Flow Modeling</div>
+                <div class="toc-item">7.5 ROI & Break-Even Analysis</div>
+
+                <div class="toc-section">SECTION 8: OPERATIONAL PROTOCOLS (Pages 27-28)</div>
+                <div class="toc-item">8.1 Daily Management Routines</div>
+                <div class="toc-item">8.2 Maintenance Schedules</div>
+                <div class="toc-item">8.3 Quality Control Standards</div>
+                <div class="toc-item">8.4 Staffing & Automation Balance</div>
+
+                <div class="toc-section">SECTION 9: RISK & COMPLIANCE (Pages 29-30)</div>
+                <div class="toc-item">9.1 Risk Assessment Matrix</div>
+                <div class="toc-item">9.2 Regulatory Compliance</div>
+                <div class="toc-item">9.3 Insurance & Liability</div>
+                <div class="toc-item">9.4 Scalability & Replication</div>
+                <div class="toc-item">9.5 Project Continuity Parameters</div>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 2 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-3">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Executive System Architecture<br>
+                        <strong>Ref:</strong> DTQ-ESA-01
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 1.0: Executive System Architecture</h3>
+            </div>
+
+            <h2 class="section-header">1.1 Infrastructure Concept & Strategic Intent</h2>
+            <p class="narrative" contenteditable="true">
+                The DreamTeQ Modern Farmstead Estate model fundamentally reimagines traditional land usage by transforming a standard one-acre footprint into a highly automated, high-yield smart asset matrix. This architectural blueprint leverages precision agriculture, automated localized logistics, and green micro-utilities to eliminate standard distribution leaks and external dependencies. The focal core features an ultra-efficient architectural residence built with black prefab sandwich panels, providing exceptional thermal regulation and rapid structural deployment.
+            </p>
+            <p class="narrative" contenteditable="true">
+                The strategic intent is to create a self-sustaining ecosystem where every square meter generates measurable value. Unlike conventional farming that relies on external supply chains, this model internalizes production, processing, and distribution within the estate boundary. The result is a 26-month capital recovery timeline with sustained annual revenue generation exceeding $100,000.
+            </p>
+
+            <div class="image-placeholder-block" id="img-zone-3">
+                <div class="placeholder-svg-bg">
+                    <span>[Visual Matrix: 3D Render of Black Prefab Sandwich Panel Modern House]</span>
+                    <span style="font-size:7pt; color:#888; margin-top:3px;">Perspective: North-Facing Solar Roof Offset with Integrated Rainwater Collection</span>
+                </div>
+                <img id="render-view-3" class="user-uploaded-img" />
+                <button class="img-upload-trigger" onclick="triggerImgUpload('file-zone-3')">Upload AI Media</button>
+                <input type="file" id="file-zone-3" style="display:none;" accept="image/*" onchange="loadLocalAsset(this, 'render-view-3')"/>
+            </div>
+
+            <h2 class="section-header">1.2 Design Philosophy & Core Principles</h2>
+            <div class="grid-three-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Principle 1: Closed-Loop Efficiency</h4>
+                    <p>Every output becomes an input. Graywater feeds hydroponics. Compost enriches soil. Solar powers everything. Waste is designed out of the system.</p>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Principle 2: Automation-First</h4>
+                    <p>Manual labor is minimized through IoT sensors, automated dosing, and smart monitoring. Human oversight focuses on optimization, not repetition.</p>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Principle 3: Scalable Modularity</h4>
+                    <p>Each system component operates independently but integrates seamlessly. Expansion requires replication, not redesign.</p>
+                </div>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 3 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-4">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Executive System Architecture<br>
+                        <strong>Ref:</strong> DTQ-ESA-02
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 1.0: Executive System Architecture (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">1.3 Spatial Allocation Matrix</h2>
+            <p class="narrative" contenteditable="true">
+                The one-acre layout (4,047 square meters) is divided into four functional quadrants to optimize nutrient cycling, automated equipment paths, and micro-climate management. Each quadrant serves a distinct purpose while maintaining interoperability with adjacent zones.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Quadrant</th>
+                            <th>Designation</th>
+                            <th>Area (sqm)</th>
+                            <th>% of Total</th>
+                            <th>Primary Function</th>
+                            <th>Secondary Function</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Alpha</td>
+                            <td>Residential Core</td>
+                            <td>850</td>
+                            <td>21.0%</td>
+                            <td>Smart Residence & Living</td>
+                            <td>Energy Storage & Micro-Grid</td>
+                        </tr>
+                        <tr>
+                            <td>Beta</td>
+                            <td>Hydroponic Array</td>
+                            <td>1,200</td>
+                            <td>29.7%</td>
+                            <td>Vertical Crop Production</td>
+                            <td>Water Recycling & Treatment</td>
+                        </tr>
+                        <tr>
+                            <td>Gamma</td>
+                            <td>Precision Crop Block</td>
+                            <td>1,500</td>
+                            <td>37.1%</td>
+                            <td>Open-Air Vine & Row Crops</td>
+                            <td>Soil Amendment & Composting</td>
+                        </tr>
+                        <tr>
+                            <td>Delta</td>
+                            <td>Smart Apiary Matrix</td>
+                            <td>497</td>
+                            <td>12.3%</td>
+                            <td>Honey Production & Pollination</td>
+                            <td>Biodiversity Support</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>Total</td>
+                            <td>Integrated Estate</td>
+                            <td>4,047</td>
+                            <td>100.0%</td>
+                            <td>Multi-Output Production</td>
+                            <td>Closed-Loop Sustainability</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="section-header">1.4 Quadrant Alpha: Residential Core</h2>
+            <div class="grid-two-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Structural Components</h4>
+                    <ul>
+                        <li>250 sqm prefab black sandwich panel smart house</li>
+                        <li>Graywater treatment and recycling layout</li>
+                        <li>Individual micro-grid power nodes (solar + battery)</li>
+                        <li>Thermal mass storage for passive heating/cooling</li>
+                        <li>Integrated rainwater collection and filtration</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Smart Systems</h4>
+                    <ul>
+                        <li>Home automation hub with climate control</li>
+                        <li>Security perimeter with motion detection</li>
+                        <li>Energy consumption monitoring dashboard</li>
+                        <li>Remote management via mobile application</li>
+                        <li>Emergency backup power switching</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 4 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-5">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Executive System Architecture<br>
+                        <strong>Ref:</strong> DTQ-ESA-03
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 1.0: Executive System Architecture (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">1.5 Integration Topology</h2>
+            <p class="narrative" contenteditable="true">
+                The four quadrants are not isolated silos but interconnected nodes in a unified operational network. Data flows, resource streams, and operational commands circulate through a central IoT hub that coordinates all estate activities. This topology ensures that a change in one quadrant triggers appropriate adjustments in others.
+            </p>
+
+            <div class="image-placeholder-block" id="img-zone-5">
+                <div class="placeholder-svg-bg">
+                    <span>[System Topology Diagram: Interconnected Quadrant Network]</span>
+                    <span style="font-size:7pt; color:#888; margin-top:3px;">Data Flow: Central Hub → Quadrant Nodes → Edge Sensors</span>
+                </div>
+                <img id="render-view-5" class="user-uploaded-img" />
+                <button class="img-upload-trigger" onclick="triggerImgUpload('file-zone-5')">Upload AI Media</button>
+                <input type="file" id="file-zone-5" style="display:none;" accept="image/*" onchange="loadLocalAsset(this, 'render-view-5')"/>
+            </div>
+
+            <h2 class="section-header">1.6 Sustainability Framework</h2>
+            <p class="narrative" contenteditable="true">
+                Sustainability is not an add-on feature but the foundational design parameter. The estate achieves carbon neutrality through three mechanisms: energy self-sufficiency via solar arrays, water self-sufficiency via rainwater harvesting and recycling, and nutrient self-sufficiency via composting and closed-loop hydroponics. The carbon footprint is further reduced by eliminating transportation emissions through on-site production and processing.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Sustainability Metric</th>
+                            <th>Baseline Target</th>
+                            <th>Year 1 Projection</th>
+                            <th>Year 3 Projection</th>
+                            <th>Measurement Method</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Energy Independence</td>
+                            <td>85%</td>
+                            <td>78%</td>
+                            <td>95%</td>
+                            <td>Grid Import vs. Solar Generation</td>
+                        </tr>
+                        <tr>
+                            <td>Water Recycling Rate</td>
+                            <td>90%</td>
+                            <td>82%</td>
+                            <td>94%</td>
+                            <td>Recycled Volume / Total Consumption</td>
+                        </tr>
+                        <tr>
+                            <td>Waste Diversion</td>
+                            <td>95%</td>
+                            <td>88%</td>
+                            <td>97%</td>
+                            <td>Composted + Recycled / Total Waste</td>
+                        </tr>
+                        <tr>
+                            <td>Carbon Offset</td>
+                            <td>100%</td>
+                            <td>85%</td>
+                            <td>110%</td>
+                            <td>Net Emissions vs. Sequestration</td>
+                        </tr>
+                        <tr>
+                            <td>Soil Health Index</td>
+                            <td>8.5/10</td>
+                            <td>7.2/10</td>
+                            <td>9.1/10</td>
+                            <td>Organic Matter + Microbial Diversity</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 5 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-6">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Residential Core Design<br>
+                        <strong>Ref:</strong> DTQ-RCD-01
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 2.0: Residential Core Design</h3>
+            </div>
+
+            <h2 class="section-header">2.1 Prefab Sandwich Panel Architecture</h2>
+            <p class="narrative" contenteditable="true">
+                The residential structure utilizes high-performance prefabricated sandwich panels with a black exterior finish. These panels consist of an insulating core (typically polyurethane or mineral wool) sandwiched between two structural facings (galvanized steel or aluminum). This construction method delivers exceptional thermal performance (U-value below 0.25 W/m²K), rapid assembly (structural shell completed in 5-7 days), and long-term durability with minimal maintenance.
+            </p>
+            <p class="narrative" contenteditable="true">
+                The black finish serves dual purposes: aesthetic distinction and passive solar gain absorption. During cooler months, the dark surface absorbs and transfers thermal energy to the interior thermal mass. During warmer months, automated shading systems and cross-ventilation design prevent overheating.
+            </p>
+
+            <div class="image-placeholder-block" id="img-zone-6">
+                <div class="placeholder-svg-bg">
+                    <span>[Architectural Detail: Sandwich Panel Cross-Section & Assembly Sequence]</span>
+                    <span style="font-size:7pt; color:#888; margin-top:3px;">Scale: 1:20 | Material: PU Core + Galvanized Steel Facings</span>
+                </div>
+                <img id="render-view-6" class="user-uploaded-img" />
+                <button class="img-upload-trigger" onclick="triggerImgUpload('file-zone-6')">Upload AI Media</button>
+                <input type="file" id="file-zone-6" style="display:none;" accept="image/*" onchange="loadLocalAsset(this, 'render-view-6')"/>
+            </div>
+
+            <h2 class="section-header">2.2 Structural Specifications</h2>
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Specification</th>
+                            <th>Standard</th>
+                            <th>Performance Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Panel Thickness</td>
+                            <td>100mm - 150mm</td>
+                            <td>EN 14509</td>
+                            <td>Class A Fire Resistance</td>
+                        </tr>
+                        <tr>
+                            <td>Thermal Conductivity</td>
+                            <td>0.022 W/mK (PU Core)</td>
+                            <td>ISO 8302</td>
+                            <td>Excellent</td>
+                        </tr>
+                        <tr>
+                            <td>Sound Insulation</td>
+                            <td>35 dB (Rw)</td>
+                            <td>ISO 717-1</td>
+                            <td>Good</td>
+                        </tr>
+                        <tr>
+                            <td>Wind Load Resistance</td>
+                            <td>1.5 kN/m²</td>
+                            <td>EN 1991-1-4</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td>Seismic Rating</td>
+                            <td>Zone 3 (Moderate)</td>
+                            <td>Local Building Code</td>
+                            <td>Compliant</td>
+                        </tr>
+                        <tr>
+                            <td>Lifespan</td>
+                            <td>50+ Years</td>
+                            <td>Manufacturer Warranty</td>
+                            <td>Extended</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 6 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-7">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Residential Core Design<br>
+                        <strong>Ref:</strong> DTQ-RCD-02
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 2.0: Residential Core Design (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">2.3 Thermal Regulation Systems</h2>
+            <p class="narrative" contenteditable="true">
+                Thermal regulation operates through a multi-layered strategy combining passive design, active systems, and smart controls. The sandwich panel envelope provides the primary thermal barrier. Additional layers include: phase-change material (PCM) panels in ceiling cavities that absorb heat during the day and release it at night; underfloor hydronic heating powered by solar thermal collectors; and a heat recovery ventilation (HRV) system that maintains air quality while recovering 85% of thermal energy from exhaust air.
+            </p>
+
+            <div class="grid-two-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Passive Thermal Strategies</h4>
+                    <ul>
+                        <li>High thermal mass concrete floors (150mm)</li>
+                        <li>Strategic window placement for cross-ventilation</li>
+                        <li>Overhanging eaves for summer shading</li>
+                        <li>Earth-bermed north wall for thermal stability</li>
+                        <li>Reflective roof coating to reduce heat gain</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Active Thermal Systems</h4>
+                    <ul>
+                        <li>Solar thermal collectors (4m² array)</li>
+                        <li>Hydronic underfloor distribution</li>
+                        <li>Heat pump backup (COP 4.2)</li>
+                        <li>Smart thermostat with zone control</li>
+                        <li>Thermal storage tank (500L capacity)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 class="section-header">2.4 Smart Home Integration</h2>
+            <p class="narrative" contenteditable="true">
+                The residence operates as a node within the broader estate IoT network. A central home automation hub (Home Assistant or similar open-source platform) connects lighting, climate, security, energy, and water systems. All controls are accessible via mobile application, with local network fallback for internet outages. Voice control integration and predictive automation (learning occupant patterns) reduce manual intervention.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Smart System</th>
+                            <th>Hardware</th>
+                            <th>Protocol</th>
+                            <th>Integration Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Climate Control</td>
+                            <td>Smart Thermostat + Zone Dampers</td>
+                            <td>Zigbee / WiFi</td>
+                            <td>Full Automation</td>
+                        </tr>
+                        <tr>
+                            <td>Lighting</td>
+                            <td>LED Dimmable + Motion Sensors</td>
+                            <td>Zigbee</td>
+                            <td>Scheduled + Adaptive</td>
+                        </tr>
+                        <tr>
+                            <td>Security</td>
+                            <td>IP Cameras + Perimeter Sensors</td>
+                            <td>PoE / WiFi</td>
+                            <td>24/7 Monitoring</td>
+                        </tr>
+                        <tr>
+                            <td>Energy</td>
+                            <td>Smart Meter + Inverter Display</td>
+                            <td>Modbus / MQTT</td>
+                            <td>Real-Time Dashboard</td>
+                        </tr>
+                        <tr>
+                            <td>Water</td>
+                            <td>Flow Meters + Quality Sensors</td>
+                            <td>LoRaWAN</td>
+                            <td>Alert + Logging</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 7 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-8">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Residential Core Design<br>
+                        <strong>Ref:</strong> DTQ-RCD-03
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 2.0: Residential Core Design (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">2.5 Living Space Optimization</h2>
+            <p class="narrative" contenteditable="true">
+                The 250 square meter floor plan is optimized for functionality, flexibility, and connection to the surrounding estate. The layout follows an open-plan concept with defined zones: a central living/kitchen/dining area (80 sqm), two bedrooms with ensuite bathrooms (40 sqm each), a home office/study (20 sqm), a utility room with laundry and water treatment (25 sqm), and a covered veranda (45 sqm) serving as the transition between indoor and outdoor living.
+            </p>
+
+            <div class="image-placeholder-block" id="img-zone-8">
+                <div class="placeholder-svg-bg">
+                    <span>[Floor Plan: 250 sqm Prefab Residence Layout]</span>
+                    <span style="font-size:7pt; color:#888; margin-top:3px;">Scale: 1:100 | North Indicator | Room Labels & Dimensions</span>
+                </div>
+                <img id="render-view-8" class="user-uploaded-img" />
+                <button class="img-upload-trigger" onclick="triggerImgUpload('file-zone-8')">Upload AI Media</button>
+                <input type="file" id="file-zone-8" style="display:none;" accept="image/*" onchange="loadLocalAsset(this, 'render-view-8')"/>
+            </div>
+
+            <h2 class="section-header">2.6 Structural Engineering Specifications</h2>
+            <div class="grid-three-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Foundation</h4>
+                    <ul>
+                        <li>Type: Reinforced concrete slab-on-grade</li>
+                        <li>Thickness: 200mm with 50mm insulation</li>
+                        <li>Reinforcement: Steel mesh + edge beams</li>
+                        <li>Damp proof membrane: 1200 gauge polythene</li>
+                        <li>Load capacity: 5 kN/m² live load</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Roof System</h4>
+                    <ul>
+                        <li>Type: Mono-pitch with 5° slope</li>
+                        <li>Integrated solar panel mounting rails</li>
+                        <li>Rainwater collection gutters (150mm)</li>
+                        <li>Insulation: 200mm mineral wool</li>
+                        <li>Waterproofing: EPDM membrane</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Services Integration</h4>
+                    <ul>
+                        <li>Electrical: 3-phase 400V supply</li>
+                        <li>Plumbing: PEX manifold system</li>
+                        <li>Data: CAT6A structured cabling</li>
+                        <li>HVAC: Ducted with HRV unit</li>
+                        <li>Fire: Smoke detectors + extinguishers</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning-box" contenteditable="true">
+                <strong>Engineering Note:</strong> All structural calculations must be verified by a licensed structural engineer for the specific site conditions. Soil bearing capacity, seismic zone classification, and wind loading must be confirmed before procurement. The prefab manufacturer must provide certified test reports for all sandwich panel assemblies.
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 8 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-9">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Hydroponics & Production<br>
+                        <strong>Ref:</strong> DTQ-HYD-01
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 3.0: Hydroponics & Production Systems</h3>
+            </div>
+
+            <h2 class="section-header">3.1 Vertical Container Systems</h2>
+            <p class="narrative" contenteditable="true">
+                Quadrant Beta houses the intensive climate-controlled hydroponic production facility. The system utilizes repurposed 40-foot shipping containers converted into vertical growing environments. Each container is insulated, climate-controlled, and equipped with multi-tier growing racks. The vertical orientation maximizes production density, achieving 3-5 times the yield per square meter compared to traditional soil-based cultivation.
+            </p>
+            <p class="narrative" contenteditable="true">
+                The container approach provides several strategic advantages: complete environmental control independent of external weather; pest and disease isolation; year-round production capability; modular scalability (add containers as demand grows); and rapid deployment (containers can be operational within weeks of delivery).
+            </p>
+
+            <div class="image-placeholder-block" id="img-zone-9">
+                <div class="placeholder-svg-bg">
+                    <span>[System Layout: Shipping Container Hydroponic Array]</span>
+                    <span style="font-size:7pt; color:#888; margin-top:3px;">Configuration: 4x Containers | Tier Count: 6-8 per Unit | LED Array Overhead</span>
+                </div>
+                <img id="render-view-9" class="user-uploaded-img" />
+                <button class="img-upload-trigger" onclick="triggerImgUpload('file-zone-9')">Upload AI Media</button>
+                <input type="file" id="file-zone-9" style="display:none;" accept="image/*" onchange="loadLocalAsset(this, 'render-view-9')"/>
+            </div>
+
+            <h2 class="section-header">3.2 Container Configuration Matrix</h2>
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Container ID</th>
+                            <th>Crop Type</th>
+                            <th>Growing Method</th>
+                            <th>Tier Count</th>
+                            <th>Plant Capacity</th>
+                            <th>Harvest Cycle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>BETA-01</td>
+                            <td>Leafy Greens (Lettuce, Spinach)</td>
+                            <td>NFT (Nutrient Film Technique)</td>
+                            <td>8 tiers</td>
+                            <td>2,400 plants</td>
+                            <td>28-35 days</td>
+                        </tr>
+                        <tr>
+                            <td>BETA-02</td>
+                            <td>Herbs (Basil, Cilantro, Mint)</td>
+                            <td>Deep Water Culture (DWC)</td>
+                            <td>6 tiers</td>
+                            <td>1,800 plants</td>
+                            <td>21-28 days</td>
+                        </tr>
+                        <tr>
+                            <td>BETA-03</td>
+                            <td>Microgreens & Shoots</td>
+                            <td>Vertical Tray System</td>
+                            <td>10 tiers</td>
+                            <td>5,000 trays</td>
+                            <td>7-14 days</td>
+                        </tr>
+                        <tr>
+                            <td>BETA-04</td>
+                            <td>Tomatoes & Peppers</td>
+                            <td>Dutch Bucket System</td>
+                            <td>4 tiers</td>
+                            <td>320 plants</td>
+                            <td>60-90 days</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>Total System</td>
+                            <td>Mixed Production</td>
+                            <td>Multi-Method</td>
+                            <td>28 tiers</td>
+                            <td>9,520 plants</td>
+                            <td>Continuous</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 9 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-10">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Hydroponics & Production<br>
+                        <strong>Ref:</strong> DTQ-HYD-02
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 3.0: Hydroponics & Production Systems (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">3.3 Automated Nutrient Delivery</h2>
+            <p class="narrative" contenteditable="true">
+                The nutrient delivery system operates as a closed-loop, fully automated network. A central mixing station prepares nutrient solutions based on real-time crop requirements. Peristaltic dosing pumps inject concentrated nutrient solutions into the main distribution lines at precise intervals. Each container has independent pH and EC (electrical conductivity) sensors that feed data back to the central controller, which adjusts dosing rates accordingly.
+            </p>
+
+            <div class="grid-two-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Central Mixing Station</h4>
+                    <ul>
+                        <li>Primary reservoir: 1,000L food-grade tank</li>
+                        <li>Secondary reservoirs: 200L each (A & B solutions)</li>
+                        <li>Mixing pump: 1,500 L/hr circulation</li>
+                        <li>Filtration: 50-micron sediment + carbon</li>
+                        <li>UV sterilization: 30W inline unit</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Dosing & Monitoring</h4>
+                    <ul>
+                        <li>pH sensors: ±0.01 accuracy, 4-20mA output</li>
+                        <li>EC sensors: ±2% accuracy, auto-temperature comp</li>
+                        <li>Dosing pumps: 0.1-500 mL/min variable flow</li>
+                        <li>Controller: PLC with 4G/cloud connectivity</li>
+                        <li>Alarm thresholds: SMS + Email alerts</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 class="section-header">3.4 Nutrient Solution Formulations</h2>
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Nutrient Element</th>
+                            <th>Leafy Greens (ppm)</th>
+                            <th>Herbs (ppm)</th>
+                            <th>Tomatoes (ppm)</th>
+                            <th>Source Compound</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nitrogen (N)</td>
+                            <td>150-200</td>
+                            <td>120-160</td>
+                            <td>180-220</td>
+                            <td>Calcium Nitrate, Potassium Nitrate</td>
+                        </tr>
+                        <tr>
+                            <td>Phosphorus (P)</td>
+                            <td>40-50</td>
+                            <td>35-45</td>
+                            <td>60-80</td>
+                            <td>Monopotassium Phosphate</td>
+                        </tr>
+                        <tr>
+                            <td>Potassium (K)</td>
+                            <td>200-250</td>
+                            <td>180-220</td>
+                            <td>250-300</td>
+                            <td>Potassium Nitrate, Potassium Sulfate</td>
+                        </tr>
+                        <tr>
+                            <td>Calcium (Ca)</td>
+                            <td>150-180</td>
+                            <td>140-170</td>
+                            <td>180-220</td>
+                            <td>Calcium Nitrate, Calcium Chloride</td>
+                        </tr>
+                        <tr>
+                            <td>Magnesium (Mg)</td>
+                            <td>40-50</td>
+                            <td>35-45</td>
+                            <td>50-60</td>
+                            <td>Magnesium Sulfate (Epsom Salt)</td>
+                        </tr>
+                        <tr>
+                            <td>Iron (Fe)</td>
+                            <td>2.0-3.0</td>
+                            <td>2.0-2.5</td>
+                            <td>3.0-4.0</td>
+                            <td>Iron Chelate (Fe-EDTA)</td>
+                        </tr>
+                        <tr>
+                            <td>Trace Elements</td>
+                            <td>0.5-1.0</td>
+                            <td>0.5-1.0</td>
+                            <td>0.5-1.0</td>
+                            <td>Boron, Manganese, Zinc, Copper, Molybdenum</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 10 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-11">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Hydroponics & Production<br>
+                        <strong>Ref:</strong> DTQ-HYD-03
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 3.0: Hydroponics & Production Systems (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">3.5 LED Spectrum Optimization</h2>
+            <p class="narrative" contenteditable="true">
+                Lighting represents the single largest energy input in controlled environment agriculture. The DreamTeQ system utilizes full-spectrum LED arrays with tunable wavelength output. Each crop type receives a customized light recipe optimized for photosynthetic efficiency, morphological development, and secondary metabolite production (flavor compounds, antioxidants, vitamins).
+            </p>
+            <p class="narrative" contenteditable="true">
+                The LED system operates on a 16-hour photoperiod for vegetative growth and 12-hour for flowering/fruiting crops. Dimmable drivers allow gradual intensity ramping (simulating dawn/dusk) which reduces plant stress and improves acclimation. PAR (Photosynthetically Active Radiation) targets range from 200-400 μmol/m²/s for leafy greens to 600-800 μmol/m²/s for fruiting crops.
+            </p>
+
+            <div class="image-placeholder-block" id="img-zone-11">
+                <div class="placeholder-svg-bg">
+                    <span>[LED Spectrum Chart: Wavelength Distribution per Crop Type]</span>
+                    <span style="font-size:7pt; color:#888; margin-top:3px;">Blue (450nm) | Red (660nm) | Far-Red (730nm) | White (Full Spectrum)</span>
+                </div>
+                <img id="render-view-11" class="user-uploaded-img" />
+                <button class="img-upload-trigger" onclick="triggerImgUpload('file-zone-11')">Upload AI Media</button>
+                <input type="file" id="file-zone-11" style="display:none;" accept="image/*" onchange="loadLocalAsset(this, 'render-view-11')"/>
+            </div>
+
+            <h2 class="section-header">3.6 Light Recipe Specifications</h2>
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Crop Category</th>
+                            <th>Blue % (450nm)</th>
+                            <th>Red % (660nm)</th>
+                            <th>Far-Red % (730nm)</th>
+                            <th>White % (4000K)</th>
+                            <th>PPFD Target</th>
+                            <th>Daily Light Integral</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Leafy Greens</td>
+                            <td>25%</td>
+                            <td>60%</td>
+                            <td>5%</td>
+                            <td>10%</td>
+                            <td>250 μmol/m²/s</td>
+                            <td>14.4 mol/m²/day</td>
+                        </tr>
+                        <tr>
+                            <td>Herbs</td>
+                            <td>30%</td>
+                            <td>55%</td>
+                            <td>5%</td>
+                            <td>10%</td>
+                            <td>300 μmol/m²/s</td>
+                            <td>17.3 mol/m²/day</td>
+                        </tr>
+                        <tr>
+                            <td>Microgreens</td>
+                            <td>35%</td>
+                            <td>50%</td>
+                            <td>5%</td>
+                            <td>10%</td>
+                            <td>200 μmol/m²/s</td>
+                            <td>11.5 mol/m²/day</td>
+                        </tr>
+                        <tr>
+                            <td>Tomatoes (Veg)</td>
+                            <td>20%</td>
+                            <td>65%</td>
+                            <td>5%</td>
+                            <td>10%</td>
+                            <td>400 μmol/m²/s</td>
+                            <td>23.0 mol/m²/day</td>
+                        </tr>
+                        <tr>
+                            <td>Tomatoes (Fruit)</td>
+                            <td>15%</td>
+                            <td>70%</td>
+                            <td>5%</td>
+                            <td>10%</td>
+                            <td>600 μmol/m²/s</td>
+                            <td>25.9 mol/m²/day</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-box" contenteditable="true">
+                <strong>Technical Note:</strong> LED fixtures selected must have a minimum efficacy of 2.7 μmol/J (micromoles of photons per joule of electrical energy). Samsung LM301H or equivalent diodes are recommended. Driver efficiency should exceed 93%. Heat sinks must maintain junction temperature below 85°C for 50,000-hour lifespan.
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 11 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-12">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Hydroponics & Production<br>
+                        <strong>Ref:</strong> DTQ-HYD-04
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 3.0: Hydroponics & Production Systems (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">3.7 Crop Rotation & Yield Planning</h2>
+            <p class="narrative" contenteditable="true">
+                Continuous production requires strategic crop rotation to prevent nutrient depletion, manage pest cycles, and maintain market supply consistency. The container system enables rapid crop switching (clean-out and replant within 48 hours). Rotation cycles are planned on a quarterly basis, with microgreens providing fill-in production during transition periods.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Quarter</th>
+                            <th>BETA-01</th>
+                            <th>BETA-02</th>
+                            <th>BETA-03</th>
+                            <th>BETA-04</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Q1 (Jan-Mar)</td>
+                            <td>Butter Lettuce</td>
+                            <td>Genovese Basil</td>
+                            <td>Pea Shoots</td>
+                            <td>Cherry Tomatoes</td>
+                        </tr>
+                        <tr>
+                            <td>Q2 (Apr-Jun)</td>
+                            <td>Romaine Lettuce</td>
+                            <td>Cilantro</td>
+                            <td>Sunflower Shoots</td>
+                            <td>Bell Peppers</td>
+                        </tr>
+                        <tr>
+                            <td>Q3 (Jul-Sep)</td>
+                            <td>Spinach</td>
+                            <td>Thai Basil</td>
+                            <td>Radish Microgreens</td>
+                            <td>Beefsteak Tomatoes</td>
+                        </tr>
+                        <tr>
+                            <td>Q4 (Oct-Dec)</td>
+                            <td>Arugula</td>
+                            <td>Parsley</td>
+                            <td>Broccoli Microgreens</td>
+                            <td>Snack Peppers</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="section-header">3.8 Annual Yield Projections</h2>
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Production Unit</th>
+                            <th>Annual Cycles</th>
+                            <th>Yield per Cycle</th>
+                            <th>Annual Yield</th>
+                            <th>Market Price/kg</th>
+                            <th>Annual Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>BETA-01 Leafy Greens</td>
+                            <td>10 cycles</td>
+                            <td>620 kg</td>
+                            <td>6,200 kg</td>
+                            <td>$3.00</td>
+                            <td>$18,600</td>
+                        </tr>
+                        <tr>
+                            <td>BETA-02 Herbs</td>
+                            <td>14 cycles</td>
+                            <td>150 kg</td>
+                            <td>2,100 kg</td>
+                            <td>$8.00</td>
+                            <td>$16,800</td>
+                        </tr>
+                        <tr>
+                            <td>BETA-03 Microgreens</td>
+                            <td>36 cycles</td>
+                            <td>110 kg</td>
+                            <td>3,960 kg</td>
+                            <td>$15.00</td>
+                            <td>$59,400</td>
+                        </tr>
+                        <tr>
+                            <td>BETA-04 Tomatoes/Peppers</td>
+                            <td>4 cycles</td>
+                            <td>850 kg</td>
+                            <td>3,400 kg</td>
+                            <td>$4.50</td>
+                            <td>$15,300</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>Hydroponic Total</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>15,660 kg</td>
+                            <td>Avg $5.72</td>
+                            <td>$110,100</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 12 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-13">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Hydroponics & Production<br>
+                        <strong>Ref:</strong> DTQ-HYD-05
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 3.0: Hydroponics & Production Systems (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">3.9 Water Management & Recycling</h2>
+            <p class="narrative" contenteditable="true">
+                Water efficiency is a critical performance metric. The hydroponic system targets 90% water recycling through a multi-stage treatment process. Runoff from growing channels is collected, filtered, sterilized, and rebalanced before recirculation. This closed-loop approach reduces total water consumption to approximately 10% of what would be required for equivalent soil-based production.
+            </p>
+
+            <div class="grid-two-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Water Treatment Stages</h4>
+                    <ul>
+                        <li><strong>Collection:</strong> Gravity-fed return channels from all containers</li>
+                        <li><strong>Filtration:</strong> 100-micron → 25-micron → 5-micron sequential</li>
+                        <li><strong>Sterilization:</strong> UV-C (40mJ/cm² dose) + Hydrogen Peroxide (50ppm)</li>
+                        <li><strong>Rebalancing:</strong> pH adjustment + nutrient top-up</li>
+                        <li><strong>Storage:</strong> 2,000L treated water reservoir</li>
+                        <li><strong>Distribution:</strong> Pressure pump to container manifolds</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Water Quality Parameters</h4>
+                    <ul>
+                        <li><strong>pH Range:</strong> 5.5 - 6.5 (target 5.8)</li>
+                        <li><strong>EC Range:</strong> 1.2 - 2.4 mS/cm</li>
+                        <li><strong>Dissolved Oxygen:</strong> > 6 mg/L</li>
+                        <li><strong>Temperature:</strong> 18-22°C</li>
+                        <li><strong>Turbidity:</strong> < 1 NTU</li>
+                        <li><strong>Pathogen Count:</strong> Zero tolerance</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 class="section-header">3.10 Water Consumption Budget</h2>
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Water Use Category</th>
+                            <th>Daily Volume (L)</th>
+                            <th>Annual Volume (L)</th>
+                            <th>Source</th>
+                            <th>Recycling Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hydroponic Circulation</td>
+                            <td>2,500</td>
+                            <td>912,500</td>
+                            <td>Recycled + Top-up</td>
+                            <td>90%</td>
+                        </tr>
+                        <tr>
+                            <td>Evapotranspiration Loss</td>
+                            <td>250</td>
+                            <td>91,250</td>
+                            <td>Top-up required</td>
+                            <td>0%</td>
+                        </tr>
+                        <tr>
+                            <td>System Flushing (monthly)</td>
+                            <td>83 avg</td>
+                            <td>30,000</td>
+                            <td>Fresh water</td>
+                            <td>0%</td>
+                        </tr>
+                        <tr>
+                            <td>Cleaning & Sanitization</td>
+                            <td>50</td>
+                            <td>18,250</td>
+                            <td>Fresh water</td>
+                            <td>0%</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>Net Fresh Water Requirement</td>
+                            <td>~383</td>
+                            <td>139,500</td>
+                            <td>Rainwater + Well</td>
+                            <td>—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 13 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-14">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Hydroponics & Production<br>
+                        <strong>Ref:</strong> DTQ-HYD-06
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 3.0: Hydroponics & Production Systems (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">3.11 Production Forecasting Models</h2>
+            <p class="narrative" contenteditable="true">
+                Production forecasting integrates environmental data, crop growth models, and market demand signals. The system uses a combination of deterministic growth curves (based on cultivar-specific parameters) and machine learning algorithms that adjust predictions based on real-time sensor feedback. Forecast accuracy improves over time as the model learns site-specific growing conditions.
+            </p>
+
+            <div class="image-placeholder-block" id="img-zone-14">
+                <div class="placeholder-svg-bg">
+                    <span>[Production Forecast Dashboard: Monthly Yield Projections vs. Actuals]</span>
+                    <span style="font-size:7pt; color:#888; margin-top:3px;">Visualization: Line Chart with Confidence Intervals | Seasonal Adjustments</span>
+                </div>
+                <img id="render-view-14" class="user-uploaded-img" />
+                <button class="img-upload-trigger" onclick="triggerImgUpload('file-zone-14')">Upload AI Media</button>
+                <input type="file" id="file-zone-14" style="display:none;" accept="image/*" onchange="loadLocalAsset(this, 'render-view-14')"/>
+            </div>
+
+            <h2 class="section-header">3.12 5-Year Production Trajectory</h2>
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Hydroponic Yield (kg)</th>
+                            <th>Precision Crop Yield (kg)</th>
+                            <th>Apiary Output (L)</th>
+                            <th>Total Revenue</th>
+                            <th>Cumulative Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Year 1</td>
+                            <td>12,528</td>
+                            <td>19,200</td>
+                            <td>1,440</td>
+                            <td>$96,120</td>
+                            <td>$96,120</td>
+                        </tr>
+                        <tr>
+                            <td>Year 2</td>
+                            <td>14,094</td>
+                            <td>21,600</td>
+                            <td>1,620</td>
+                            <td>$108,135</td>
+                            <td>$204,255</td>
+                        </tr>
+                        <tr>
+                            <td>Year 3</td>
+                            <td>15,660</td>
+                            <td>24,000</td>
+                            <td>1,800</td>
+                            <td>$120,150</td>
+                            <td>$324,405</td>
+                        </tr>
+                        <tr>
+                            <td>Year 4</td>
+                            <td>15,660</td>
+                            <td>24,000</td>
+                            <td>1,800</td>
+                            <td>$120,150</td>
+                            <td>$444,555</td>
+                        </tr>
+                        <tr>
+                            <td>Year 5</td>
+                            <td>15,660</td>
+                            <td>24,000</td>
+                            <td>1,800</td>
+                            <td>$120,150</td>
+                            <td>$564,705</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-box" contenteditable="true">
+                <strong>Assumptions:</strong> Year 1 operates at 80% capacity due to ramp-up and learning curve. Years 2-3 scale to 90% and 100% respectively. Years 4-5 maintain steady-state at full capacity. Market prices assume 2% annual inflation adjustment. Precision crop yields (Gamma Quadrant) are detailed in Section 3.13.
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 14 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-15">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Smart Apiary Integration<br>
+                        <strong>Ref:</strong> DTQ-API-01
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 4.0: Smart Apiary Integration</h3>
+            </div>
+
+            <h2 class="section-header">4.1 IoT Flight Path Tracking</h2>
+            <p class="narrative" contenteditable="true">
+                The smart apiary array sits at the southern margin of the estate (Quadrant Delta). This location optimizes local crop pollination via automated flight-path tracking nodes while producing premium organic honey yields. IoT-enabled hive monitors track bee activity, hive weight, temperature, humidity, and sound patterns to detect swarming events, disease outbreaks, or queen failure before they become critical.
+            </p>
+            <p class="narrative" contenteditable="true">
+                Flight path tracking uses a combination of RFID-tagged foragers and computer vision cameras positioned at hive entrances. This data maps pollination coverage across the estate, identifying which crops receive adequate bee visitation and which may require supplemental pollination measures. The system also tracks pesticide-free buffer zones to ensure organic certification compliance.
+            </p>
+
+            <div class="image-placeholder-block" id="img-zone-15">
+                <div class="placeholder-svg-bg">
+                    <span>[Apiary Layout: IoT Hive Array with Flight Path Tracking Nodes]</span>
+                    <span style="font-size:7pt; color:#888; margin-top:3px;">Configuration: 20 Hives | 4 Tracking Nodes | 50m Pollination Radius per Hive</span>
+                </div>
+                <img id="render-view-15" class="user-uploaded-img" />
+                <button class="img-upload-trigger" onclick="triggerImgUpload('file-zone-15')">Upload AI Media</button>
+                <input type="file" id="file-zone-15" style="display:none;" accept="image/*" onchange="loadLocalAsset(this, 'render-view-15')"/>
+            </div>
+
+            <h2 class="section-header">4.2 Hive Architecture & Management</h2>
+            <div class="grid-two-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Hive Specifications</h4>
+                    <ul>
+                        <li>Type: Langstroth 10-frame standard</li>
+                        <li>Material: Food-grade polypropylene</li>
+                        <li>Insulation: 25mm expanded polystyrene</li>
+                        <li>Roof: Ventilated with rain protection</li>
+                        <li>Stand: Elevated 400mm with ant guards</li>
+                        <li>Orientation: Entrance facing southeast</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>IoT Monitoring Array</h4>
+                    <ul>
+                        <li>Weight scale: ±10g accuracy, daily logging</li>
+                        <li>Temperature: Internal + external sensors</li>
+                        <li>Humidity: RH monitoring for brood health</li>
+                        <li>Sound analysis: Swarm detection algorithm</li>
+                        <li>Entrance counter: IR beam break system</li>
+                        <li>GPS tracking: Hive location mapping</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 15 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-16">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Smart Apiary Integration<br>
+                        <strong>Ref:</strong> DTQ-API-02
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 4.0: Smart Apiary Integration (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">4.3 Pollination Coordination</h2>
+            <p class="narrative" contenteditable="true">
+                The apiary's primary ecological function is pollination support for the estate's crop systems. Each hive can effectively pollinate within a 3-5 kilometer radius, but the estate layout ensures that all production zones fall within the optimal 500-meter radius for maximum pollination efficiency. The flight path tracking system correlates bee visitation rates with crop yield data, quantifying the pollination value generated by the apiary.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Crop Type</th>
+                            <th>Pollination Dependence</th>
+                            <th>Yield Increase with Bees</th>
+                            <th>Peak Flowering Period</th>
+                            <th>Required Hive Density</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Tomatoes (Open Field)</td>
+                            <td>Moderate</td>
+                            <td>+15-25%</td>
+                            <td>Year-round (staggered)</td>
+                            <td>2 hives per 1,000 sqm</td>
+                        </tr>
+                        <tr>
+                            <td>Peppers</td>
+                            <td>Low-Moderate</td>
+                            <td>+10-15%</td>
+                            <td>Year-round (staggered)</td>
+                            <td>1 hive per 1,000 sqm</td>
+                        </tr>
+                        <tr>
+                            <td>Cucumbers</td>
+                            <td>High</td>
+                            <td>+30-40%</td>
+                            <td>Q2-Q3</td>
+                            <td>3 hives per 1,000 sqm</td>
+                        </tr>
+                        <tr>
+                            <td>Squash & Melons</td>
+                            <td>High</td>
+                            <td>+35-50%</td>
+                            <td>Q2-Q3</td>
+                            <td>3 hives per 1,000 sqm</td>
+                        </tr>
+                        <tr>
+                            <td>Beans & Legumes</td>
+                            <td>Low</td>
+                            <td>+5-10%</td>
+                            <td>Q1-Q2, Q3-Q4</td>
+                            <td>1 hive per 2,000 sqm</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="section-header">4.4 Honey Production & Processing</h2>
+            <p class="narrative" contenteditable="true">
+                Honey production targets 1,800 liters annually from 20 managed hives. Each hive produces 60-100 liters in optimal conditions, with conservative estimates at 90 liters per hive. The honey is extracted using a small-scale centrifugal extractor (4-frame capacity) and processed through a simple filtration system (200-micron mesh) to retain pollen and enzymes. No heat treatment is applied, preserving raw honey quality.
+            </p>
+
+            <div class="grid-two-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Processing Equipment</h4>
+                    <ul>
+                        <li>Manual 4-frame extractor (stainless steel)</li>
+                        <li>Double-sieve filtration system</li>
+                        <li>Food-grade settling tanks (50L)</li>
+                        <li>Glass jar filling station</li>
+                        <li>Label printer + packaging materials</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Quality Standards</h4>
+                    <ul>
+                        <li>Moisture content: < 18%</li>
+                        <p>HMF (Hydroxymethylfurfural): < 40 mg/kg</p>
+                        <li>Diastase activity: > 8 DN</li>
+                        <li>Free from antibiotics and pesticides</li>
+                        <li>Organic certification pathway</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 16 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-17">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Smart Apiary Integration<br>
+                        <strong>Ref:</strong> DTQ-API-03
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 4.0: Smart Apiary Integration (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">4.5 Apiary Safety Protocols</h2>
+            <p class="narrative" contenteditable="true">
+                Beekeeping involves inherent risks that require systematic management. The estate implements a comprehensive safety protocol covering personal protective equipment, hive inspection procedures, emergency response, and visitor management. All personnel working in or near the apiary must complete basic beekeeping safety training before access is granted.
+            </p>
+
+            <div class="grid-three-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Personal Protection</h4>
+                    <ul>
+                        <li>Full bee suit (ventilated, light color)</li>
+                        <li>Leather gloves with canvas cuffs</li>
+                        <li>Veil with steel mesh (not synthetic)</li>
+                        <li>Closed-toe boots with elastic cuffs</li>
+                        <li>EpiPen available for allergic reactions</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Inspection Protocol</h4>
+                    <ul>
+                        <li>Schedule: Weekly during active season</li>
+                        <li>Time: Mid-morning (10-11 AM) when foragers are out</li>
+                        <li>Weather: Dry, calm, temperature > 15°C</li>
+                        <li>Duration: Max 15 minutes per hive</li>
+                        <li>Documentation: Digital log with photos</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Emergency Response</h4>
+                    <ul>
+                        <li>First aid kit: Bee sting treatment supplies</li>
+                        <li>Communication: Two-way radio + mobile phone</li>
+                        <li>Evacuation: Clear path to safe zone (50m away)</li>
+                        <li>Medical: Local hospital contact (15 min)</li>
+                        <li>Fire: Water mist extinguisher (never CO2)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 class="section-header">4.6 Annual Apiary Calendar</h2>
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Primary Activity</th>
+                            <th>Secondary Activity</th>
+                            <th>Monitoring Focus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>January</td><td>Hive consolidation</td><td>Equipment maintenance</td><td>Food stores, cluster size</td></tr>
+                        <tr><td>February</td><td>Early spring inspection</td><td>Feeding if necessary</td><td>Queen activity, brood pattern</td></tr>
+                        <tr><td>March</td><td>Colony expansion</td><td>Swarm prevention</td><td>Queen cells, congestion</td></tr>
+                        <tr><td>April</td><td>First honey flow</td><td>Super addition</td><td>Nectar availability, weight gain</td></tr>
+                        <tr><td>May</td><td>Peak honey production</td><td>Swarm management</td><td>Storage capacity, moisture</td></tr>
+                        <tr><td>June</td><td>First extraction</td><td>Split strong colonies</td><td>Honey ripeness, capped frames</td></tr>
+                        <tr><td>July</td><td>Mid-season inspection</td><td>Varroa treatment</td><td>Mite counts, colony health</td></tr>
+                        <tr><td>August</td><td>Second honey flow</td><td>Requeening if needed</td><td>Flowering patterns, weight</td></tr>
+                        <tr><td>September</td><td>Second extraction</td><td>Winter preparation</td><td>Food stores, colony strength</td></tr>
+                        <tr><td>October</td><td>Winter feeding</td><td>Hive insulation</td><td>Weight targets, disease check</td></tr>
+                        <tr><td>November</td><td>Mouse guards installation</td><td>Equipment storage</td><td>Cluster stability, ventilation</td></tr>
+                        <tr><td>December</td><td>Minimal intervention</td><td>Planning for next season</td><td>Winter survival, food levels</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 17 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-18">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Energy & Power Systems<br>
+                        <strong>Ref:</strong> DTQ-ENG-01
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 5.0: Energy & Power Systems</h3>
+            </div>
+
+            <h2 class="section-header">5.1 Solar Array Configuration</h2>
+            <p class="narrative" contenteditable="true">
+                The estate's energy independence strategy centers on a photovoltaic solar array integrated into the residential roof structure and supplemented by ground-mounted panels in non-production zones. The total installed capacity targets 15 kWp (kilowatt peak), split between roof-mounted (8 kWp) and ground-mounted (7 kWp) arrays. This capacity is designed to meet 100% of average daily consumption while maintaining surplus generation for battery charging during peak sun hours.
+            </p>
+            <p class="narrative" contenteditable="true">
+                Panel selection prioritizes efficiency and durability. Monocrystalline PERC (Passivated Emitter and Rear Cell) modules with 21%+ efficiency are specified. The roof array uses all-black aesthetic panels to maintain the architectural vision, while ground-mounted panels prioritize cost-effectiveness and ease of maintenance access.
+            </p>
+
+            <div class="image-placeholder-block" id="img-zone-18">
+                <div class="placeholder-svg-bg">
+                    <span>[Solar Array Layout: Roof-Mounted + Ground-Mounted PV System]</span>
+                    <span style="font-size:7pt; color:#888; margin-top:3px;">Total: 15 kWp | Tilt: 25° | Azimuth: 180° (South) | Inverter: 3-Phase Hybrid</span>
+                </div>
+                <img id="render-view-18" class="user-uploaded-img" />
+                <button class="img-upload-trigger" onclick="triggerImgUpload('file-zone-18')">Upload AI Media</button>
+                <input type="file" id="file-zone-18" style="display:none;" accept="image/*" onchange="loadLocalAsset(this, 'render-view-18')"/>
+            </div>
+
+            <h2 class="section-header">5.2 Array Specifications</h2>
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Roof Array</th>
+                            <th>Ground Array</th>
+                            <th>System Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Capacity</td>
+                            <td>8 kWp</td>
+                            <td>7 kWp</td>
+                            <td>15 kWp</td>
+                        </tr>
+                        <tr>
+                            <td>Panel Count</td>
+                            <td>20 x 400W</td>
+                            <td>18 x 390W</td>
+                            <td>38 panels</td>
+                        </tr>
+                        <tr>
+                            <td>Panel Type</td>
+                            <td>Mono PERC All-Black</td>
+                            <td>Mono PERC Standard</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>Efficiency</td>
+                            <td>21.2%</td>
+                            <td>20.8%</td>
+                            <td>Avg 21.0%</td>
+                        </tr>
+                        <tr>
+                            <td>Tilt Angle</td>
+                            <td>20° (roof pitch)</td>
+                            <td>25° (adjustable)</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>Area Required</td>
+                            <td>45 sqm</td>
+                            <td>42 sqm</td>
+                            <td>87 sqm</td>
+                        </tr>
+                        <tr>
+                            <td>Annual Generation</td>
+                            <td>12,800 kWh</td>
+                            <td>11,200 kWh</td>
+                            <td>24,000 kWh</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 18 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-19">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Energy & Power Systems<br>
+                        <strong>Ref:</strong> DTQ-ENG-02
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 5.0: Energy & Power Systems (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">5.3 Battery Storage & Micro-Grid</h2>
+            <p class="narrative" contenteditable="true">
+                Energy storage is the critical enabler of grid independence. The system utilizes lithium iron phosphate (LiFePO4) battery technology for its superior cycle life (6,000+ cycles at 80% depth of discharge), thermal stability, and safety profile. The battery bank is sized to provide 48 hours of autonomy at average consumption levels, ensuring continuity during extended cloudy periods or system maintenance.
+            </p>
+
+            <div class="grid-two-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Battery Bank Specifications</h4>
+                    <ul>
+                        <li>Chemistry: LiFePO4 (Lithium Iron Phosphate)</li>
+                        <li>Total Capacity: 40 kWh usable</li>
+                        <li>Nominal Voltage: 48V DC</li>
+                        <li>Configuration: 16S2P (16 cells series, 2 parallel)</li>
+                        <li>Cycle Life: 6,000 cycles @ 80% DoD</li>
+                        <li>Warranty: 10 years / 4,000 cycles</li>
+                        <li>Operating Temp: -10°C to +55°C</li>
+                        <li>Enclosure: IP65 rated outdoor cabinet</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Micro-Grid Architecture</h4>
+                    <ul>
+                        <li>Inverter: 10 kW hybrid (solar + battery + grid)</li>
+                        <li>Charge Controller: MPPT 150A per string</li>
+                        <li>AC Distribution: 3-phase 400V panel</li>
+                        <li>DC Distribution: 48V bus for lighting</li>
+                        <li>Monitoring: Real-time SOC, voltage, current</li>
+                        <li>Grid Tie: Export capability with net metering</li>
+                        <li>Island Mode: Automatic disconnect on grid failure</li>
+                        <li>Load Priority: Critical > Production > General</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 class="section-header">5.4 Backup Power Systems</h2>
+            <p class="narrative" contenteditable="true">
+                While the battery bank provides primary backup, a secondary diesel generator (15 kVA) serves as the ultimate resilience layer. The generator auto-starts when battery SOC drops below 20% and grid power is unavailable. A 200-liter diesel tank provides 48 hours of generator runtime. The generator is tested monthly under load to ensure readiness.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Backup Tier</th>
+                            <th>System</th>
+                            <th>Capacity</th>
+                            <th>Autonomy</th>
+                            <th>Activation Trigger</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Primary</td>
+                            <td>LiFePO4 Battery Bank</td>
+                            <td>40 kWh</td>
+                            <td>48 hours</td>
+                            <td>Automatic (solar deficit)</td>
+                        </tr>
+                        <tr>
+                            <td>Secondary</td>
+                            <td>Diesel Generator</td>
+                            <td>15 kVA</td>
+                            <td>48 hours</td>
+                            <td>Battery SOC < 20%</td>
+                        </tr>
+                        <tr>
+                            <td>Tertiary</td>
+                            <td>Grid Connection</td>
+                            <td>Unlimited</td>
+                            <td>Continuous</td>
+                            <td>Manual or auto-fallback</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 19 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-20">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Energy & Power Systems<br>
+                        <strong>Ref:</strong> DTQ-ENG-03
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 5.0: Energy & Power Systems (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">5.5 Energy Consumption Modeling</h2>
+            <p class="narrative" contenteditable="true">
+                Accurate energy modeling is essential for right-sizing the generation and storage systems. The estate's consumption is divided into residential, production, and auxiliary categories. LED lighting for hydroponics represents the largest single load, followed by climate control systems and residential appliances. The model assumes conservative duty cycles and includes seasonal variations.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Load Category</th>
+                            <th>Daily kWh</th>
+                            <th>Annual kWh</th>
+                            <th>% of Total</th>
+                            <th>Peak Load (kW)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hydroponic LED Lighting</td>
+                            <td>28.8</td>
+                            <td>10,512</td>
+                            <td>43.8%</td>
+                            <td>12.0</td>
+                        </tr>
+                        <tr>
+                            <td>Climate Control (HVAC)</td>
+                            <td>12.0</td>
+                            <td>4,380</td>
+                            <td>18.3%</td>
+                            <td>5.0</td>
+                        </tr>
+                        <tr>
+                            <td>Water Pumps & Circulation</td>
+                            <td>4.8</td>
+                            <td>1,752</td>
+                            <td>7.3%</td>
+                            <td>2.0</td>
+                        </tr>
+                        <tr>
+                            <td>Residential Appliances</td>
+                            <td>8.4</td>
+                            <td>3,066</td>
+                            <td>12.8%</td>
+                            <td>4.5</td>
+                        </tr>
+                        <tr>
+                            <td>IoT & Monitoring Systems</td>
+                            <td>1.2</td>
+                            <td>438</td>
+                            <td>1.8%</td>
+                            <td>0.5</td>
+                        </tr>
+                        <tr>
+                            <td>Apiary & Auxiliary</td>
+                            <td>2.4</td>
+                            <td>876</td>
+                            <td>3.7%</td>
+                            <td>1.0</td>
+                        </tr>
+                        <tr>
+                            <td>Security & Perimeter</td>
+                            <td>1.8</td>
+                            <td>657</td>
+                            <td>2.7%</td>
+                            <td>0.8</td>
+                        </tr>
+                        <tr>
+                            <td>Miscellaneous & Reserve</td>
+                            <td>2.4</td>
+                            <td>876</td>
+                            <td>3.7%</td>
+                            <td>1.5</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>Total Estate Consumption</td>
+                            <td>61.8</td>
+                            <td>22,557</td>
+                            <td>94.0%</td>
+                            <td>27.3</td>
+                        </tr>
+                        <tr>
+                            <td>Surplus for Battery Charging</td>
+                            <td>3.9</td>
+                            <td>1,443</td>
+                            <td>6.0%</td>
+                            <td>—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="section-header">5.6 Grid Independence Roadmap</h2>
+            <p class="narrative" contenteditable="true">
+                The estate transitions from grid-dependent to grid-independent over a 3-year period. Year 1 maintains grid connection as backup while optimizing solar generation and load management. Year 2 reduces grid import to <10% of consumption. Year 3 achieves full independence with grid connection retained only for emergency export/import flexibility.
+            </p>
+
+            <div class="chart-box-wrapper">
+                <div style="width:35%; font-size:8.5pt; color:#444;">
+                    <strong>Grid Independence Trajectory:</strong><br>
+                    Progressive reduction in grid dependency through solar capacity expansion, battery augmentation, and load optimization. Target: 100% renewable by Year 3.
+                </div>
+                <div class="bar-chart-mock">
+                    <div class="chart-bar-container" style="width: 22%;">
+                        <div class="bar-fill" style="height: 85%;"><div class="bar-val">85%</div></div>
+                        <div class="bar-label">Year 1 Grid</div>
+                    </div>
+                    <div class="chart-bar-container" style="width: 22%;">
+                        <div class="bar-fill" style="height: 45%;"><div class="bar-val">45%</div></div>
+                        <div class="bar-label">Year 2 Grid</div>
+                    </div>
+                    <div class="chart-bar-container" style="width: 22%;">
+                        <div class="bar-fill" style="height: 10%;"><div class="bar-val">10%</div></div>
+                        <div class="bar-label">Year 3 Grid</div>
+                    </div>
+                    <div class="chart-bar-container" style="width: 22%;">
+                        <div class="bar-fill" style="height: 5%;"><div class="bar-val">5%</div></div>
+                        <div class="bar-label">Year 4+ Grid</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 20 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-21">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Water & Waste Management<br>
+                        <strong>Ref:</strong> DTQ-WWM-01
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 6.0: Water & Waste Management</h3>
+            </div>
+
+            <h2 class="section-header">6.1 Rainwater Harvesting</h2>
+            <p class="narrative" contenteditable="true">
+                The estate's water independence strategy begins with rainwater harvesting. The residential roof (250 sqm catchment area) and auxiliary structures collect rainfall via gutter systems feeding into a centralized storage network. Based on regional rainfall data (1,200mm annual average), the theoretical harvest potential is 300,000 liters annually, far exceeding the estate's total water requirement of approximately 140,000 liters.
+            </p>
+
+            <div class="image-placeholder-block" id="img-zone-21">
+                <div class="placeholder-svg-bg">
+                    <span>[Water System Diagram: Rainwater Collection → Storage → Treatment → Distribution]</span>
+                    <span style="font-size:7pt; color:#888; margin-top:3px;">Capacity: 50,000L Storage | First-Flush Diverter | Multi-Stage Filtration</span>
+                </div>
+                <img id="render-view-21" class="user-uploaded-img" />
+                <button class="img-upload-trigger" onclick="triggerImgUpload('file-zone-21')">Upload AI Media</button>
+                <input type="file" id="file-zone-21" style="display:none;" accept="image/*" onchange="loadLocalAsset(this, 'render-view-21')"/>
+            </div>
+
+            <h2 class="section-header">6.2 Harvesting System Specifications</h2>
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Specification</th>
+                            <th>Capacity / Rating</th>
+                            <th>Material</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Catchment Area</td>
+                            <td>Residential + auxiliary roofs</td>
+                            <td>300 sqm total</td>
+                            <td>Metal roofing (galvanized)</td>
+                        </tr>
+                        <tr>
+                            <td>Gutters</td>
+                            <td>Half-round profile</td>
+                            <td>150mm diameter</td>
+                            <td>Aluminum</td>
+                        </tr>
+                        <tr>
+                            <td>First-Flush Diverter</td>
+                            <td>Auto-drain after rainfall</td>
+                            <td>100L per downpipe</td>
+                            <td>HDPE</td>
+                        </tr>
+                        <tr>
+                            <td>Primary Storage</td>
+                            <td>Above-ground tank</td>
+                            <td>30,000L</td>
+                            <td>Food-grade polyethylene</td>
+                        </tr>
+                        <tr>
+                            <td>Secondary Storage</td>
+                            <td>Underground cistern</td>
+                            <td>20,000L</td>
+                            <td>Reinforced concrete</td>
+                        </tr>
+                        <tr>
+                            <td>Filtration</td>
+                            <td>Sediment + Carbon + UV</td>
+                            <td>5-micron final</td>
+                            <td>Stainless steel housings</td>
+                        </tr>
+                        <tr>
+                            <td>Distribution Pump</td>
+                            <td>Variable speed booster</td>
+                            <td>2.2 kW, 3,000 L/hr</td>
+                            <td>Stainless steel</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 21 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-22">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Water & Waste Management<br>
+                        <strong>Ref:</strong> DTQ-WWM-02
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 6.0: Water & Waste Management (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">6.3 Graywater Treatment</h2>
+            <p class="narrative" contenteditable="true">
+                Graywater (wastewater from sinks, showers, and laundry) represents a significant recycling opportunity. The estate's graywater treatment system processes approximately 150 liters per day through a constructed wetland filter bed. The treated water meets irrigation quality standards and is directed to the precision crop block (Quadrant Gamma) for supplemental watering, reducing freshwater demand by an additional 20%.
+            </p>
+
+            <div class="grid-two-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Graywater Treatment Stages</h4>
+                    <ul>
+                        <li><strong>Collection:</strong> Separate plumbing from blackwater</li>
+                        <li><strong>Screening:</strong> 2mm mesh hair/lint filter</li>
+                        <li><strong>Sedimentation:</strong> 500L settling tank (24hr retention)</li>
+                        <li><strong>Biological:</strong> Constructed wetland (4 sqm, gravel + reeds)</li>
+                        <li><strong>Disinfection:</strong> Slow sand filter + UV (optional)</li>
+                        <li><strong>Storage:</strong> 1,000L treated water tank</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Quality Parameters</h4>
+                    <ul>
+                        <li>BOD5: < 20 mg/L</li>
+                        <li>TSS: < 30 mg/L</li>
+                        <li>Turbidity: < 5 NTU</li>
+                        <p>E. coli: < 1,000 CFU/100mL</p>
+                        <li>pH: 6.0 - 8.5</li>
+                        <li>Electrical conductivity: < 1,500 μS/cm</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 class="section-header">6.4 Blackwater Processing</h2>
+            <p class="narrative" contenteditable="true">
+                Blackwater (toilet waste) is processed through a compact biogas digester system. The 2,000L digester produces biogas for cooking and nutrient-rich effluent for composting. This approach eliminates septic tank dependency, produces renewable energy, and closes the nutrient loop. The system is sized for 4-6 person occupancy with 20-day hydraulic retention time.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Biogas System Parameter</th>
+                            <th>Specification</th>
+                            <th>Output</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Digester Volume</td>
+                            <td>2,000L fixed dome</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>Daily Input</td>
+                            <td>20L blackwater + 2kg organic waste</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>Biogas Production</td>
+                            <td>0.5 m³/day</td>
+                            <td>Equivalent to 0.3 kg LPG</td>
+                        </tr>
+                        <tr>
+                            <td>Methane Content</td>
+                            <td>60-70%</td>
+                            <td>Combustion-ready</td>
+                        </tr>
+                        <tr>
+                            <td>Digestate Output</td>
+                            <td>18L/day</td>
+                            <td>NPK-rich liquid fertilizer</td>
+                        </tr>
+                        <tr>
+                            <td>Retention Time</td>
+                            <td>20 days</td>
+                            <td>Pathogen reduction > 99%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 22 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-23">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Water & Waste Management<br>
+                        <strong>Ref:</strong> DTQ-WWM-03
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 6.0: Water & Waste Management (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">6.5 Composting & Soil Amendment</h2>
+            <p class="narrative" contenteditable="true">
+                The estate's organic waste stream (crop residues, kitchen scraps, garden trimmings, and digestate from the biogas system) is converted into high-quality compost through a three-bin hot composting system. Each bin holds 1 cubic meter and operates on a 90-day cycle: active filling (30 days), active decomposition (30 days), and curing/maturing (30 days). This produces approximately 4 cubic meters of finished compost annually, sufficient for all soil amendment needs in the precision crop block.
+            </p>
+
+            <div class="grid-three-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Compost Input Streams</h4>
+                    <ul>
+                        <li>Hydroponic crop residues (non-diseased)</li>
+                        <li>Kitchen vegetable scraps</li>
+                        <li>Garden trimmings and weeds</li>
+                        <li>Biogas digestate (diluted)</li>
+                        <li>Wood chip bedding (carbon source)</li>
+                        <li>Shredded cardboard and paper</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Compost Quality Targets</h4>
+                    <ul>
+                        <li>C:N Ratio: 25:1 to 30:1</li>
+                        <li>Moisture: 40-60%</li>
+                        <li>Temperature: 55-65°C (thermophilic phase)</li>
+                        <li>pH: 6.5 - 7.5</li>
+                        <li>Finished compost: Dark, crumbly, earthy odor</li>
+                        <li>Pathogen elimination: 3 heat cycles minimum</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Application Schedule</h4>
+                    <ul>
+                        <li>Spring: 2 cm surface dressing</li>
+                        <li>Mid-season: Side-dressing for heavy feeders</li>
+                        <li>Autumn: Deep incorporation for soil building</li>
+                        <li>Greenhouse beds: 30% compost mix</li>
+                        <li>Potting mix: 20% compost + 80% coir</li>
+                        <li>Mulch layer: 5cm around perennials</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 class="section-header">6.6 Water Quality Monitoring</h2>
+            <p class="narrative" contenteditable="true">
+                Continuous water quality monitoring ensures all water streams meet their intended use standards. The monitoring network includes inline sensors for key parameters, supplemented by monthly laboratory testing for comprehensive analysis. Data is logged to the central IoT platform with automated alerts for out-of-range conditions.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Water Stream</th>
+                            <th>Monitoring Frequency</th>
+                            <th>Key Parameters</th>
+                            <th>Alert Threshold</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Rainwater (raw)</td>
+                            <td>Weekly</td>
+                            <td>pH, TSS, turbidity</td>
+                            <td>pH < 5.0 or > 8.0</td>
+                        </tr>
+                        <tr>
+                            <td>Potable Water</td>
+                            <td>Daily (sensors) + Monthly (lab)</td>
+                            <td>pH, EC, chlorine, bacteria</td>
+                            <td>E. coli > 0 CFU/100mL</td>
+                        </tr>
+                        <tr>
+                            <td>Hydroponic Nutrient</td>
+                            <td>Continuous (automated)</td>
+                            <td>pH, EC, DO, temperature</td>
+                            <td>pH > 6.5 or < 5.0</td>
+                        </tr>
+                        <tr>
+                            <td>Graywater (treated)</td>
+                            <td>Weekly</td>
+                            <td>BOD, TSS, E. coli</td>
+                            <td>E. coli > 1,000 CFU/100mL</td>
+                        </tr>
+                        <tr>
+                            <td>Biogas Effluent</td>
+                            <td>Monthly</td>
+                            <td>NPK, pathogens, pH</td>
+                            <td>Ascaris eggs > 0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 23 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-24">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Financial Matrix<br>
+                        <strong>Ref:</strong> DTQ-FIN-01
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 7.0: Financial Matrix & Project Economics</h3>
+            </div>
+
+            <h2 class="section-header">7.1 Capital Expense Breakdown</h2>
+            <p class="narrative" contenteditable="true">
+                Deploying the DreamTeQ Modern Farmstead Estate requires structured upfront capital across infrastructure, production systems, and operational readiness. The total capital investment of $93,500 is allocated across five major categories, with the residential structure representing the largest single expenditure. All costs include procurement, shipping, installation, and commissioning.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Capital Category</th>
+                            <th>Line Item</th>
+                            <th>Unit Cost (USD)</th>
+                            <th>Qty</th>
+                            <th>Total (USD)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="4"><strong>Infrastructure</strong></td>
+                            <td>Prefab Sandwich Panel Residence</td>
+                            <td>$65,000</td>
+                            <td>1</td>
+                            <td>$65,000</td>
+                        </tr>
+                        <tr>
+                            <td>Foundation & Site Prep</td>
+                            <td>$4,500</td>
+                            <td>1</td>
+                            <td>$4,500</td>
+                        </tr>
+                        <tr>
+                            <td>Perimeter Fencing & Gates</td>
+                            <td>$2,000</td>
+                            <td>1</td>
+                            <td>$2,000</td>
+                        </tr>
+                        <tr>
+                            <td>Access Roads & Parking</td>
+                            <td>$1,500</td>
+                            <td>1</td>
+                            <td>$1,500</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3"><strong>Production</strong></td>
+                            <td>Hydroponics Container Pack (4 units)</td>
+                            <td>$24,000</td>
+                            <td>1</td>
+                            <td>$24,000</td>
+                        </tr>
+                        <tr>
+                            <td>Smart Apiary Integration Hub</td>
+                            <td>$4,500</td>
+                            <td>1</td>
+                            <td>$4,500</td>
+                        </tr>
+                        <tr>
+                            <td>Precision Crop Equipment</td>
+                            <td>$3,500</td>
+                            <td>1</td>
+                            <td>$3,500</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3"><strong>Energy</strong></td>
+                            <td>Solar Array (15 kWp)</td>
+                            <td>$12,000</td>
+                            <td>1</td>
+                            <td>$12,000</td>
+                        </tr>
+                        <tr>
+                            <td>Battery Bank (40 kWh LiFePO4)</td>
+                            <td>$8,000</td>
+                            <td>1</td>
+                            <td>$8,000</td>
+                        </tr>
+                        <tr>
+                            <td>Inverter & Control Systems</td>
+                            <td>$3,500</td>
+                            <td>1</td>
+                            <td>$3,500</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2"><strong>Water</strong></td>
+                            <td>Rainwater Harvesting System</td>
+                            <td>$3,000</td>
+                            <td>1</td>
+                            <td>$3,000</td>
+                        </tr>
+                        <tr>
+                            <td>Graywater & Biogas Systems</td>
+                            <td>$2,500</td>
+                            <td>1</td>
+                            <td>$2,500</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2"><strong>Technology</strong></td>
+                            <td>IoT Monitoring & Control Network</td>
+                            <td>$2,000</td>
+                            <td>1</td>
+                            <td>$2,000</td>
+                        </tr>
+                        <tr>
+                            <td>Security & Communication</td>
+                            <td>$1,500</td>
+                            <td>1</td>
+                            <td>$1,500</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td colspan="4"><strong>Total Capital Investment</strong></td>
+                            <td><strong>$93,500</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 24 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-25">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Financial Matrix<br>
+                        <strong>Ref:</strong> DTQ-FIN-02
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 7.0: Financial Matrix & Project Economics (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">7.2 Operational Cost Projections</h2>
+            <p class="narrative" contenteditable="true">
+                Operational costs are designed to be minimal through automation and self-sufficiency. The largest ongoing expenses are nutrient solutions for hydroponics, seed/stock replenishment, and occasional equipment maintenance. Energy costs are near-zero due to solar self-generation. Labor is limited to oversight and harvesting, with automation handling routine tasks.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Operational Category</th>
+                            <th>Monthly Cost (USD)</th>
+                            <th>Annual Cost (USD)</th>
+                            <th>% of Revenue</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hydroponic Nutrients & Media</td>
+                            <td>$280</td>
+                            <td>$3,360</td>
+                            <td>3.1%</td>
+                            <td>Concentrated solutions, bulk purchase</td>
+                        </tr>
+                        <tr>
+                            <td>Seeds, Seedlings & Stock</td>
+                            <td>$150</td>
+                            <td>$1,800</td>
+                            <td>1.7%</td>
+                            <td>Heirloom varieties, some self-saving</td>
+                        </tr>
+                        <tr>
+                            <td>Energy (Grid Backup)</td>
+                            <td>$40</td>
+                            <td>$480</td>
+                            <td>0.4%</td>
+                            <td>Declining as independence increases</td>
+                        </tr>
+                        <tr>
+                            <td>Water (Municipal Backup)</td>
+                            <td>$25</td>
+                            <td>$300</td>
+                            <td>0.3%</td>
+                            <td>Minimal due to rainwater harvesting</td>
+                        </tr>
+                        <tr>
+                            <td>Equipment Maintenance</td>
+                            <td>$120</td>
+                            <td>$1,440</td>
+                            <td>1.3%</td>
+                            <td>Preventive schedule, spare parts stock</td>
+                        </tr>
+                        <tr>
+                            <td>Apiary Management</td>
+                            <td>$60</td>
+                            <td>$720</td>
+                            <td>0.7%</td>
+                            <td>Feed, treatments, replacement queens</td>
+                        </tr>
+                        <tr>
+                            <td>Packaging & Marketing</td>
+                            <td>$200</td>
+                            <td>$2,400</td>
+                            <td>2.2%</td>
+                            <td>Labels, jars, website, social media</td>
+                        </tr>
+                        <tr>
+                            <td>Insurance & Compliance</td>
+                            <td>$150</td>
+                            <td>$1,800</td>
+                            <td>1.7%</td>
+                            <td>Property, liability, organic certification</td>
+                        </tr>
+                        <tr>
+                            <td>Miscellaneous & Contingency</td>
+                            <td>$100</td>
+                            <td>$1,200</td>
+                            <td>1.1%</td>
+                            <td>10% buffer on operational costs</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>Total Annual Operating Cost</td>
+                            <td>$1,125</td>
+                            <td>$13,500</td>
+                            <td>12.6%</td>
+                            <td>Highly efficient, automation-driven</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="section-header">7.3 Revenue Stream Analysis</h2>
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Revenue Stream</th>
+                            <th>Unit</th>
+                            <th>Annual Volume</th>
+                            <th>Price/Unit (USD)</th>
+                            <th>Annual Revenue (USD)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Leafy Greens (Hydroponic)</td>
+                            <td>kg</td>
+                            <td>6,200</td>
+                            <td>$3.00</td>
+                            <td>$18,600</td>
+                        </tr>
+                        <tr>
+                            <td>Herbs (Hydroponic)</td>
+                            <td>kg</td>
+                            <td>2,100</td>
+                            <td>$8.00</td>
+                            <td>$16,800</td>
+                        </tr>
+                        <tr>
+                            <td>Microgreens (Hydroponic)</td>
+                            <td>kg</td>
+                            <td>3,960</td>
+                            <td>$15.00</td>
+                            <td>$59,400</td>
+                        </tr>
+                        <tr>
+                            <td>Tomatoes & Peppers (Hydroponic)</td>
+                            <td>kg</td>
+                            <td>3,400</td>
+                            <td>$4.50</td>
+                            <td>$15,300</td>
+                        </tr>
+                        <tr>
+                            <td>Precision Crop Block (Gamma)</td>
+                            <td>kg</td>
+                            <td>24,000</td>
+                            <td>$2.00</td>
+                            <td>$48,000</td>
+                        </tr>
+                        <tr>
+                            <td>Honey (Apiary)</td>
+                            <td>Liter</td>
+                            <td>1,800</td>
+                            <td>$12.00</td>
+                            <td>$21,600</td>
+                        </tr>
+                        <tr>
+                            <td>Value-Added Products</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>$5,000</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td colspan="4"><strong>Total Annual Revenue (Year 3 Steady State)</strong></td>
+                            <td><strong>$184,700</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 25 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-26">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Financial Matrix<br>
+                        <strong>Ref:</strong> DTQ-FIN-03
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 7.0: Financial Matrix & Project Economics (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">7.4 Cash Flow Modeling</h2>
+            <p class="narrative" contenteditable="true">
+                The cash flow model demonstrates the project's financial viability over a 5-year horizon. Year 1 operates at reduced capacity (80%) with higher learning-curve costs. Year 2 scales to 90% with improved efficiency. Year 3 achieves full steady-state operation. The model assumes conservative market prices with 2% annual inflation and accounts for seasonal revenue fluctuations.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Financial Metric</th>
+                            <th>Year 1</th>
+                            <th>Year 2</th>
+                            <th>Year 3</th>
+                            <th>Year 4</th>
+                            <th>Year 5</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Gross Revenue</td>
+                            <td>$96,120</td>
+                            <td>$108,135</td>
+                            <td>$120,150</td>
+                            <td>$122,553</td>
+                            <td>$125,004</td>
+                        </tr>
+                        <tr>
+                            <td>Operating Costs</td>
+                            <td>$16,200</td>
+                            <td>$14,850</td>
+                            <td>$13,500</td>
+                            <td>$13,770</td>
+                            <td>$14,045</td>
+                        </tr>
+                        <tr>
+                            <td>Net Operating Income</td>
+                            <td>$79,920</td>
+                            <td>$93,285</td>
+                            <td>$106,650</td>
+                            <td>$108,783</td>
+                            <td>$110,959</td>
+                        </tr>
+                        <tr>
+                            <td>Capital Investment</td>
+                            <td>$93,500</td>
+                            <td>$0</td>
+                            <td>$0</td>
+                            <td>$0</td>
+                            <td>$0</td>
+                        </tr>
+                        <tr>
+                            <td>Cumulative Cash Flow</td>
+                            <td>-$13,580</td>
+                            <td>$79,705</td>
+                            <td>$186,355</td>
+                            <td>$295,138</td>
+                            <td>$406,097</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>Payback Period</strong></td>
+                            <td colspan="5"><strong>14.1 months (achieved mid-Year 2)</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="section-header">7.5 ROI & Break-Even Analysis</h2>
+            <div class="grid-two-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Return Metrics</h4>
+                    <ul>
+                        <li><strong>Simple ROI (Year 3):</strong> 114%</li>
+                        <li><strong>IRR (5-year):</strong> 87%</li>
+                        <li><strong>NPV (10% discount):</strong> $312,450</li>
+                        <li><strong>Payback Period:</strong> 14.1 months</li>
+                        <li><strong>Profit Margin (Year 3):</strong> 88.8%</li>
+                        <li><strong>Revenue per sqm:</strong> $45.60</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Sensitivity Analysis</h4>
+                    <ul>
+                        <li><strong>Revenue -20%:</strong> Payback extends to 18 months</li>
+                        <li><strong>Revenue +20%:</strong> Payback reduces to 11 months</li>
+                        <li><strong>Costs +30%:</strong> Payback extends to 16 months</li>
+                        <li><strong>Costs -20%:</strong> Payback reduces to 12 months</li>
+                        <li><strong>Combined worst case:</strong> Still profitable by Month 22</li>
+                        <li><strong>Combined best case:</strong> Payback by Month 9</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-box" contenteditable="true">
+                <strong>Financial Note:</strong> These projections assume direct-to-consumer sales at premium prices. Wholesale or institutional pricing would reduce margins but increase volume. The model does not include potential revenue from agritourism, educational workshops, or technology licensing, which could significantly enhance returns. All figures are pre-tax and should be adjusted for local tax regulations.
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 26 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-27">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Operational Protocols<br>
+                        <strong>Ref:</strong> DTQ-OPS-01
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 8.0: Operational Protocols</h3>
+            </div>
+
+            <h2 class="section-header">8.1 Daily Management Routines</h2>
+            <p class="narrative" contenteditable="true">
+                The estate operates on structured daily routines that balance automation oversight with hands-on production management. Morning sessions (6:00-9:00 AM) focus on system health checks and harvest preparation. Midday sessions (10:00 AM-2:00 PM) handle processing, packaging, and administrative tasks. Evening sessions (4:00-6:00 PM) conduct system reviews and next-day planning. Total daily labor requirement is 4-6 hours for a single operator.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Time Block</th>
+                            <th>Activity</th>
+                            <th>Duration</th>
+                            <th>Quadrant</th>
+                            <th>Tools / Systems</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>06:00 - 06:30</td>
+                            <td>IoT Dashboard Review</td>
+                            <td>30 min</td>
+                            <td>Alpha (Residence)</td>
+                            <td>Mobile app, alerts check</td>
+                        </tr>
+                        <tr>
+                            <td>06:30 - 07:30</td>
+                            <td>Hydroponic System Check</td>
+                            <td>60 min</td>
+                            <td>Beta (Hydroponics)</td>
+                            <td>pH/EC meters, visual inspection</td>
+                        </tr>
+                        <tr>
+                            <td>07:30 - 08:30</td>
+                            <td>Harvest & Quality Sort</td>
+                            <td>60 min</td>
+                            <td>Beta (Hydroponics)</td>
+                            <td>Harvest tools, scale, containers</td>
+                        </tr>
+                        <tr>
+                            <td>08:30 - 09:00</td>
+                            <td>Precision Crop Inspection</td>
+                            <td>30 min</td>
+                            <td>Gamma (Crops)</td>
+                            <td>Moisture probe, pest check</td>
+                        </tr>
+                        <tr>
+                            <td>10:00 - 12:00</td>
+                            <td>Processing & Packaging</td>
+                            <td>120 min</td>
+                            <td>Beta (Processing)</td>
+                            <td>Washer, dryer, packer, labeler</td>
+                        </tr>
+                        <tr>
+                            <td>12:00 - 13:00</td>
+                            <td>Admin & Order Fulfillment</td>
+                            <td>60 min</td>
+                            <td>Alpha (Office)</td>
+                            <td>Computer, printer, inventory</td>
+                        </tr>
+                        <tr>
+                            <td>14:00 - 15:00</td>
+                            <td>Apiary Inspection (weekly)</td>
+                            <td>60 min</td>
+                            <td>Delta (Apiary)</td>
+                            <td>Bee suit, smoker, hive tools</td>
+                        </tr>
+                        <tr>
+                            <td>15:00 - 16:00</td>
+                            <td>System Maintenance</td>
+                            <td>60 min</td>
+                            <td>All Quadrants</td>
+                            <td>Tool kit, spare parts, lubricants</td>
+                        </tr>
+                        <tr>
+                            <td>16:00 - 16:30</td>
+                            <td>Energy & Water Review</td>
+                            <td>30 min</td>
+                            <td>Alpha (Monitoring)</td>
+                            <td>Dashboard, meter readings</td>
+                        </tr>
+                        <tr>
+                            <td>16:30 - 17:00</td>
+                            <td>Next-Day Planning</td>
+                            <td>30 min</td>
+                            <td>Alpha (Office)</td>
+                            <td>Task list, calendar, weather</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="section-header">8.2 Maintenance Schedules</h2>
+            <div class="grid-three-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Daily Maintenance</h4>
+                    <ul>
+                        <li>Clean harvest tools and containers</li>
+                        <li>Check pump operation and flow rates</li>
+                        <li>Verify sensor readings vs. manual checks</li>
+                        <li>Empty and clean filtration screens</li>
+                        <li>Inspect for leaks or unusual sounds</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Weekly Maintenance</h4>
+                    <ul>
+                        <li>Calibrate pH and EC sensors</li>
+                        <li>Clean LED fixtures and reflectors</li>
+                        <li>Inspect container seals and insulation</li>
+                        <li>Test backup systems (generator, pumps)</li>
+                        <li>Review and archive data logs</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Monthly Maintenance</h4>
+                    <ul>
+                        <li>Deep clean nutrient reservoirs</li>
+                        <li>Replace UV sterilizer lamps</li>
+                        <li>Inspect solar panel cleanliness</li>
+                        <li>Test battery capacity and balance</li>
+                        <li>Service HVAC filters and ducts</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 27 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-28">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Operational Protocols<br>
+                        <strong>Ref:</strong> DTQ-OPS-02
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 8.0: Operational Protocols (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">8.3 Quality Control Standards</h2>
+            <p class="narrative" contenteditable="true">
+                Product quality is the foundation of market positioning and pricing power. The estate implements a three-tier quality control system: pre-harvest assessment (visual, size, maturity), post-harvest processing (washing, sorting, packaging), and final inspection before dispatch. All products are traceable to their production container, harvest date, and batch number.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Product Category</th>
+                            <th>Grade A Standard</th>
+                            <th>Grade B Standard</th>
+                            <th>Reject Criteria</th>
+                            <th>Grade A Target %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Leafy Greens</td>
+                            <td>Uniform size, no blemishes, crisp</td>
+                            <td>Minor cosmetic defects</td>
+                            <td>Yellowing, wilting, pest damage</td>
+                            <td>85%</td>
+                        </tr>
+                        <tr>
+                            <td>Herbs</td>
+                            <td>Full flavor, vibrant color, intact</td>
+                            <td>Some leaf damage, still aromatic</td>
+                            <td>Flowering, woody stems, mold</td>
+                            <td>80%</td>
+                        </tr>
+                        <tr>
+                            <td>Microgreens</td>
+                            <td>True leaves, 5-8cm height, fresh</td>
+                            <td>Slightly elongated, minor discoloration</td>
+                            <td>Damping off, mold, leggy growth</td>
+                            <td>75%</td>
+                        </tr>
+                        <tr>
+                            <td>Tomatoes</td>
+                            <td>Firm, uniform color, no cracks</td>
+                            <td>Slight shape variation, minor scarring</td>
+                            <td>Soft spots, cracks, pest entry</td>
+                            <td>80%</td>
+                        </tr>
+                        <tr>
+                            <td>Honey</td>
+                            <td>Clear, proper moisture, no crystals</td>
+                            <td>Partial crystallization, still edible</td>
+                            <td>Fermentation, off-odor, excess moisture</td>
+                            <td>90%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="section-header">8.4 Staffing & Automation Balance</h2>
+            <p class="narrative" contenteditable="true">
+                The estate is designed for minimal labor input through strategic automation. A single full-time operator can manage all systems with seasonal support for peak harvest periods. The automation-to-labor ratio is approximately 70:30, meaning 70% of routine tasks are automated while 30% require human judgment, creativity, and physical intervention.
+            </p>
+
+            <div class="grid-two-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Automated Tasks (70%)</h4>
+                    <ul>
+                        <li>Nutrient mixing and dosing</li>
+                        <li>Irrigation scheduling and delivery</li>
+                        <li>Climate control (temperature, humidity, CO2)</li>
+                        <li>Lighting photoperiod management</li>
+                        <li>Water quality monitoring and alerts</li>
+                        <li>Energy management and load balancing</li>
+                        <li>Data logging and reporting</li>
+                        <li>Security monitoring</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Manual Tasks (30%)</h4>
+                    <ul>
+                        <li>Seed sowing and transplanting</li>
+                        <li>Harvesting and quality sorting</li>
+                        <li>Processing, packaging, and labeling</li>
+                        <li>Customer relations and sales</li>
+                        <li>Apiary inspection and management</li>
+                        <li>Preventive maintenance</li>
+                        <li>System optimization and troubleshooting</li>
+                        <li>Strategic planning and expansion</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 28 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-29">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Risk & Compliance<br>
+                        <strong>Ref:</strong> DTQ-RIS-01
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 9.0: Risk Assessment & Compliance</h3>
+            </div>
+
+            <h2 class="section-header">9.1 Risk Assessment Matrix</h2>
+            <p class="narrative" contenteditable="true">
+                Comprehensive risk management identifies, quantifies, and mitigates threats to operational continuity and financial performance. Risks are categorized by probability (Low/Medium/High) and impact (Minor/Moderate/Severe), with mitigation strategies assigned to each significant risk. The matrix is reviewed quarterly and updated based on operational experience.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Risk Category</th>
+                            <th>Specific Risk</th>
+                            <th>Probability</th>
+                            <th>Impact</th>
+                            <th>Mitigation Strategy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Technical</td>
+                            <td>IoT system failure</td>
+                            <td>Medium</td>
+                            <td>Moderate</td>
+                            <td>Redundant sensors, manual override, local control</td>
+                        </tr>
+                        <tr>
+                            <td>Technical</td>
+                            <td>Pump or dosing failure</td>
+                            <td>Medium</td>
+                            <td>Severe</td>
+                            <td>Backup pumps, spare parts inventory, 24hr response</td>
+                        </tr>
+                        <tr>
+                            <td>Technical</td>
+                            <td>LED array failure</td>
+                            <td>Low</td>
+                            <td>Moderate</td>
+                            <td>Modular design, spare driver units, phased replacement</td>
+                        </tr>
+                        <tr>
+                            <td>Biological</td>
+                            <td>Crop disease outbreak</td>
+                            <td>Medium</td>
+                            <td>Severe</td>
+                            <td>Container isolation, biocontrol, resistant varieties</td>
+                        </tr>
+                        <tr>
+                            <td>Biological</td>
+                            <td>Bee colony collapse</td>
+                            <td>Low</td>
+                            <td>Moderate</td>
+                            <td>Multiple hives, Varroa management, genetic diversity</td>
+                        </tr>
+                        <tr>
+                            <td>Environmental</td>
+                            <td>Extended drought</td>
+                            <td>Medium</td>
+                            <td>Moderate</td>
+                            <td>Oversized storage, municipal backup, drought-tolerant crops</td>
+                        </tr>
+                        <tr>
+                            <td>Environmental</td>
+                            <td>Severe storm damage</td>
+                            <td>Low</td>
+                            <td>Severe</td>
+                            <td>Structural engineering, insurance, emergency protocols</td>
+                        </tr>
+                        <tr>
+                            <td>Market</td>
+                            <td>Price collapse</td>
+                            <td>Medium</td>
+                            <td>Severe</td>
+                            <td>Diversified products, value-added processing, contracts</td>
+                        </tr>
+                        <tr>
+                            <td>Market</td>
+                            <td>Demand reduction</td>
+                            <td>Low</td>
+                            <td>Moderate</td>
+                            <td>Multiple channels, subscription model, preserved goods</td>
+                        </tr>
+                        <tr>
+                            <td>Regulatory</td>
+                            <td>Organic certification loss</td>
+                            <td>Low</td>
+                            <td>Moderate</td>
+                            <td>Strict compliance, documentation, buffer zones</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="section-header">9.2 Regulatory Compliance</h2>
+            <div class="grid-two-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Required Permits & Licenses</h4>
+                    <ul>
+                        <li>Building permit (residential structure)</li>
+                        <li>Agricultural operation license</li>
+                        <li>Water abstraction permit (if applicable)</li>
+                        <li>Food handling and safety certification</li>
+                        <li>Organic certification (optional, Year 2)</li>
+                        <li>Beekeeping registration</li>
+                        <li>Electrical grid connection approval</li>
+                        <li>Environmental impact assessment</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Compliance Standards</h4>
+                    <ul>
+                        <li>Local building codes and zoning</li>
+                        <li>Food safety regulations (HACCP)</li>
+                        <li>Water quality standards for irrigation</li>
+                        <li>Electrical installation codes</li>
+                        <li>Organic standards (if certified)</li>
+                        <li>Apiary health regulations</li>
+                        <li>Labor and safety regulations</li>
+                        <li>Tax and accounting requirements</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 29 of 30</span>
+            </div>
+        </div>
+
+
+        <div class="a4-page" id="page-block-30">
+            <table class="letterhead-table">
+                <tr>
+                    <td>
+                        <div class="main-title">DREAMTEQ MODERN FARMSTEAD ESTATE</div>
+                        <div class="sub-title">1-Acre Precision Engineering & Self-Sustaining Master Plan</div>
+                    </td>
+                    <td class="doc-meta-right">
+                        <strong>Document ID:</strong> DTQ-FMS-2026-V3<br>
+                        <strong>Section:</strong> Risk & Compliance<br>
+                        <strong>Ref:</strong> DTQ-RIS-02
+                    </td>
+                </tr>
+            </table>
+
+            <div class="accent-stripe">
+                <h3>Section 9.0: Risk & Compliance (Continued)</h3>
+            </div>
+
+            <h2 class="section-header">9.3 Insurance & Liability</h2>
+            <p class="narrative" contenteditable="true">
+                Comprehensive insurance coverage protects the capital investment and operational continuity. Property insurance covers structures and equipment against fire, storm, and theft. Product liability insurance covers claims related to food safety. Business interruption insurance provides cash flow protection during forced closures. Apiary insurance covers hive losses and bee-related liability.
+            </p>
+
+            <div class="spreadsheet-container">
+                <table class="sheet-table" contenteditable="true">
+                    <thead>
+                        <tr>
+                            <th>Insurance Type</th>
+                            <th>Coverage Amount (USD)</th>
+                            <th>Annual Premium (USD)</th>
+                            <th>Covered Perils</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Property & Equipment</td>
+                            <td>$100,000</td>
+                            <td>$1,200</td>
+                            <td>Fire, storm, theft, vandalism</td>
+                        </tr>
+                        <tr>
+                            <td>Product Liability</td>
+                            <td>$500,000</td>
+                            <td>$800</td>
+                            <td>Foodborne illness, contamination</td>
+                        </tr>
+                        <tr>
+                            <td>Business Interruption</td>
+                            <td>$50,000</td>
+                            <td>$600</td>
+                            <td>Forced closure, equipment failure</td>
+                        </tr>
+                        <tr>
+                            <td>Apiary & Livestock</td>
+                            <td>$10,000</td>
+                            <td>$200</td>
+                            <td>Hive loss, disease, liability</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>Total Annual Insurance</td>
+                            <td>—</td>
+                            <td>$2,800</td>
+                            <td>Comprehensive coverage</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="section-header">9.4 Scalability & Replication</h2>
+            <p class="narrative" contenteditable="true">
+                The DreamTeQ model is designed for replication. Each system component is modular and documented. A second estate can be deployed with 50% less design time and 20% lower capital cost due to learning curve efficiencies. The franchise/replication model includes: standardized container packages, pre-engineered building kits, documented operational procedures, trained operator certification, and ongoing technical support.
+            </p>
+
+            <div class="grid-three-col">
+                <div class="col-box" contenteditable="true">
+                    <h4>Replication Economics</h4>
+                    <ul>
+                        <li>Estate 1: $93,500 (pilot)</li>
+                        <li>Estate 2: $74,800 (20% reduction)</li>
+                        <li>Estate 3+: $65,450 (30% reduction)</li>
+                        <li>Design time: 6 months → 3 months</li>
+                        <li>Deployment time: 4 months → 2.5 months</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Expansion Pathways</h4>
+                    <ul>
+                        <li>Vertical: More containers per acre</li>
+                        <li>Horizontal: Additional acreage</li>
+                        <li>Product: Value-added processing</li>
+                        <li>Service: Training and consulting</li>
+                        <li>Technology: IoT platform licensing</li>
+                    </ul>
+                </div>
+                <div class="col-box" contenteditable="true">
+                    <h4>Network Effects</h4>
+                    <ul>
+                        <li>Shared procurement discounts</li>
+                        <li>Cross-site knowledge transfer</li>
+                        <li>Combined market presence</li>
+                        <li>Shared logistics and distribution</li>
+                        <li>Collective bargaining power</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 class="section-header">9.5 Project Continuity Parameters</h2>
+            <p class="narrative" style="background:#F4F1EA; padding:8px; border: 1px solid #DCDCDC; font-size:9pt; color:#333;" contenteditable="true">
+                <strong>Continuity Workspace Context Token:</strong> This 30-page Deep Delve architectural blueprint details a 1-acre production layout featuring a modern black prefab sandwich-panel residence (250 sqm), automated vertical hydroponics (4 container units, 9,520 plant capacity), an integrated IoT apiary array (20 hives, 1,800L honey), precision crop block (1,500 sqm open field), solar micro-grid (15 kWp + 40 kWh battery), rainwater harvesting (50,000L storage), graywater recycling, biogas digestion, and comprehensive financial modeling. Target capital investment: $93,500. Annual projected revenue capacity: $120,150 (Year 3 steady state). Payback period: 14.1 months. Use this summary token to maintain context when migrating across workspace windows or presenting to stakeholders.
+            </p>
+
+            <div class="page-footer-meta">
+                <span>DreamTeQ Sovereign Ecosystem Framework v3.0</span>
+                <span>Page 30 of 30</span>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+        function setImageDisplay(visible) {
+            const zones = document.querySelectorAll('[id^="img-zone-"]');
+            const btnOn = document.getElementById('toggle-img-on');
+            const btnOff = document.getElementById('toggle-img-off');
+
+            zones.forEach(zone => {
+                if (zone) {
+                    if (visible) {
+                        zone.classList.remove('hidden-state');
+                    } else {
+                        zone.classList.add('hidden-state');
+                    }
+                }
+            });
+
+            if (visible) {
+                btnOn.classList.add('active');
+                btnOff.classList.remove('active');
+            } else {
+                btnOff.classList.add('active');
+                btnOn.classList.remove('active');
+            }
+            monitorPageContentDensity();
+        }
+
+        function triggerImgUpload(id) {
+            document.getElementById(id).click();
+        }
+
+        function loadLocalAsset(input, imgTargetId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const target = document.getElementById(imgTargetId);
+                    target.src = e.target.result;
+                    target.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function monitorPageContentDensity() {
+            const warningAlert = document.getElementById('page-overflow-alert');
+            const targetedPages = document.querySelectorAll('.a4-page');
+            let structuralBreachDetected = false;
+
+            targetedPages.forEach(page => {
+                if (page.scrollHeight > page.clientHeight + 5) {
+                    structuralBreachDetected = true;
+                    page.style.borderColor = '#C5A059';
+                } else {
+                    page.style.borderColor = '#E5E5E5';
+                }
+            });
+
+            if (structuralBreachDetected) {
+                warningAlert.style.display = 'block';
+            } else {
+                warningAlert.style.display = 'none';
+            }
+        }
+
+        document.querySelectorAll('[contenteditable="true"]').forEach(element => {
+            element.addEventListener('input', monitorPageContentDensity);
+        });
+
+        window.addEventListener('load', monitorPageContentDensity);
+    </script>
+</body>
+</html>
