@@ -1,24 +1,19 @@
 {
   "version": 2,
-  "name": "dreamteq-titanium-erp360-platform",
   "buildCommand": null,
   "outputDirectory": null,
   "framework": null,
   "functions": {
     "api/sync.js": {
-      "runtime": "nodejs20.x",
       "maxDuration": 30
     },
     "api/security-fetch.js": {
-      "runtime": "nodejs20.x",
       "maxDuration": 15
     },
     "api/whatsapp-webhook.js": {
-      "runtime": "nodejs20.x",
       "maxDuration": 10
     },
     "api/mpesa-callback.js": {
-      "runtime": "nodejs20.x",
       "maxDuration": 15
     }
   },
